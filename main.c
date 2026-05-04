@@ -1,8 +1,8 @@
 #include "raylib.h"
 #include <math.h>
 
-#define WINDOW_WIDTH 1000
-#define WINDOW_HEIGHT 1000
+#define WINDOW_WIDTH 800
+#define WINDOW_HEIGHT 800
 #define PROJECTILE_CAP 100
 
 typedef struct {
@@ -45,7 +45,7 @@ int main() {
     player.lives = 3;
     player.fireRate=10;//Znaci da puca x puta po sekundi
     //Napraviti neku funkciju za inicijalizaciju
-    float fire_timer =0.0;
+    float fire_timer =0.0f;
     Projectile projectiles[PROJECTILE_CAP];
     for (int i=0; i<PROJECTILE_CAP; i++) {
         projectiles[i].active = false;
@@ -67,7 +67,12 @@ int main() {
         if (IsKeyDown(KEY_S)) movement.y += player.playerPos.y < WINDOW_HEIGHT - player.playerSize? 1 : 0;
 
         fire_timer+=dt;
-        if ((fire_timer > 1/player.fireRate) && IsKeyDown(KEY_K)) {
+
+        if (fire_timer > 600) {
+            fire_timer = 0.0f; //ako je igrac bio afk duze od 10 minuta fire timer se resetuje
+        }
+
+        if (fire_timer > 1/player.fireRate && IsKeyDown(KEY_K)) {
             shoot(projectiles, player.playerPos, 5, 750);
             fire_timer = 0;
         }
