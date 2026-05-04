@@ -18,7 +18,12 @@ find_package(${LIB1} QUIET)
 if(NOT ${LIB1}_FOUND)
     include_dependency(${LIB1} http://github.com/raysan5/raylib.git 6.0)
 endif ()
-add_executable(2026_CyberAttack main.c)
+add_executable(2026_CyberAttack main.c
+        mech/Player.h
+        mech/Player.c
+        mech/Projectile.h
+        mech/Projectile.c
+        mechanics.h)
 target_include_directories(2026_CyberAttack PRIVATE ${raylib_include_DIRS})
 
 target_link_libraries(2026_CyberAttack PRIVATE ${LIB1})
