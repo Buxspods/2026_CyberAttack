@@ -14,21 +14,25 @@ void Shoot(Projectile projectiles[],Vector2 pos,float size,float speed) {
     }
 }
 
+void UpdateProjectile(Projectile *p,float dt) {
+    p->pos.x += p->speed * dt * p->direction.x;
+    p->pos.y += p->speed * dt * p->direction.y;//Treba odraditi normalizaciju
+
+    if (p->pos.y < p->size/2 || p->pos.x < p->size/2) {//Izlazak iz ekrana
+        p->active = false;
+    }
+}
+
 void UpdateProjectiles(Projectile projectiles[]) {
+    float dt=GetFrameTime();
+    //Prethodna funkcija rastavljena ovako jer je bio bug da posle 100 ispucanih metaka nece vise da puca
     for (int i = 0; i < PROJECTILE_CAP; i++) {
         if (projectiles[i].active) {
-
-            float dt = GetFrameTime();
-            projectiles[i].pos.x += projectiles[i].speed * dt * projectiles[i].direction.x;
-            projectiles[i].pos.y += projectiles[i].speed * dt * projectiles[i].direction.y;//Treba odraditi normalizaciju
-
-            if (projectiles[i].pos.y < projectiles[i].size/2 && projectiles[i].pos.x < projectiles[i].size/2) {//Izlazak iz ekrana
-                projectiles[i].active = false;
-            }
+            UpdateProjectile(&projectiles[i],dt);
         }
     }
 }
-void drawProjectiles(Projectile projectiles[]) {
+void DrawProjectiles(Projectile projectiles[]) {
     for (int i = 0; i < PROJECTILE_CAP; i++) {
         if (projectiles[i].active) {
             DrawCircleV(projectiles[i].pos, projectiles[i].size, RED);

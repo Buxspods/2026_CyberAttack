@@ -16,5 +16,6 @@ typedef struct {
 }Projectile;
 void Shoot(Projectile projectiles[],Vector2 pos,float size,float speed);
 void UpdateProjectiles(Projectile projectiles[]);
-void drawProjectiles(Projectile projectiles[]);
+void DrawProjectiles(Projectile projectiles[]);
+void UpdateProjectile(Projectile *p,float dt);
 #endif //INC_2026_CYBERATTACK_PROJECTILE_H

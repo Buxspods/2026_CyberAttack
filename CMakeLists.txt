@@ -23,7 +23,11 @@ add_executable(2026_CyberAttack main.c
         mech/Player.c
         mech/Projectile.h
         mech/Projectile.c
-        mechanics.h)
+        mechanics.h
+        AI/EnemyTypes.h
+        AI/Enemy.h
+        AI/Enemy.c
+        AI.h)
 target_include_directories(2026_CyberAttack PRIVATE ${raylib_include_DIRS})
 
 target_link_libraries(2026_CyberAttack PRIVATE ${LIB1})
