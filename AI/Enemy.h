@@ -15,20 +15,20 @@ typedef struct {
     float speed;
     EnemyType type;
     Vector2 movementDirection;
-    Vector2 shootingDirection;
     float actionTimer;//Napraviti bolji sistem za ovo (za sada AI moze da radi samo po jednu akciju ovo treba da bude niz
     //Sa vise akcija gde ce svaka akcija da pozove odredjenu funkciju
     bool active;//Ista logika kao i za metkove
 }Enemy;
+typedef struct GameState GameState;
 //Funkcije za inicijalizaciju razlicitih tipova protivnika
 void SpawnEnemy(Enemy enemies[],EnemyType type,Vector2 position);
 void InitMeelePlane(Enemy *e);
 void InitTurret(Enemy *e);
 //Logika
-void Decision(Enemy *e);
+void Decision(Enemy *e, struct GameState * state);
 void MeelePlaneDecision(Enemy *e,float dt);
-void TurretDecision(Enemy *e,float dt);
-void UpdateEnemies(Enemy enemies[]);
+void TurretDecision(Enemy *e,float dt,struct GameState * state);
+void UpdateEnemies(struct GameState * state);
 
 void DrawEnemies(Enemy enemies[]);
 #endif //INC_2026_CYBERATTACK_ENEMY_H

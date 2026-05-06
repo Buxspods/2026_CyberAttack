@@ -5,5 +5,5 @@
 #ifndef INC_2026_CYBERATTACK_AI_H
 #define INC_2026_CYBERATTACK_AI_H
 #include"AI/EnemyTypes.h"
-#include"AI/Enemy.h"
+#include "mech/GameState.h"
 #endif //INC_2026_CYBERATTACK_AI_H

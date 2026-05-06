@@ -33,6 +33,8 @@ add_executable(2026_CyberAttack main.c
         GUI/pauseMeni.h
         GUI/glavniMeni.c
         GUI/pauseMeni.c
+        mech/GameState.h
+        mech/GameState.c
 )
 target_include_directories(2026_CyberAttack PRIVATE ${raylib_include_DIRS})
 
