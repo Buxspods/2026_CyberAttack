@@ -2,10 +2,19 @@
 #include <math.h>
 #include "mechanics.h"
 #include "AI.h"
+#include"GUI.h"
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 #define PROJECTILE_CAP 100
 #define ENEMY_CAP 100
+
+Font font_exo;
+Font font_orbitron;
+Font press_start_2p;
+Texture2D background;
+MeniOpcija opcije[6], opcijePause[5];
+int isPaused = 0;
+
 int main() {
     //inicijalizacija igraca (sve se ovo moze proizvoljno menjati)
     Player player = InitPlayer((Vector2) {WINDOW_WIDTH / 2.0, WINDOW_HEIGHT / 1.25},20,500.0f,3,10);
@@ -24,6 +33,14 @@ int main() {
     //pravljenje pocetnog prozora i postavljanje najveceg dozvoljenog FPS-a
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "2026: Cyber Attack");
     SetTargetFPS(60);
+
+    InitGlavni();
+    InitPause();
+    Vector2 dimenzije = MeasureTextEx(font_orbitron, "2026: Cyber Attack", 70, 2);
+    Vector2 pozicija = {WINDOW_WIDTH / 2.0f - dimenzije.x / 2, WINDOW_WIDTH * 0.125f};
+    float vreme = 0.0f;
+    float providnost = 1.0f;
+    SetExitKey(KEY_NULL);
     //Game Loop
     while(!WindowShouldClose()) {
         Color background = {67, 67, 69, 255}; //OVU BOJU CEMO SVAKAKO SKLONITI KAD TAD
@@ -50,14 +67,25 @@ int main() {
         UpdateProjectiles(projectiles);
         UpdateEnemies(enemies);
 
+        //Ova linija treba da se ukljuci kada bude potreban pause meni
+        //if (IsKeyPressed(KEY_ESCAPE)) isPaused = isPaused == 0? 1: 0;
         //CRTANJE
         BeginDrawing();
         ClearBackground(background);
         DrawPlayer(player);
         DrawProjectiles(projectiles);
         DrawEnemies(enemies);
+        //Linije ispod treba da se ukljuce kada budu bili potrebni glavni i pause meni
+        /*CrtajMeni(&pozicija, &vreme, &providnost);
+        if (isPaused) {
+            CrtajPause();
+        }*/
         EndDrawing();
     }
+    UnloadFont(font_exo);
+    UnloadFont(font_orbitron);
+    UnloadFont(press_start_2p);
+    UnloadTexture(background);
     CloseWindow();
     return 0;
 }

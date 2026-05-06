@@ -27,7 +27,19 @@ add_executable(2026_CyberAttack main.c
         AI/EnemyTypes.h
         AI/Enemy.h
         AI/Enemy.c
-        AI.h)
+        AI.h
+        GUI.h
+        GUI/glavniMeni.h
+        GUI/pauseMeni.h
+        GUI/glavniMeni.c
+        GUI/pauseMeni.c
+)
 target_include_directories(2026_CyberAttack PRIVATE ${raylib_include_DIRS})
 
 target_link_libraries(2026_CyberAttack PRIVATE ${LIB1})
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/resources"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/resources")
+
