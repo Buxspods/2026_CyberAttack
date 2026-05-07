@@ -4,33 +4,36 @@
 
 #include "projectile.h"
 #include "raymath.h"
+#include "EntityTypes.h"
 
-void Shoot(Projectile projectiles[],Vector2 pos,float size,float speed) {
+
+void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,float speed, Vector2 target) {
+    Vector2 direction;
+    EntityType projectile_tag;
+
+    if(shooter == ENEMY_TURRET){
+        projectile_tag = ENEMY_PROJECTILE;
+    }
+    else{
+        direction = (Vector2){0,-1};
+        projectile_tag = PLAYER_PROJECTILE;
+    }
     for (int i = 0; i < PROJECTILE_CAP; i++) {
         if (!projectiles[i].active) {
+            projectiles[i].entityType = projectile_tag;
             projectiles[i].active = true;
             projectiles[i].pos = pos;
             projectiles[i].size = size;
             projectiles[i].speed = speed;
-            Vector2 direction = {0,-1};
+            if(shooter == ENEMY_TURRET){
+                direction = Vector2Normalize(Vector2Subtract(target,projectiles[i].pos));
+            }
             projectiles[i].direction = direction;
             break;
         }
     }
 }
-void ShootAt(Projectile projectiles[],Vector2 pos,float size,float speed,Vector2 target) {
-    for (int i = 0; i < PROJECTILE_CAP; i++) {
-        if (!projectiles[i].active) {
-            projectiles[i].active = true;
-            projectiles[i].pos = pos;
-            projectiles[i].size = size;
-            projectiles[i].speed = speed;
-            Vector2 direction = Vector2Normalize(Vector2Subtract(target,projectiles[i].pos));
-            projectiles[i].direction = direction;
-            break;
-        }
-    }
-}
+
 void UpdateProjectile(Projectile *p,float dt) {
     p->pos.x += p->speed * dt * p->direction.x;
     p->pos.y += p->speed * dt * p->direction.y;//Treba odraditi normalizaciju

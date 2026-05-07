@@ -31,7 +31,7 @@ int main() {
     float providnost = 1.0f;
     SetExitKey(KEY_NULL);
     //Game Loop
-    SpawnEnemy(gamestate.enemies,TURRET,(Vector2){100,100});
+    SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){100,100});
     while(!WindowShouldClose()) {
         Color BackgroundColor = {67, 67, 69, 255}; //OVU BOJU CEMO SVAKAKO SKLONITI KAD TAD
 
@@ -41,7 +41,7 @@ int main() {
 
         if (spawn_timer>3) {
             spawn_timer=0;
-            SpawnEnemy(gamestate.enemies,MELEE_PLANE,(Vector2){500,1000});
+            SpawnEnemy(gamestate.enemies,ENEMY_MELEE_PLANE,(Vector2){500,1000});
             //Iz nekog razloga se ekran zacrni kada se ovde stavi window height
         }
         if (fire_timer > 600) {
@@ -49,13 +49,15 @@ int main() {
         }
 
         if (fire_timer > (1/gamestate.player.fireRate) && IsKeyDown(KEY_K)) {
-            Shoot(gamestate.projectiles, gamestate.player.playerPos, 5, 750);
+            Shoot(PLAYER, gamestate.projectiles, gamestate.player.playerPos, 5, 750, (Vector2){0, 0});
             fire_timer = 0;
         }
 
         UpdatePlayerPosition(&gamestate.player);
         UpdateProjectiles(gamestate.projectiles);
         UpdateEnemies(&gamestate);
+        CheckCollisions(&gamestate);
+       
 
         //Ova linija treba da se ukljuci kada bude potreban pause meni
         //if (IsKeyPressed(KEY_ESCAPE)) isPaused = isPaused == 0? 1: 0;

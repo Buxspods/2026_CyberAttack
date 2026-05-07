@@ -5,8 +5,10 @@
 #ifndef INC_2026_CYBERATTACK_PLAYER_H
 #define INC_2026_CYBERATTACK_PLAYER_H
 #include "raylib.h"
+#include "EntityTypes.h"
 
 typedef struct {
+    EntityType entityType;
     Vector2 playerPos;
     float playerSize;
     float playerSpeed;

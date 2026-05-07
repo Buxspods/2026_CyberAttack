@@ -7,5 +7,6 @@
 
 #include "mech/Player.h"
 #include "mech/Projectile.h"
-
+#include "mech/EntityTypes.h"
+#include "mech/Collisions.h"
 #endif //INC_2026_CYBERATTACK_MECHANICS_H

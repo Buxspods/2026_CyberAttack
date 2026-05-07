@@ -9,15 +9,15 @@
 #include "../mech/GameState.h"
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
-void SpawnEnemy(Enemy enemies[],EnemyType type,Vector2 position) {
+void SpawnEnemy(Enemy enemies[],EntityType type,Vector2 position) {
     for (int i=0;i<ENEMY_CAP;i++) {
         if (!enemies[i].active) {
             enemies[i].active = true;
             enemies[i].position = position;
             enemies[i].type = type;
             switch (enemies[i].type) {
-                case MELEE_PLANE:InitMeelePlane(&enemies[i]);break;
-                case TURRET:InitTurret(&enemies[i]);break;
+                case ENEMY_MELEE_PLANE:InitMeelePlane(&enemies[i]);break;
+                case ENEMY_TURRET:InitTurret(&enemies[i]);break;
             }
             break;
         }
@@ -47,8 +47,8 @@ void UpdateEnemies(GameState * state) {
 void Decision(Enemy *e,GameState *state) {
     float dt = GetFrameTime();
     switch (e->type) {
-        case (MELEE_PLANE): MeelePlaneDecision(e,dt); break;
-        case(TURRET):TurretDecision(e,dt,state); break;
+        case (ENEMY_MELEE_PLANE): MeelePlaneDecision(e,dt); break;
+        case(ENEMY_TURRET):TurretDecision(e,dt,state); break;
     }
 }
 void MeelePlaneDecision(Enemy *e,float dt) {
@@ -62,7 +62,7 @@ void TurretDecision(Enemy *e,float dt,GameState * state) {
     e->actionTimer+=dt;
     if (e->actionTimer>1) {
         e->actionTimer =0;
-        ShootAt(state->projectiles,e->position,5,700,state->player.playerPos);
+        Shoot(ENEMY_TURRET,state->projectiles,e->position,5,700,state->player.playerPos);
     }
 }
 void DrawEnemies(Enemy enemies[]) {

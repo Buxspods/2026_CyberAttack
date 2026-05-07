@@ -6,8 +6,9 @@
 #define INC_2026_CYBERATTACK_PROJECTILE_H
 #define PROJECTILE_CAP 100
 #include "raylib.h"
-
+#include "EntityTypes.h"
 typedef struct {
+    EntityType entityType;
     Vector2 pos;
     float size;
     float speed;
@@ -15,9 +16,9 @@ typedef struct {
     bool active;
     Vector2 direction;
 }Projectile;
-void Shoot(Projectile projectiles[],Vector2 pos,float size,float speed);
+void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,float speed, Vector2 target);
 void UpdateProjectiles(Projectile projectiles[]);
 void DrawProjectiles(Projectile projectiles[]);
 void UpdateProjectile(Projectile *p,float dt);
-void ShootAt(Projectile projectiles[],Vector2 pos,float size,float speed,Vector2 target);
+//void ShootAt(Projectile projectiles[],Vector2 pos,float size,float speed,Vector2 target);
 #endif //INC_2026_CYBERATTACK_PROJECTILE_H

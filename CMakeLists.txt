@@ -24,7 +24,6 @@ add_executable(2026_CyberAttack main.c
         mech/Projectile.h
         mech/Projectile.c
         mechanics.h
-        AI/EnemyTypes.h
         AI/Enemy.h
         AI/Enemy.c
         AI.h
@@ -35,6 +34,10 @@ add_executable(2026_CyberAttack main.c
         GUI/pauseMeni.c
         mech/GameState.h
         mech/GameState.c
+        mech/Collisions.h
+        mech/Collisions.c
+        mech/EntityTypes.h
+        mech/Entity.h
 )
 target_include_directories(2026_CyberAttack PRIVATE ${raylib_include_DIRS})
 

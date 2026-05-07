@@ -8,6 +8,7 @@
 
 Player InitPlayer(Vector2 playerPos, float playerSize, float playerSpeed, int lives, float fireRate) {
     Player player = {0};
+    player.entityType = PLAYER;
     player.playerPos = playerPos;
     player.playerSpeed = 500.0f;
     player.playerSize = 20;
