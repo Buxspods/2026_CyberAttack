@@ -2,6 +2,8 @@
 // Created by A1 on 5/4/2026.
 //
 #include "Player.h"
+#include"../GUI/assets.h"
+#include"../GUI/planeGUI.h"
 #include <math.h>
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
@@ -16,8 +18,9 @@ Player InitPlayer(Vector2 playerPos, float playerSize, float playerSpeed, int li
     player.fireRate=10;
     return player;
 }
-void DrawPlayer(Player player) {
-    DrawCircleV(player.playerPos, player.playerSize, WHITE);
+void DrawPlayer(Player player, GraphicAssets *assets) {
+    //DrawCircleV(player.playerPos, player.playerSize, WHITE);
+    DrawPlaneGUI(&player.playerPos, assets);
 }
 void UpdatePlayerPosition(Player *player) {
     float dt = GetFrameTime(); //delta time potreban da bi na svakom kompu igra isla istom brzinom

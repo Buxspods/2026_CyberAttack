@@ -1,9 +1,7 @@
 #ifndef INC_2026_CYBERATTACK_PAUSEMENI_H
 #define INC_2026_CYBERATTACK_PAUSEMENI_H
 
-#include"glavniMeni.h"
-extern int isPaused;
-extern MeniOpcija opcijePause[5];
+#include"assets.h"
 
 void ResumeGame();
 void HighestScores2();
@@ -11,7 +9,7 @@ void Settings2();
 void Controls2();
 void ExitAndSave();
 
-void CrtajPause();
-void InitPause();
+void CrtajPause(GraphicAssets *assets);
+void InitPause(GraphicAssets *assets);
 
 #endif //INC_2026_CYBERATTACK_PAUSEMENI_H

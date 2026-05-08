@@ -38,6 +38,13 @@ add_executable(2026_CyberAttack main.c
         mech/Collisions.c
         mech/EntityTypes.h
         mech/Entity.h
+        GUI/assets.h
+        GUI/highest-score.h
+        GUI/stats.h
+        GUI/stats.c
+        GUI/highest-score.c
+        GUI/planeGUI.c
+        GUI/planeGUI.h
 )
 target_include_directories(2026_CyberAttack PRIVATE ${raylib_include_DIRS})
 
@@ -48,3 +55,7 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         "${CMAKE_CURRENT_SOURCE_DIR}/resources"
         "$<TARGET_FILE_DIR:${PROJECT_NAME}>/resources")
 
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/highest-score"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/highest-score")

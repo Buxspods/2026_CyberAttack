@@ -6,6 +6,7 @@
 #define INC_2026_CYBERATTACK_PLAYER_H
 #include "raylib.h"
 #include "EntityTypes.h"
+#include"../GUI/assets.h"
 
 typedef struct {
     EntityType entityType;
@@ -17,6 +18,6 @@ typedef struct {
     Texture2D texture;
 } Player;
 Player InitPlayer(Vector2 playerPos, float playerSize, float playerSpeed, int lives, float fireRate);
-void DrawPlayer(Player player);
+void DrawPlayer(Player player, GraphicAssets *assets);
 void UpdatePlayerPosition(Player *player);
 #endif //INC_2026_CYBERATTACK_PLAYER_H

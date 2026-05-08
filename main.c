@@ -1,5 +1,6 @@
 //#include "raylib.h" Ne treba include jer je raylib vec ukljucen u drugim header fajlovima
 #include <math.h>
+#include<stdlib.h>
 #include "mechanics.h"
 #include "AI.h"
 #include"GUI.h"
@@ -8,12 +9,6 @@
 #define PROJECTILE_CAP 100
 #define ENEMY_CAP 100
 
-Font font_exo;
-Font font_orbitron;
-Font press_start_2p;
-Texture2D background;
-MeniOpcija opcije[6], opcijePause[5];
-int isPaused = 0;
 
 int main() {
     float fire_timer =0.0f;//Prebaciti ovo verovatno u logiku za igraca nekakvu
@@ -23,10 +18,15 @@ int main() {
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "2026: Cyber Attack");
     SetTargetFPS(60);
 
-    InitGlavni();
-    InitPause();
-    Vector2 dimenzije = MeasureTextEx(font_orbitron, "2026: Cyber Attack", 70, 2);
-    Vector2 pozicija = {WINDOW_WIDTH / 2.0f - dimenzije.x / 2, WINDOW_WIDTH * 0.125f};
+    GraphicAssets assets = {0};
+    assets.highestScores = NULL;
+    Vector2 pozicijaAviona = {100, 100};
+
+    InitGlavni(&assets);
+    InitPause(&assets);
+
+    Vector2 dimenzije = MeasureTextEx(assets.fontOrbitron, "2026: Cyber Attack", 70, 2);
+    Vector2 pozicija = {windowWidth / 2.0f - dimenzije.x / 2, windowHeight * 0.125f};
     float vreme = 0.0f;
     float providnost = 1.0f;
     SetExitKey(KEY_NULL);
@@ -60,24 +60,35 @@ int main() {
        
 
         //Ova linija treba da se ukljuci kada bude potreban pause meni
-        //if (IsKeyPressed(KEY_ESCAPE)) isPaused = isPaused == 0? 1: 0;
+        assets.mis = GetMousePosition();
+        if (IsKeyPressed(KEY_ESCAPE)) assets.isPaused = assets.isPaused == 0? 1: 0;
         //CRTANJE
         BeginDrawing();
         ClearBackground(BackgroundColor);
-        DrawPlayer(gamestate.player);
+        DrawPlayer(gamestate.player, &assets);
         DrawProjectiles(gamestate.projectiles);
         DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
-        //Linije ispod treba da se ukljuce kada budu bili potrebni glavni i pause meni
-        /*CrtajMeni(&pozicija, &vreme, &providnost);
-        if (isPaused) {
-            CrtajPause();
+
+        //Ovo ispod je za test glavnog menija, pauseMenija i GUI-a aviona, u nekom trenutku ce biti potrebno
+        /*if (assets.fja == NULL) {
+            CrtajMeni(&pozicija ,&vreme, &providnost, &assets);
+            //DrawRectangle(0, 0, windowWidth, windowHeight, BLACK);
+            DrawPlaneGUI(&pozicijaAviona, &assets);
+        }
+        else {
+            assets.fja(&assets);
+            if (assets.isPaused) {
+                CrtajPause(&assets);
+                int score = 16;
+                int lives = 10;
+                int ammo = 100;
+                PrikaziStats(score, lives, ammo, &assets);
+            }
         }*/
+        //Linije ispod treba da se ukljuce kada budu bili potrebni glavni i pause meni
         EndDrawing();
     }
-    UnloadFont(font_exo);
-    UnloadFont(font_orbitron);
-    UnloadFont(press_start_2p);
-    UnloadTexture(background);
+    UnloadAssets(&assets);
     CloseWindow();
     return 0;
 }

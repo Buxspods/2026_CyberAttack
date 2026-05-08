@@ -6,30 +6,18 @@
 #define INC_2026_CYBERATTACK_GLAVNIMENI_H
 #define windowWidth 1000
 #define windowHeight 1000
-#include"raylib.h"
+#include"assets.h"
+#include"highest-score.h"
 
-extern Font font_exo;
-extern Font font_orbitron;
-extern Font press_start_2p;
-extern Texture2D background;
-typedef void (*MojaFja)();
-typedef struct {
-    char naziv[20];
-    Vector2 pozicija;
-    Vector2 dimenzija;
-    MojaFja akcija;
-}MeniOpcija;
-extern MeniOpcija opcije[6];
+void StartNewGame(GraphicAssets *assets);
+void LoadGame(GraphicAssets *assets);
+void HighestScores(GraphicAssets *assets);
+void Settings(GraphicAssets *assets);
+void Controls(GraphicAssets *assets);
+void ExitGame(GraphicAssets *assets);
 
-void StartNewGame();
-void LoadGame();
-void HighestScores();
-void Settings();
-void Controls();
-void ExitGame();
-
-void CrtajMeni(Vector2 *pozicija, float *vreme, float *providnost);
-void InitGlavni();
-
+void CrtajMeni(Vector2 *pozicija,float *vreme, float *providnost, GraphicAssets *assets);
+void InitGlavni(GraphicAssets *assets);
+void UnloadAssets(GraphicAssets *assets);
 
 #endif //INC_2026_CYBERATTACK_GLAVNIMENI_H

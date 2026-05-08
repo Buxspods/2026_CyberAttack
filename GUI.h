@@ -4,7 +4,11 @@
 
 #ifndef INC_2026_CYBERATTACK_GUI_H
 #define INC_2026_CYBERATTACK_GUI_H
+#include"GUI/assets.h"
 #include"GUI/glavniMeni.h"
 #include"GUI/pauseMeni.h"
+#include"GUI/stats.h"
+#include"GUI/highest-score.h"
+#include"GUI/planeGUI.h"
 
 #endif //INC_2026_CYBERATTACK_GUI_H
