@@ -90,6 +90,11 @@ int main() {
         DrawPowerUps(gamestate.powerups);
         PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
 
+        //Test za crtanje metka i PowerUp-ova
+        //DrawPowerUp(assets.powerUpAmmo, (Vector2){400, 100});
+        //DrawPowerUp(assets.powerUpHealth, (Vector2){400, 200});
+        //DrawPowerUp(assets.powerUpSpeed, (Vector2){400, 300});
+        //DrawProjectile(assets.metak, (Vector2){400, 400});
         //Ovo ispod je za test glavnog menija, pauseMenija i GUI-a aviona, u nekom trenutku ce biti potrebno
         /*if (assets.fja == NULL) {
             CrtajMeni(&pozicija ,&vreme, &providnost, &assets);
@@ -106,7 +111,7 @@ int main() {
                 PrikaziStats(score, lives, ammo, &assets);
             }
         }*/
-        //Linije ispod treba da se ukljuce kada budu bili potrebni glavni i pause meni
+        //Linije iznad treba da se ukljuce kada budu bili potrebni glavni i pause meni
         EndDrawing();
     }
     UnloadAssets(&assets);

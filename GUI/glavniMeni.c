@@ -98,6 +98,10 @@ void InitGlavni(GraphicAssets *assets) {
     assets->avionLevo = LoadTexture("resources/images/spritesheetAvionLevo.png");
     assets->avionDesno = LoadTexture("resources/images/spritesheetAvionDesno.png");
     assets->avionPravo = LoadTexture("resources/images/spritesheetAvionPravo.png");
+    assets->metak = LoadTexture("resources/images/metak.png");
+    assets->powerUpAmmo = LoadTexture("resources/images/powerUpAmmo.png");
+    assets->powerUpSpeed = LoadTexture("resources/images/powerUpBrzina.png");
+    assets->powerUpHealth = LoadTexture("resources/images/powerUpHealth.png");
     assets->fja = NULL;
 
     memcpy(assets->opcije, (MeniOpcija[]){
@@ -122,5 +126,12 @@ void UnloadAssets(GraphicAssets *assets) {
     UnloadFont(assets->fontCommando);
     UnloadTexture(assets->background);
     UnloadTexture(assets->srce);
+    UnloadTexture(assets->avionDesno);
+    UnloadTexture(assets->avionPravo);
+    UnloadTexture(assets->avionLevo);
+    UnloadTexture(assets->metak);
+    UnloadTexture(assets->powerUpAmmo);
+    UnloadTexture(assets->powerUpSpeed);
+    UnloadTexture(assets->powerUpHealth);
     free(assets->highestScores);
 }

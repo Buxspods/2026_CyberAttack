@@ -42,3 +42,11 @@ void DrawPlaneGUI(Vector2 *pozicija, GraphicAssets *assets) {
     Rectangle sourceRec = { (int)(*aktivniFrame) * sirinaFrejma, 0, sirinaFrejma, (float)trenutnaTextura.height };
     DrawTextureRec(trenutnaTextura, sourceRec, (Vector2){ pozicija->x - sirinaFrejma/2, pozicija->y }, WHITE);
 }
+
+void DrawPowerUp(Texture2D powerUp, Vector2 position) {
+    DrawTexture(powerUp, position.x, position.y, WHITE);
+}
+
+void DrawProjectile(Texture2D projectile, Vector2 position) {
+    DrawTexture(projectile, position.x, position.y, WHITE);
+}
