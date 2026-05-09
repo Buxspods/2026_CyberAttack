@@ -17,7 +17,7 @@ void DrawTextGlow(Font font, const char* text, Vector2 pos, float size, Color co
 }
 
 void PrikaziStats(int score, int lives, int ammo, GraphicAssets *assets) {
-    DrawRectangle(0, 0, windowHeight, windowWidth,Fade(BLACK, 1.0f));
+    //DrawRectangle(0, 0, windowHeight, windowWidth,Fade(BLACK, 1.0f));
 
     DrawTextGlow(assets->fontCommando, "SCORE", (Vector2){50, 50}, 40, SKYBLUE);
     DrawTextGlow(assets->fontCommando, TextFormat("%07i", score), (Vector2){50, 90}, 40, SKYBLUE);

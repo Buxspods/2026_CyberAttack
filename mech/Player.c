@@ -1,6 +1,3 @@
-//
-// Created by A1 on 5/4/2026.
-//
 #include "Player.h"
 #include"../GUI/assets.h"
 #include"../GUI/planeGUI.h"
@@ -8,19 +5,22 @@
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 
-Player InitPlayer(Vector2 playerPos, float playerSize, float playerSpeed, int lives, float fireRate) {
+Player InitPlayer(float score, Vector2 playerPos, float playerSize, float playerSpeed, int lives, float fireRate, int ammo) {
     Player player = {0};
     player.entityType = PLAYER;
     player.playerPos = playerPos;
     player.playerSpeed = 500.0f;
     player.playerSize = 20;
-    player.lives = 3;
-    player.fireRate=10;
+    player.lives = 5;
+    player.fireRate = 10;
+    player.ammo = ammo;
+    player.score = 0;
     return player;
 }
 void DrawPlayer(Player player, GraphicAssets *assets) {
     //DrawCircleV(player.playerPos, player.playerSize, WHITE);
-    DrawPlaneGUI(&player.playerPos, assets);
+    Vector2 pos = (Vector2){player.playerPos.x, player.playerPos.y - 1.5 * player.playerSize};
+    DrawPlaneGUI(&pos, assets);
 }
 void UpdatePlayerPosition(Player *player) {
     float dt = GetFrameTime(); //delta time potreban da bi na svakom kompu igra isla istom brzinom

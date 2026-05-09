@@ -7,6 +7,8 @@
 #define PROJECTILE_CAP 100
 #include "raylib.h"
 #include "EntityTypes.h"
+#include "Player.h"
+
 typedef struct {
     EntityType entityType;
     Vector2 pos;
@@ -16,7 +18,7 @@ typedef struct {
     bool active;
     Vector2 direction;
 }Projectile;
-void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,float speed, Vector2 target);
+void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,float speed, Vector2 target, Player *player);
 void UpdateProjectiles(Projectile projectiles[]);
 void DrawProjectiles(Projectile projectiles[]);
 void UpdateProjectile(Projectile *p,float dt);

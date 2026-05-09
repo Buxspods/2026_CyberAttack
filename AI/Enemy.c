@@ -15,6 +15,7 @@ void SpawnEnemy(Enemy enemies[],EntityType type,Vector2 position) {
             enemies[i].active = true;
             enemies[i].position = position;
             enemies[i].type = type;
+            enemies[i].deathScore = DEFAULT_DEATH_SCORE;
             switch (enemies[i].type) {
                 case ENEMY_MELEE_PLANE:InitMeelePlane(&enemies[i]);break;
                 case ENEMY_TURRET:InitTurret(&enemies[i]);break;
@@ -24,15 +25,15 @@ void SpawnEnemy(Enemy enemies[],EntityType type,Vector2 position) {
     }
 }
 void InitMeelePlane(Enemy *e) {
-    e->HP = 10;//Za sad
-    e->maxHP = 10;
+    e->HP = 5;//Za sad
+    e->maxHP = 5;
     e->speed = 200.0f;
     e->movementDirection = (Vector2){0,-1};
     e->size = 40;
 }
 void InitTurret(Enemy *e) {
-    e->HP = 10;
-    e->maxHP = 10;
+    e->HP = 5;
+    e->maxHP = 5;
     e->speed = 0;
     e->size = 20;
     e->actionTimer = 0;
@@ -62,7 +63,7 @@ void TurretDecision(Enemy *e,float dt,GameState * state) {
     e->actionTimer+=dt;
     if (e->actionTimer>1) {
         e->actionTimer =0;
-        Shoot(ENEMY_TURRET,state->projectiles,e->position,5,700,state->player.playerPos);
+        Shoot(ENEMY_TURRET,state->projectiles,e->position,5,700,state->player.playerPos, &state->player);
     }
 }
 void DrawEnemies(Enemy enemies[]) {
@@ -71,4 +72,8 @@ void DrawEnemies(Enemy enemies[]) {
             DrawCircle(enemies[i].position.x,enemies[i].position.y,enemies[i].size, YELLOW);
         }
     }
+}
+
+void DestroyEnemy(Enemy *enemy) {
+    enemy->active = false;
 }

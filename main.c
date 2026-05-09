@@ -4,6 +4,8 @@
 #include "mechanics.h"
 #include "AI.h"
 #include"GUI.h"
+#include <time.h>
+
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 #define PROJECTILE_CAP 100
@@ -11,6 +13,7 @@
 
 
 int main() {
+    srand(time(NULL));
     float fire_timer =0.0f;//Prebaciti ovo verovatno u logiku za igraca nekakvu
     float spawn_timer =4.0f;
     GameState gamestate = InitGameState();//Inicijalizuje Igraca protivnike i metkove
@@ -32,6 +35,13 @@ int main() {
     SetExitKey(KEY_NULL);
     //Game Loop
     SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){100,100});
+    SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){900,100});
+    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){100,900});
+    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){450,450});
+    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){900,900});
+    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){550,450});
+
+
     while(!WindowShouldClose()) {
         Color BackgroundColor = {67, 67, 69, 255}; //OVU BOJU CEMO SVAKAKO SKLONITI KAD TAD
 
@@ -48,9 +58,13 @@ int main() {
             fire_timer = 0.0f; //ako je igrac bio afk duze od 10 minuta fire timer se resetuje
         }
 
-        if (fire_timer > (1/gamestate.player.fireRate) && IsKeyDown(KEY_K)) {
-            Shoot(PLAYER, gamestate.projectiles, gamestate.player.playerPos, 5, 750, (Vector2){0, 0});
+        if (fire_timer > (1/gamestate.player.fireRate) && IsKeyDown(KEY_K) && gamestate.player.ammo > 0) {
+            Shoot(PLAYER, gamestate.projectiles, gamestate.player.playerPos, 5, 750, (Vector2){0, 0}, &gamestate.player);
             fire_timer = 0;
+        }
+
+        if(IsKeyDown(KEY_H)) { //sluzi za dopunu municije samo dok se testira
+            gamestate.player.ammo = 100;
         }
 
         UpdatePlayerPosition(&gamestate.player);
@@ -58,7 +72,7 @@ int main() {
         UpdateEnemies(&gamestate);
         CheckCollisions(&gamestate);
        
-
+//
         //Ova linija treba da se ukljuci kada bude potreban pause meni
         assets.mis = GetMousePosition();
         if (IsKeyPressed(KEY_ESCAPE)) assets.isPaused = assets.isPaused == 0? 1: 0;
@@ -66,8 +80,15 @@ int main() {
         BeginDrawing();
         ClearBackground(BackgroundColor);
         DrawPlayer(gamestate.player, &assets);
+
+        //OVO JE KORISCENO SAMO DA SE VIDI HITBOX IGRACA I TO JE TOOOOOO
+        //Color newCol = {255, 0, 127, 200};
+        //DrawCircle(gamestate.player.playerPos.x, gamestate.player.playerPos.y, gamestate.player.playerSize / 1.5, newCol);
+
         DrawProjectiles(gamestate.projectiles);
         DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
+        DrawPowerUps(gamestate.powerups);
+        PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
 
         //Ovo ispod je za test glavnog menija, pauseMenija i GUI-a aviona, u nekom trenutku ce biti potrebno
         /*if (assets.fja == NULL) {

@@ -5,12 +5,11 @@
 #include "projectile.h"
 #include "raymath.h"
 #include "EntityTypes.h"
+#include "Player.h"
 
-
-void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,float speed, Vector2 target) {
+void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,float speed, Vector2 target, Player *player) {
     Vector2 direction;
     EntityType projectile_tag;
-
     if(shooter == ENEMY_TURRET){
         projectile_tag = ENEMY_PROJECTILE;
     }
@@ -29,6 +28,11 @@ void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,f
                 direction = Vector2Normalize(Vector2Subtract(target,projectiles[i].pos));
             }
             projectiles[i].direction = direction;
+            if (shooter == PLAYER) {
+                player->ammo--;
+            }
+
+
             break;
         }
     }

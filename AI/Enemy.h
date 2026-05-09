@@ -9,6 +9,7 @@
 #include "../mech/EntityTypes.h"
 
 #define ENEMY_CAP 100
+#define DEFAULT_DEATH_SCORE 50
 typedef struct {
     Vector2 position;
     int HP;
@@ -16,6 +17,7 @@ typedef struct {
     float size;
     float speed;
     EntityType type;
+    float deathScore;
     Vector2 movementDirection;
     float actionTimer;//Napraviti bolji sistem za ovo (za sada AI moze da radi samo po jednu akciju ovo treba da bude niz
     //Sa vise akcija gde ce svaka akcija da pozove odredjenu funkciju
@@ -33,4 +35,5 @@ void TurretDecision(Enemy *e,float dt,struct GameState * state);
 void UpdateEnemies(struct GameState * state);
 
 void DrawEnemies(Enemy enemies[]);
+void DestroyEnemy(Enemy *enemy);
 #endif //INC_2026_CYBERATTACK_ENEMY_H

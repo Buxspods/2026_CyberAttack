@@ -13,11 +13,13 @@ typedef struct {
     Vector2 playerPos;
     float playerSize;
     float playerSpeed;
+    float score;
     int lives;
     float fireRate;
+    int ammo;
     Texture2D texture;
 } Player;
-Player InitPlayer(Vector2 playerPos, float playerSize, float playerSpeed, int lives, float fireRate);
+Player InitPlayer(float score, Vector2 playerPos, float playerSize, float playerSpeed, int lives, float fireRate, int ammo);
 void DrawPlayer(Player player, GraphicAssets *assets);
 void UpdatePlayerPosition(Player *player);
 #endif //INC_2026_CYBERATTACK_PLAYER_H

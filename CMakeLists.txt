@@ -45,6 +45,11 @@ add_executable(2026_CyberAttack main.c
         GUI/highest-score.c
         GUI/planeGUI.c
         GUI/planeGUI.h
+        DebugTools.h
+        mech/WaveMaker.h
+        mech/WaveMaker.c
+        mech/Powerup.h
+        mech/Powerup.c
 )
 target_include_directories(2026_CyberAttack PRIVATE ${raylib_include_DIRS})
 
