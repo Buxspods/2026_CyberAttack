@@ -6,5 +6,6 @@
 void DrawPlaneGUI(Vector2 *pozicija, GraphicAssets *assets);
 void DrawPowerUp(Texture2D powerUp, Vector2 position);
 void DrawProjectile(Texture2D projectile, Vector2 position);
+void DrawExplosion(GraphicAssets *assets, Vector2 pozicija, bool trigger);
 
 #endif //INC_2026_CYBERATTACK_PLANEGUI_H

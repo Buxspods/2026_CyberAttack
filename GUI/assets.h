@@ -18,6 +18,7 @@ typedef struct GraphicAssets {
     Font fontExo;
     Font fontOrbitron;
     Font fontCommando;
+    Texture2D eksplozija;
     Texture2D metak;
     Texture2D powerUpHealth;
     Texture2D powerUpAmmo;

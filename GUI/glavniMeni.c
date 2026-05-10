@@ -102,6 +102,7 @@ void InitGlavni(GraphicAssets *assets) {
     assets->powerUpAmmo = LoadTexture("resources/images/powerUpAmmo.png");
     assets->powerUpSpeed = LoadTexture("resources/images/powerUpBrzina.png");
     assets->powerUpHealth = LoadTexture("resources/images/powerUpHealth.png");
+    assets->eksplozija = LoadTexture("resources/images/eksplozija.png");
     assets->fja = NULL;
 
     memcpy(assets->opcije, (MeniOpcija[]){
@@ -133,5 +134,6 @@ void UnloadAssets(GraphicAssets *assets) {
     UnloadTexture(assets->powerUpAmmo);
     UnloadTexture(assets->powerUpSpeed);
     UnloadTexture(assets->powerUpHealth);
+    UnloadTexture(assets->eksplozija);
     free(assets->highestScores);
 }

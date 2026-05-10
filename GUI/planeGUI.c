@@ -50,3 +50,41 @@ void DrawPowerUp(Texture2D powerUp, Vector2 position) {
 void DrawProjectile(Texture2D projectile, Vector2 position) {
     DrawTexture(projectile, position.x, position.y, WHITE);
 }
+
+void DrawExplosion(GraphicAssets *assets, Vector2 pozicija, bool trigger) {
+    static int currentFrame = 0;
+    static float frameTimer = 0.0f;
+    static bool isPlaying = false;
+
+    int maxFrames = 9;
+    float frameSpeed = 15.0f;
+
+    if (trigger) {
+        isPlaying = true;
+        currentFrame = 0;
+        frameTimer = 0.0f;
+    }
+
+    if (isPlaying) {
+        frameTimer += GetFrameTime();
+
+        if (frameTimer >= (1.0f / frameSpeed)) {
+            frameTimer = 0.0f;
+            currentFrame++;
+
+            if (currentFrame >= maxFrames) {
+                isPlaying = false;
+                currentFrame = 0;
+            }
+        }
+
+        if (isPlaying) {
+            float frameWidth = (float)assets->eksplozija.width / maxFrames;
+            Rectangle sourceRec = { (float)currentFrame * frameWidth, 0, frameWidth, (float)assets->eksplozija.height };
+
+            BeginBlendMode(BLEND_ADDITIVE);
+            DrawTextureRec(assets->eksplozija, sourceRec, pozicija, WHITE);
+            EndBlendMode();
+        }
+    }
+}
