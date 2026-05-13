@@ -54,6 +54,7 @@ void InitTurret(Enemy *e) {
     e->actions[MOVEMENT_ACTION].update = NULL;
     e->actions[SHOOTING_ACTION] = InitAction(&LinearShot,1/e->fireRate);
 }
+//Dodati funkciju za inicijalizaciju uniona mozda
 void InitRangedPlane(Enemy *e) {
     e->HP = 5;
     e->maxHP = 5;

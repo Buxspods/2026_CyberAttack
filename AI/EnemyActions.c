@@ -25,7 +25,7 @@ void MoveCircular(Vector2 *pos, Vector2 centerPos,float speed,int direction,floa
     float dy = pos->y - centerPos.y;
     float radius = sqrtf(dx * dx + dy * dy);
     float angle = atan2f(dy, dx);
-    angle += dt * speed * 0.01f;
+    angle += dt * speed/radius;
 
     pos->x = centerPos.x + cosf(angle) * radius;
     pos->y = centerPos.y + sinf(angle) * radius;
