@@ -7,30 +7,51 @@
 //#include "EnemyTypes.h"
 #include "raylib.h"
 #include "../mech/EntityTypes.h"
+#include "States.h"
 
 #define ENEMY_CAP 100
 #define DEFAULT_DEATH_SCORE 50
-typedef struct {
+#define MOVEMENT_ACTION 0
+#define SHOOTING_ACTION 1
+#define MAX_ACTIONS 2
+typedef struct Enemy Enemy;
+typedef struct GameState GameState;
+typedef void (*EnemyUpdateFunc)(Enemy *e, GameState *state, float dt);
+typedef struct{
+    EnemyUpdateFunc update;
+    float actionTimer;
+    float currentTime;
+}Action;
+struct Enemy{
     Vector2 position;
     int HP;
     int maxHP;
     float size;
     float speed;
+    float fireRate;
     EntityType type;
     float deathScore;
-    Vector2 movementDirection;
-    float actionTimer;//Napraviti bolji sistem za ovo (za sada AI moze da radi samo po jednu akciju ovo treba da bude niz
-    //Sa vise akcija gde ce svaka akcija da pozove odredjenu funkciju
+    Action actions[2];
     bool active;//Ista logika kao i za metkove
-}Enemy;
+    union{
+        struct {Vector2 direction;} linear;
+        struct {Vector2 center;Vector2 position;int direction;} circular;//direction je +/- jedan da bi odlucio da li hoces na desnu ili levu stranu
+        struct {Vector2 position;float amplitude;float frequency; float baseline;int direction;} sine;
+    } movementData;
+    union {
+        struct {Vector2 direction;} single;//Add more stuff here
+        struct {Vector2 direction;int amount;float rotationAngleRadians;} shotgun;
+    }shootingData;
+};
 typedef struct GameState GameState;
 //Funkcije za inicijalizaciju razlicitih tipova protivnika
 void SpawnEnemy(Enemy enemies[],EntityType type,Vector2 position);
 void InitMeelePlane(Enemy *e);
 void InitTurret(Enemy *e);
+void InitRangedPlane(Enemy *e);
 //Logika
-void Decision(Enemy *e, struct GameState * state);
-void MeelePlaneDecision(Enemy *e,float dt);
+void Decision(Enemy *e, GameState * state);
+void MeleePlaneDecision(Enemy *e,float d,GameState * state);
 void TurretDecision(Enemy *e,float dt,struct GameState * state);
 void UpdateEnemies(struct GameState * state);
 

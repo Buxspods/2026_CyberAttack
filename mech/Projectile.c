@@ -10,7 +10,7 @@
 void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,float speed, Vector2 target, Player *player) {
     Vector2 direction;
     EntityType projectile_tag;
-    if(shooter == ENEMY_TURRET){
+    if(shooter == ENEMY_TURRET || shooter == ENEMY_RANGED_PLANE){
         projectile_tag = ENEMY_PROJECTILE;
     }
     else{
@@ -24,15 +24,13 @@ void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,f
             projectiles[i].pos = pos;
             projectiles[i].size = size;
             projectiles[i].speed = speed;
-            if(shooter == ENEMY_TURRET){
+            if(shooter == ENEMY_TURRET || shooter == ENEMY_RANGED_PLANE){
                 direction = Vector2Normalize(Vector2Subtract(target,projectiles[i].pos));
             }
             projectiles[i].direction = direction;
             if (shooter == PLAYER) {
                 player->ammo--;
             }
-
-
             break;
         }
     }

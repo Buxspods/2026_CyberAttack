@@ -3,10 +3,14 @@
 //
 #include "../mech/projectile.h"
 #include "Enemy.h"
-
+#include"EnemyActions.h"
 #include <stdio.h>
+#include <stdlib.h>
+
+#include "raymath.h"
 
 #include "../mech/GameState.h"
+#include "EnemyActions.h"
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 void SpawnEnemy(Enemy enemies[],EntityType type,Vector2 position) {
@@ -19,51 +23,78 @@ void SpawnEnemy(Enemy enemies[],EntityType type,Vector2 position) {
             switch (enemies[i].type) {
                 case ENEMY_MELEE_PLANE:InitMeelePlane(&enemies[i]);break;
                 case ENEMY_TURRET:InitTurret(&enemies[i]);break;
+                case ENEMY_RANGED_PLANE:InitRangedPlane(&enemies[i]);break;
             }
             break;
         }
     }
 }
+Action InitAction(EnemyUpdateFunc f,float timer) {
+    Action res;
+    res.update = f;
+    res.actionTimer = timer;
+    res.currentTime=0;
+    return res;
+}
 void InitMeelePlane(Enemy *e) {
     e->HP = 5;//Za sad
     e->maxHP = 5;
     e->speed = 200.0f;
-    e->movementDirection = (Vector2){0,-1};
     e->size = 40;
+    e->actions[MOVEMENT_ACTION] = InitAction(&LinearMovement,GetFrameTime());
+    e->actions[SHOOTING_ACTION].update = NULL;
+    e->movementData.linear.direction = (Vector2){0,-1};
 }
 void InitTurret(Enemy *e) {
     e->HP = 5;
     e->maxHP = 5;
     e->speed = 0;
     e->size = 20;
-    e->actionTimer = 0;
+    e->fireRate = 2.73f;//The binding of Isaac reference
+    e->actions[MOVEMENT_ACTION].update = NULL;
+    e->actions[SHOOTING_ACTION] = InitAction(&LinearShot,1/e->fireRate);
+}
+void InitRangedPlane(Enemy *e) {
+    e->HP = 5;
+    e->maxHP = 5;
+    e->size = 15;
+    e->fireRate = 2.73f;
+    e->speed = 350.0f;
+    int random = GetRandomValue(0,2);
+    e->actions[SHOOTING_ACTION] = InitAction(&LinearShot,1/e->fireRate);
+    if (random ==0) {
+        e->actions[MOVEMENT_ACTION] = InitAction(&SineMovement,GetFrameTime());
+        e->movementData.sine.direction=1;
+        e->movementData.sine.amplitude = 30.f;
+        e->movementData.sine.frequency= 0.02f;
+        e->movementData.sine.baseline = WINDOW_HEIGHT/2;
+        e->movementData.sine.position = e->position;
+    }
+    if (random ==1) {
+        e->actions[MOVEMENT_ACTION] = InitAction(&CircularMovement,GetFrameTime());
+        e->movementData.circular.position = e->position;
+        int randomDir = GetRandomValue(0,1);
+        if (randomDir ==0) {
+            e->movementData.circular.direction = -1;
+        }
+        else
+            e->movementData.circular.direction = 1;
+        e->movementData.circular.center = (Vector2){WINDOW_WIDTH/2,WINDOW_HEIGHT/2};
+    }
+    if (random ==2) {
+        e->actions[MOVEMENT_ACTION] = InitAction(&LinearMovement,GetFrameTime());
+        e->movementData.linear.direction = (Vector2){1,0};
+    }
 }
 void UpdateEnemies(GameState * state) {
+    float dt = GetFrameTime();
     for (int i=0;i<ENEMY_CAP;i++) {
         if (state->enemies[i].active) {
-            Decision(&(state->enemies[i]),state);
+            for (int j=0;j<MAX_ACTIONS;j++) {
+                if (state->enemies[i].actions[j].update != NULL)
+                    state->enemies[i].actions[j].update(&state->enemies[i],state,dt);
+            }
         }
-    }
-}
-void Decision(Enemy *e,GameState *state) {
-    float dt = GetFrameTime();
-    switch (e->type) {
-        case (ENEMY_MELEE_PLANE): MeelePlaneDecision(e,dt); break;
-        case(ENEMY_TURRET):TurretDecision(e,dt,state); break;
-    }
-}
-void MeelePlaneDecision(Enemy *e,float dt) {
-    e->position.x += e->speed * dt * e->movementDirection.x;
-    e->position.y += e->speed * dt * e->movementDirection.y;//Normalizacija
-    if (e->position.x <e->size || e->position.x>WINDOW_WIDTH || e->position.y <e->size || e->position.y>WINDOW_HEIGHT) {
-        e->active = false;
-    }
-}
-void TurretDecision(Enemy *e,float dt,GameState * state) {
-    e->actionTimer+=dt;
-    if (e->actionTimer>1) {
-        e->actionTimer =0;
-        Shoot(ENEMY_TURRET,state->projectiles,e->position,5,700,state->player.playerPos, &state->player);
     }
 }
 void DrawEnemies(Enemy enemies[]) {

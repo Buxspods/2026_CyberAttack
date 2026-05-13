@@ -51,7 +51,8 @@ int main() {
 
         if (spawn_timer>3) {
             spawn_timer=0;
-            SpawnEnemy(gamestate.enemies,ENEMY_MELEE_PLANE,(Vector2){500,1000});
+            //SpawnEnemy(gamestate.enemies,ENEMY_MELEE_PLANE,(Vector2){500,1000});
+            SpawnEnemy(gamestate.enemies,ENEMY_RANGED_PLANE,(Vector2){0,WINDOW_HEIGHT/2});
             //Iz nekog razloga se ekran zacrni kada se ovde stavi window height
         }
         if (fire_timer > 600) {
