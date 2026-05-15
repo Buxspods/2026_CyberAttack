@@ -6,9 +6,15 @@
 #define INC_2026_CYBERATTACK_ENEMYACTIONS_H
 #include "Enemy.h"
 //Enemy update Functions
+typedef enum {
+    MOVEMENT_ACTION = 0,
+    SHOOTING_ACTION  = 1
+}ActionType;
 void LinearMovement(Enemy *e,GameState *state, float dt);
 void CircularMovement(Enemy *e, GameState *state, float dt);
 void SineMovement(Enemy *e,GameState *state, float dt);
 void LinearShot(Enemy *e,GameState *state, float dt);
 void ShotgunShot(Enemy *e,GameState *state, float dt);
+void PlayerShotLinear(Enemy *e,GameState *state, float dt);
+void BossPhase1(Enemy *e,GameState *state, float dt);
 #endif //INC_2026_CYBERATTACK_ENEMYACTIONS_H

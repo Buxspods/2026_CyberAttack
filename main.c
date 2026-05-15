@@ -34,13 +34,14 @@ int main() {
     float providnost = 1.0f;
     SetExitKey(KEY_NULL);
     //Game Loop
-    SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){100,100});
-    SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){900,100});
+    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){100,100});
+    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){900,100});
     //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){100,900});
     //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){450,450});
     //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){900,900});
     //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){550,450});
 
+    SpawnEnemy(gamestate.enemies,BOSS,(Vector2){WINDOW_HEIGHT/2,80});
 
     while(!WindowShouldClose()) {
         Color BackgroundColor = {67, 67, 69, 255}; //OVU BOJU CEMO SVAKAKO SKLONITI KAD TAD
@@ -49,18 +50,19 @@ int main() {
         fire_timer+=dt;
         spawn_timer+=dt;
 
-        if (spawn_timer>3) {
-            spawn_timer=0;
+        //if (spawn_timer>3) {
+        //    spawn_timer=0;
             //SpawnEnemy(gamestate.enemies,ENEMY_MELEE_PLANE,(Vector2){500,1000});
-            SpawnEnemy(gamestate.enemies,ENEMY_RANGED_PLANE,(Vector2){0,WINDOW_HEIGHT/2});
+            //SpawnEnemy(gamestate.enemies,ENEMY_RANGED_PLANE,(Vector2){0,WINDOW_HEIGHT/2});
             //Iz nekog razloga se ekran zacrni kada se ovde stavi window height
-        }
+        //}
         if (fire_timer > 600) {
             fire_timer = 0.0f; //ako je igrac bio afk duze od 10 minuta fire timer se resetuje
         }
 
         if (fire_timer > (1/gamestate.player.fireRate) && IsKeyDown(KEY_K) && gamestate.player.ammo > 0) {
-            Shoot(PLAYER, gamestate.projectiles, gamestate.player.playerPos, 5, 750, (Vector2){0, 0}, &gamestate.player);
+            PlayerShootBullet(&gamestate,&gamestate.player);
+            //Shoot(PLAYER, gamestate.projectiles, gamestate.player.playerPos, 5, 750, (Vector2){0, 0}, &gamestate.player);
             fire_timer = 0;
         }
 

@@ -24,6 +24,7 @@ void SpawnEnemy(Enemy enemies[],EntityType type,Vector2 position) {
                 case ENEMY_MELEE_PLANE:InitMeelePlane(&enemies[i]);break;
                 case ENEMY_TURRET:InitTurret(&enemies[i]);break;
                 case ENEMY_RANGED_PLANE:InitRangedPlane(&enemies[i]);break;
+                case BOSS:InitBoss(&enemies[i]);break;
             }
             break;
         }
@@ -52,7 +53,10 @@ void InitTurret(Enemy *e) {
     e->size = 20;
     e->fireRate = 2.73f;//The binding of Isaac reference
     e->actions[MOVEMENT_ACTION].update = NULL;
-    e->actions[SHOOTING_ACTION] = InitAction(&LinearShot,1/e->fireRate);
+    e->actions[SHOOTING_ACTION] = InitAction(&PlayerShotLinear,1/e->fireRate);
+    e->shootingData.single.direction = (Vector2){0,1};
+    e->shootingData.single.size = 5;
+    e->shootingData.single.speed = 700.0f;
 }
 //Dodati funkciju za inicijalizaciju uniona mozda
 void InitRangedPlane(Enemy *e) {
@@ -62,7 +66,7 @@ void InitRangedPlane(Enemy *e) {
     e->fireRate = 2.73f;
     e->speed = 350.0f;
     int random = GetRandomValue(0,2);
-    e->actions[SHOOTING_ACTION] = InitAction(&LinearShot,1/e->fireRate);
+    e->actions[SHOOTING_ACTION] = InitAction(&ShotgunShot,1/e->fireRate);
     if (random ==0) {
         e->actions[MOVEMENT_ACTION] = InitAction(&SineMovement,GetFrameTime());
         e->movementData.sine.direction=1;
@@ -86,6 +90,26 @@ void InitRangedPlane(Enemy *e) {
         e->actions[MOVEMENT_ACTION] = InitAction(&LinearMovement,GetFrameTime());
         e->movementData.linear.direction = (Vector2){1,0};
     }
+    e->shootingData.shotgun.size = 5;
+    e->shootingData.shotgun.speed = 700.0f;
+    e->shootingData.shotgun.direction = (Vector2){0,1};
+    e->shootingData.shotgun.rotationAngleRadians = PI/4;
+    e->shootingData.shotgun.amount=3;
+}
+void InitBoss(Enemy *e) {
+    e-> HP = 40;
+    e->maxHP = 40;
+    e->speed = 200.0f;
+    e->size = 80;
+    e->actions[MOVEMENT_ACTION] = InitAction(&BossPhase1,0.1f);
+    e->actions[SHOOTING_ACTION].update = NULL;
+    e->movementData.linear.direction = (Vector2) {3,2};
+    e->movementData.linear.acceleration = 200;
+    e->shootingData.shotgun.size = 15;
+    e->shootingData.shotgun.speed = 800.0f;
+    e->shootingData.shotgun.direction = (Vector2){0,1};
+    e->shootingData.shotgun.rotationAngleRadians = PI/4;
+    e->shootingData.shotgun.amount =8;
 }
 void UpdateEnemies(GameState * state) {
     float dt = GetFrameTime();
@@ -94,6 +118,10 @@ void UpdateEnemies(GameState * state) {
             for (int j=0;j<MAX_ACTIONS;j++) {
                 if (state->enemies[i].actions[j].update != NULL)
                     state->enemies[i].actions[j].update(&state->enemies[i],state,dt);
+            }
+            if (state->enemies[i].position.y > WINDOW_HEIGHT + state->enemies[i].size+15 || state->enemies[i].position.y < -state->enemies[i].size-15 ||state->enemies[i].position.x > WINDOW_WIDTH + state->enemies[i].size+15 ||
+                state->enemies[i].position.x < -state->enemies[i].size-15) {
+                    DestroyEnemy(&state->enemies[i]);
             }
         }
     }

@@ -50,7 +50,6 @@ add_executable(2026_CyberAttack main.c
         mech/WaveMaker.c
         mech/Powerup.h
         mech/Powerup.c
-        AI/States.h
         AI/EnemyActions.h
         AI/EnemyActions.c
 )

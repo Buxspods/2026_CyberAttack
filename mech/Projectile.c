@@ -6,8 +6,21 @@
 #include "raymath.h"
 #include "EntityTypes.h"
 #include "Player.h"
-
-void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,float speed, Vector2 target, Player *player) {
+//Ova funkcija dodata da bi radila sa protivnicima
+void InitProjectile(Projectile projectiles[],EntityType projectile_tag,Vector2 pos,Vector2 dir,float speed,float size) {
+    for (int i = 0; i < PROJECTILE_CAP; i++) {
+        if (!projectiles[i].active) {
+            projectiles[i].active = true;
+            projectiles[i].entityType = projectile_tag;
+            projectiles[i].pos = pos;
+            projectiles[i].direction = Vector2Normalize(dir);
+            projectiles[i].speed = speed;
+            projectiles[i].size = size;
+            break;
+        }
+    }
+}
+/*void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,float speed, Vector2 target, Player *player) {
     Vector2 direction;
     EntityType projectile_tag;
     if(shooter == ENEMY_TURRET || shooter == ENEMY_RANGED_PLANE){
@@ -34,12 +47,11 @@ void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,f
             break;
         }
     }
-}
-
+}*/
 void UpdateProjectile(Projectile *p,float dt) {
-    p->pos.x += p->speed * dt * p->direction.x;
-    p->pos.y += p->speed * dt * p->direction.y;//Treba odraditi normalizaciju
-
+    Vector2 normalizedDirection = Vector2Normalize(p->direction);
+    p->pos.x += p->speed * dt * normalizedDirection.x;
+    p->pos.y += p->speed * dt * normalizedDirection.y;
     if (p->pos.y < p->size/2 || p->pos.x < p->size/2 || p->pos.y>WINDOW_HEIGHT || p->pos.x>WINDOW_WIDTH) {//Izlazak iz ekrana
         p->active = false;
     }

@@ -22,5 +22,6 @@ void Shoot(EntityType shooter, Projectile projectiles[],Vector2 pos,float size,f
 void UpdateProjectiles(Projectile projectiles[]);
 void DrawProjectiles(Projectile projectiles[]);
 void UpdateProjectile(Projectile *p,float dt);
+void InitProjectile(Projectile projectiles[],EntityType projectile_tag,Vector2 pos,Vector2 dir,float speed,float size);
 //void ShootAt(Projectile projectiles[],Vector2 pos,float size,float speed,Vector2 target);
 #endif //INC_2026_CYBERATTACK_PROJECTILE_H

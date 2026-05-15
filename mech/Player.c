@@ -1,7 +1,8 @@
-#include "Player.h"
+#include "GameState.h"
 #include"../GUI/assets.h"
 #include"../GUI/planeGUI.h"
 #include <math.h>
+
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 
@@ -41,4 +42,9 @@ void UpdatePlayerPosition(Player *player) {
 
     player->playerPos.x += movement.x * dt * player->playerSpeed;
     player->playerPos.y += movement.y * dt * player->playerSpeed;
+}
+
+void PlayerShootBullet(GameState *state, Player *player) {
+    InitProjectile(state->projectiles,PLAYER_PROJECTILE,state->player.playerPos,(Vector2){0,-1},700,5);
+    player->ammo--;
 }

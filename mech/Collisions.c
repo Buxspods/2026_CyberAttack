@@ -55,8 +55,8 @@ void CheckCollisions(GameState *gameState) {
         //Player *player = &gameState->player;
         Enemy *enemy = &gameState->enemies[i];
         if (!enemy->active) {continue;}
-        if (CheckCollisionCircles(player->playerPos, player->playerSize,enemy->position, enemy->size))
-        {
+        if (CheckCollisionCircles(player->playerPos, player->playerSize,enemy->position, enemy->size) && enemy->type!=BOSS)
+        {//Ne ubija bossa
             for (int k = 0; k < POWERUP_CAP; k++) {
                 PowerUp *powerup = &gameState->powerups[k];
 
