@@ -86,7 +86,12 @@ void ShotgunShot(Enemy *e,GameState *state, float dt) {
 }
 void BossPhase1(Enemy*e,GameState *state, float dt) {
     MoveLinear(&e->position,e->speed,e->movementData.linear.direction,GetFrameTime());
-    e->actions[MOVEMENT_ACTION].currentTime+=dt;
+    e->actions[MOVEMENT_ACTION].currentTime+=e->speed*dt;
+    if (e->actions[MOVEMENT_ACTION].currentTime>e->actions[MOVEMENT_ACTION].actionTimer) {
+        e->shootingData.shotgun.direction = Vector2Rotate(e->shootingData.shotgun.direction,PI/3);
+        ShotgunShot(e,state,dt);
+        e->actions[MOVEMENT_ACTION].currentTime = 0;
+    }
     bool colided = false;
     if (e->position.x < e->size){
         colided = true;
@@ -98,7 +103,6 @@ void BossPhase1(Enemy*e,GameState *state, float dt) {
         e->position.x = WINDOW_WIDTH-e->size;
         e->movementData.linear.direction.x*=-1;
     }
-
     if (e->position.y < e->size){
         colided = true;
         e->position.y = e->size;
@@ -109,9 +113,10 @@ void BossPhase1(Enemy*e,GameState *state, float dt) {
         e->position.y = WINDOW_HEIGHT-e->size;
         e->movementData.linear.direction.y*=-1;
     }
-    if (colided){
+    if (colided) {
         e->speed += e->movementData.linear.acceleration;
         e->shootingData.shotgun.speed-=e->movementData.linear.acceleration;
+        e->shootingData.shotgun.direction = Vector2Rotate(e->shootingData.shotgun.direction,PI/3);
         if (e->shootingData.shotgun.speed>50)
             ShotgunShot(e,state,dt);
         else {

@@ -101,7 +101,7 @@ void InitBoss(Enemy *e) {
     e->maxHP = 40;
     e->speed = 200.0f;
     e->size = 80;
-    e->actions[MOVEMENT_ACTION] = InitAction(&BossPhase1,0.1f);
+    e->actions[MOVEMENT_ACTION] = InitAction(&BossPhase1,300);//Timer ovde oznacava predjeni put nakon kog boss automatski puca oko sebe
     e->actions[SHOOTING_ACTION].update = NULL;
     e->movementData.linear.direction = (Vector2) {3,2};
     e->movementData.linear.acceleration = 200;
