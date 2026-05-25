@@ -62,7 +62,7 @@ void ShotgunShoot(GameState *state,Vector2 centralDirection,int amount,float Spr
     }
 }
 void FireLaser(Vector2 ShooterPos,Vector2 TargetPos,GameState *state,float width) {
-    DrawRectangle(ShooterPos.x-width/2,ShooterPos.y,width,WINDOW_HEIGHT,GREEN);
+    DrawRectangle(ShooterPos.x-width/2,ShooterPos.y,width,WINDOW_HEIGHT,ORANGE);
     if (fabs(ShooterPos.x-TargetPos.x)<width/2) {
         InitProjectile(state->projectiles,ENEMY_PROJECTILE,Vector2Add(TargetPos,(Vector2){0,2}),(Vector2){0,1},
             1000,5);
