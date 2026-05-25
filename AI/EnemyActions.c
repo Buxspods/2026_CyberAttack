@@ -118,8 +118,8 @@ void BossPhase2(Enemy *e,GameState *state,float dt) {
     }
     if (colided) {
         Vector2 dir = Vector2Subtract(state->player.playerPos,e->position);
-        /*ShotgunShoot(state,dir,e->shootingData.shotgun.amount,
-            e->shootingData.shotgun.rotationAngleRadians,e->position,e->shootingData.shotgun.size,e->shootingData.shotgun.speed);*/
+        ShotgunShoot(state,dir,e->shootingData.shotgun.amount,
+            e->shootingData.shotgun.rotationAngleRadians,e->position,e->shootingData.shotgun.size,e->shootingData.shotgun.speed);
         if (e->speed<1000)
             e->speed+=200;
     }
