@@ -43,6 +43,7 @@ int main() {
 
     SpawnEnemy(gamestate.enemies,BOSS,(Vector2){WINDOW_HEIGHT/2,80});
 
+
     while(!WindowShouldClose()) {
         Color BackgroundColor = {67, 67, 69, 255}; //OVU BOJU CEMO SVAKAKO SKLONITI KAD TAD
 

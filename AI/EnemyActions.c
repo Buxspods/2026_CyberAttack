@@ -61,6 +61,13 @@ void ShotgunShoot(GameState *state,Vector2 centralDirection,int amount,float Spr
         LinearShoot(state,shooterPos,rightDirection,size,speed);
     }
 }
+void FireLaser(Vector2 ShooterPos,Vector2 TargetPos,GameState *state,float width) {
+    DrawRectangle(ShooterPos.x-width/2,ShooterPos.y,width,WINDOW_HEIGHT,GREEN);
+    if (fabs(ShooterPos.x-TargetPos.x)<width/2) {
+        InitProjectile(state->projectiles,ENEMY_PROJECTILE,Vector2Add(TargetPos,(Vector2){0,2}),(Vector2){0,1},
+            1000,5);
+    }
+}
 void LinearShot(Enemy *e,GameState *state, float dt) {
     e->actions[SHOOTING_ACTION].currentTime+=dt;
     if (e->actions[SHOOTING_ACTION].currentTime>=e->actions[SHOOTING_ACTION].actionTimer) {
@@ -84,8 +91,75 @@ void ShotgunShot(Enemy *e,GameState *state, float dt) {
             e->shootingData.shotgun.rotationAngleRadians,e->position,e->shootingData.shotgun.size,e->shootingData.shotgun.speed);
     }
 }
+void BossPhase2(Enemy *e,GameState *state,float dt) {
+    MoveLinear(&e->position,e->speed,e->movementData.linear.direction,dt);
+    e->actions[MOVEMENT_ACTION].currentTime+=e->speed*dt;
+    if (e->actions[MOVEMENT_ACTION].currentTime>e->actions[MOVEMENT_ACTION].actionTimer) {
+        Vector2 dir = Vector2Subtract(state->player.playerPos,e->position);
+        ShotgunShoot(state,dir,e->shootingData.shotgun.amount,
+            e->shootingData.shotgun.rotationAngleRadians,e->position,e->shootingData.shotgun.size,e->shootingData.shotgun.speed);
+        e->actions[MOVEMENT_ACTION].currentTime = 0;
+    }
+    bool colided = false;
+    if (e->position.x < e->size){
+        colided = true;
+        e->position.x = e->size;
+        e->movementData.linear.direction.x*=-1;
+    }
+    if (e->position.x>WINDOW_WIDTH-e->size){
+        colided = true;
+        e->position.x = WINDOW_WIDTH-e->size;
+        e->movementData.linear.direction.x*=-1;
+    }
+    if (fabs(e->position.x-WINDOW_WIDTH/2)<1) {
+        Vector2 dir = Vector2Subtract(state->player.playerPos,e->position);
+        ShotgunShoot(state,dir,e->shootingData.shotgun.amount,
+            e->shootingData.shotgun.rotationAngleRadians,e->position,e->shootingData.shotgun.size,e->shootingData.shotgun.speed);
+    }
+    if (colided) {
+        Vector2 dir = Vector2Subtract(state->player.playerPos,e->position);
+        /*ShotgunShoot(state,dir,e->shootingData.shotgun.amount,
+            e->shootingData.shotgun.rotationAngleRadians,e->position,e->shootingData.shotgun.size,e->shootingData.shotgun.speed);*/
+        if (e->speed<1000)
+            e->speed+=200;
+    }
+}
+
+void BossLaserShot(Enemy *e,GameState *state, float dt){
+    e->actions[SHOOTING_ACTION].currentTime+=dt;
+    if (e->actions[SHOOTING_ACTION].currentTime<e->actions[SHOOTING_ACTION].actionTimer) {
+        FireLaser(e->position,state->player.playerPos,state,e->size);
+    }
+    else {
+        e->actions[MOVEMENT_ACTION].update = BossPhase2;
+        e->actions[SHOOTING_ACTION].update = NULL;
+        e->actions[MOVEMENT_ACTION].currentTime = 0;
+        e->actions[MOVEMENT_ACTION].actionTimer = WINDOW_WIDTH-e->size;
+        e->movementData.linear.direction = (Vector2){-1,0};
+        e->movementData.linear.acceleration = 200;
+        e->shootingData.shotgun.size = 15;
+        e->shootingData.shotgun.speed = 900.0f;
+        e->shootingData.shotgun.direction = (Vector2){0,1};
+        e->shootingData.shotgun.rotationAngleRadians = PI/6;
+        e->shootingData.shotgun.amount =3;
+    }
+}
+
+void FireBigLaser(Enemy *e,GameState *state, float dt) {
+    e->actions[MOVEMENT_ACTION].update = NULL;
+    e->actions[SHOOTING_ACTION].update = BossLaserShot;
+}
+void BossRetreat(Enemy *e,GameState *state, float dt) {
+    MoveLinear(&e->position,e->speed,e->movementData.linear.direction,dt);
+    if (e->position.y < e->size+10) {
+        e->actions[MOVEMENT_ACTION].update = &FireBigLaser;
+        e->actions[SHOOTING_ACTION].actionTimer = 2;
+        e->actions[SHOOTING_ACTION].currentTime = 0;
+        e->movementData.linear.direction = (Vector2) {1,0};
+    }
+}
 void BossPhase1(Enemy*e,GameState *state, float dt) {
-    MoveLinear(&e->position,e->speed,e->movementData.linear.direction,GetFrameTime());
+    MoveLinear(&e->position,e->speed,e->movementData.linear.direction,dt);
     e->actions[MOVEMENT_ACTION].currentTime+=e->speed*dt;
     if (e->actions[MOVEMENT_ACTION].currentTime>e->actions[MOVEMENT_ACTION].actionTimer) {
         e->shootingData.shotgun.direction = Vector2Rotate(e->shootingData.shotgun.direction,PI/3);
@@ -131,5 +205,9 @@ void BossPhase1(Enemy*e,GameState *state, float dt) {
     if (e->speed>1000) {
         e->speed = 1000;
         e->movementData.linear.acceleration*=-1;
+    }
+    if (e->HP<e->maxHP/2) {
+        e->movementData.linear.direction = Vector2Normalize(Vector2Subtract((Vector2){WINDOW_WIDTH/2,e->size+10},e->position));
+        e->actions[MOVEMENT_ACTION].update = &BossRetreat;
     }
 }
