@@ -11,6 +11,8 @@
 //
 #define WINDOW_HEIGHT 1000
 #define WINDOW_WIDTH 1000
+
+//Verovatno treba da se pocisti dosta koda oko bossa
 void MoveLinear(Vector2 *pos,float speed,Vector2 direction,float dt) {
     Vector2 normalizedDirection = Vector2Normalize(direction);
     pos->x += speed * dt * normalizedDirection.x;
@@ -94,9 +96,8 @@ void ShotgunShot(Enemy *e,GameState *state, float dt) {
 void BossPhase2(Enemy *e,GameState *state,float dt) {
     MoveLinear(&e->position,e->speed,e->movementData.linear.direction,dt);
     e->actions[MOVEMENT_ACTION].currentTime+=e->speed*dt;
-    if (e->actions[MOVEMENT_ACTION].currentTime>e->actions[MOVEMENT_ACTION].actionTimer) {
-        Vector2 dir = Vector2Subtract(state->player.playerPos,e->position);
-        ShotgunShoot(state,dir,e->shootingData.shotgun.amount,
+    if (e->actions[MOVEMENT_ACTION].currentTime>e->actions[MOVEMENT_ACTION].actionTimer) {//Nije allignovano sa sredinom ekrana napravi to
+        ShotgunShoot(state,(Vector2){0,1},e->shootingData.shotgun.amount,
             e->shootingData.shotgun.rotationAngleRadians,e->position,e->shootingData.shotgun.size,e->shootingData.shotgun.speed);
         e->actions[MOVEMENT_ACTION].currentTime = 0;
     }
