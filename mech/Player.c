@@ -11,11 +11,18 @@ Player InitPlayer(float score, Vector2 playerPos, float playerSize, float player
     player.entityType = PLAYER;
     player.playerPos = playerPos;
     player.playerSpeed = 500.0f;
+    player.isDashing = false;
+    player.canDash = true;
+    player.dashSpeed = 2500.0f;
+    player.dashTimer = 0;
+    player.dashCooldown = 3.0f;
     player.playerSize = 20;
     player.lives = 5;
     player.fireRate = 10;
     player.ammo = ammo;
     player.score = 0;
+    player.isInvincible = false;
+    player.invincibilityTimer = 0;
     return player;
 }
 void DrawPlayer(Player player, GraphicAssets *assets) {
@@ -33,13 +40,24 @@ void UpdatePlayerPosition(Player *player) {
     if (IsKeyDown(KEY_W)) movement.y -= player->playerPos.y > player->playerSize? 1 : 0;
     if (IsKeyDown(KEY_S)) movement.y += player->playerPos.y < WINDOW_HEIGHT - player->playerSize? 1 : 0;
 
-
     if (movement.x != 0 || movement.y != 0) {
         float le = sqrtf(movement.x * movement.x + movement.y * movement.y);
         movement.x /= le;
         movement.y /= le; //le znaci length kao duzina
     }
+    if (IsKeyDown(KEY_LEFT_SHIFT) && player->canDash) {
+        SetDash(player,true);
+        player-> canDash = false;
+    }
+    else if (!player->canDash) {
+        player->dashTimer += dt;
+        if (player->dashTimer >= player->dashCooldown) {
+            player-> canDash = true;
+            player->dashTimer = 0;
+        }
+    }
 
+    player->mvmntVect = movement;
     player->playerPos.x += movement.x * dt * player->playerSpeed;
     player->playerPos.y += movement.y * dt * player->playerSpeed;
 }
@@ -47,4 +65,37 @@ void UpdatePlayerPosition(Player *player) {
 void PlayerShootBullet(GameState *state, Player *player) {
     InitProjectile(state->projectiles,PLAYER_PROJECTILE,state->player.playerPos,(Vector2){0,-1},700,5);
     player->ammo--;
+}
+
+void SetInvincibility(Player *player, bool mode) {
+    player->isInvincible = mode;
+    player->invincibilityTimer = 0;
+}
+
+void UpdateInvincibility(Player *player, float tick, float time) {
+    if (player->isInvincible) {
+        player-> invincibilityTimer += tick;
+        if (player->invincibilityTimer >= time) {
+            player->invincibilityTimer = 0;
+            SetInvincibility(player,false);
+        }
+    }
+}
+
+void SetDash(Player *player, bool mode) {
+    player->isDashing = mode;
+    player->dashTimer = 0;
+}
+
+void UpdateDash(Player *player, float tick, float time, Vector2 dash) {
+    if (player->isDashing) {
+        player-> canDash = false;
+        player-> dashTimer += tick;
+        player->playerPos.x += dash.x * player-> dashSpeed * tick;
+        player->playerPos.y += dash.y * player-> dashSpeed * tick;
+        if (player->dashTimer >= time) {
+            player->dashTimer = 0;
+            SetDash(player,false);
+        }
+    }
 }

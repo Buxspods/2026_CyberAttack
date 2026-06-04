@@ -19,7 +19,6 @@ void CheckCollisions(GameState *gameState) {
                 Enemy *enemy = &gameState->enemies[j];
 
                 if (!enemy->active) {continue;}
-
                 if (CheckCollisionCircles(enemy->position, enemy->size,project->pos, project->size)) {
                     project->active = false;
                     enemy->HP--;
@@ -40,10 +39,13 @@ void CheckCollisions(GameState *gameState) {
         }
 
         if (project->entityType == ENEMY_PROJECTILE) {//PLAYER/ENEMY BULLET COLIISION
-            //Player *player = &gameState->player;
-            if (CheckCollisionCircles(player->playerPos, player->playerSize,project->pos, project->size)) {
+
+            if (CheckCollisionCircles(player->playerPos, player->playerSize,project->pos, project->size) && !player->isInvincible) {
                 project->active = false;
                 player->lives--;
+
+                SetInvincibility(player, true);
+
                 if (player->lives <= 0) {
                     //MARE MACOLA MORA DA MI DODA SCREEN ZA SMRT
                 }
@@ -52,11 +54,11 @@ void CheckCollisions(GameState *gameState) {
     }
 
     for (int i = 0; i < ENEMY_CAP; i++) { //ENEMY/PLAYER COLLISION
-        //Player *player = &gameState->player;
         Enemy *enemy = &gameState->enemies[i];
         if (!enemy->active) {continue;}
-        if (CheckCollisionCircles(player->playerPos, player->playerSize,enemy->position, enemy->size) && enemy->type!=BOSS)
+        if (CheckCollisionCircles(player->playerPos, player->playerSize,enemy->position, enemy->size) && enemy->type!=BOSS && player->isInvincible)
         {//Ne ubija bossa
+            SetInvincibility(player, true);
             for (int k = 0; k < POWERUP_CAP; k++) {
                 PowerUp *powerup = &gameState->powerups[k];
 
@@ -71,9 +73,9 @@ void CheckCollisions(GameState *gameState) {
         }
     }
 
-    for (int i = 0; i < POWERUP_CAP; i++) {
+    for (int i = 0; i < POWERUP_CAP; i++) { //PLAYER/POWERUP COLLISION
         PowerUp *powerup = &gameState->powerups[i];
-        if (CheckCollisionCircles(player->playerPos, player->playerSize,powerup->position, powerup->size)) {
+        if (CheckCollisionCircles(player->playerPos, player->playerSize,powerup->position, powerup->size) && powerup->active) {
             PickUpPowerUp(powerup, player);
         }
     }

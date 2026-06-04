@@ -6,6 +6,9 @@
 #include"GUI.h"
 #include <time.h>
 
+#include "mech/EnemyWithTime.h"
+#include "mech/Level.h"
+#include "mech/Wave.h"
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 #define PROJECTILE_CAP 100
@@ -13,10 +16,45 @@
 
 
 int main() {
+
+    float localWaveTimer = 0.0f;
+    float globalLeveltimer = 0.0f;
+
     srand(time(NULL));
     float fire_timer =0.0f;//Prebaciti ovo verovatno u logiku za igraca nekakvu
     float spawn_timer =4.0f;
+    float dashCooldownTimer = 0.0f;
     GameState gamestate = InitGameState();//Inicijalizuje Igraca protivnike i metkove
+
+
+    EnemyWave wave4 = {
+        .enemies = {
+                {ENEMY_TURRET, {100, 450},1.0f},
+                {ENEMY_TURRET, {300, 450},2.0f},
+                {ENEMY_TURRET, {500, 450},3.0f},
+                {ENEMY_TURRET, {700, 450},3.0f}},
+                    3.0f, 4};
+    EnemyWave wave2 = {
+        .enemies = {
+                    {ENEMY_TURRET, {100, 550},1.0f},
+                    {ENEMY_TURRET, {300, 550},2.0f},
+                    {ENEMY_TURRET, {500, 550},3.0f},
+                    {ENEMY_TURRET, {700, 550},4.0f}},
+                        7.0f, 4};
+    EnemyWave wave3 = {
+        .enemies = {
+                    {ENEMY_MELEE_PLANE, {100, 650},1.0f},
+                    {ENEMY_MELEE_PLANE, {100, 650},1.5f},
+                    {ENEMY_MELEE_PLANE, {100, 650},2.0f},
+                    {ENEMY_MELEE_PLANE, {100, 650},2.5f},
+                    {ENEMY_MELEE_PLANE, {100, 650},3.0f}},
+                        11.0f, 5};
+
+    EnemyWave wave1 = {.enemies = { {BOSS, {100, 100}, 1}}, 14, 1};
+
+    Level level = {.waves = {wave1, wave2, wave3, wave4}, 4};
+    Vector2 vect = {100, 100};
+    //SpawnEnemy(gamestate.enemies, BOSS, vect);
     //pravljenje pocetnog prozora i postavljanje najveceg dozvoljenog FPS-a
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "2026: Cyber Attack");
     SetTargetFPS(60);
@@ -34,22 +72,18 @@ int main() {
     float providnost = 1.0f;
     SetExitKey(KEY_NULL);
     //Game Loop
-    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){100,100});
-    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){900,100});
-    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){100,900});
-    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){450,450});
-    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){900,900});
-    //SpawnEnemy(gamestate.enemies,ENEMY_TURRET,(Vector2){550,450});
 
-    SpawnEnemy(gamestate.enemies,BOSS,(Vector2){WINDOW_HEIGHT/2,80});
-
+    //SpawnEnemy(gamestate.enemies,BOSS,(Vector2){WINDOW_HEIGHT/2,80});
 
     while(!WindowShouldClose()) {
         Color BackgroundColor = {67, 67, 69, 255}; //OVU BOJU CEMO SVAKAKO SKLONITI KAD TAD
-
         float dt = GetFrameTime(); //delta time potreban da bi na svakom kompu igra isla istom brzinom
         fire_timer+=dt;
         spawn_timer+=dt;
+        localWaveTimer+=dt;
+        globalLeveltimer+=dt;
+
+        StartLevel(&level, &gamestate, &globalLeveltimer);
 
         //if (spawn_timer>3) {
         //    spawn_timer=0;
@@ -72,10 +106,13 @@ int main() {
         }
 
         UpdatePlayerPosition(&gamestate.player);
+        UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
+        UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
+
         UpdateProjectiles(gamestate.projectiles);
         UpdateEnemies(&gamestate);
         CheckCollisions(&gamestate);
-       
+
 //
         //Ova linija treba da se ukljuci kada bude potreban pause meni
         assets.mis = GetMousePosition();

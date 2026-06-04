@@ -164,7 +164,15 @@ void BossPhase1(Enemy*e,GameState *state, float dt) {
     e->actions[MOVEMENT_ACTION].currentTime+=e->speed*dt;
     if (e->actions[MOVEMENT_ACTION].currentTime>e->actions[MOVEMENT_ACTION].actionTimer) {
         e->shootingData.shotgun.direction = Vector2Rotate(e->shootingData.shotgun.direction,PI/3);
-        ShotgunShot(e,state,dt);
+        ShotgunShoot(
+            state,
+            e->shootingData.shotgun.direction,
+            e->shootingData.shotgun.amount,
+            e->shootingData.shotgun.rotationAngleRadians,
+            e->position,
+            e->shootingData.shotgun.size,
+            e->shootingData.shotgun.speed
+        );
         e->actions[MOVEMENT_ACTION].currentTime = 0;
     }
     bool colided = false;
@@ -193,10 +201,26 @@ void BossPhase1(Enemy*e,GameState *state, float dt) {
         e->shootingData.shotgun.speed-=e->movementData.linear.acceleration;
         e->shootingData.shotgun.direction = Vector2Rotate(e->shootingData.shotgun.direction,PI/3);
         if (e->shootingData.shotgun.speed>50)
-            ShotgunShot(e,state,dt);
+            ShotgunShoot(
+    state,
+    e->shootingData.shotgun.direction,
+    e->shootingData.shotgun.amount,
+    e->shootingData.shotgun.rotationAngleRadians,
+    e->position,
+    e->shootingData.shotgun.size,
+    e->shootingData.shotgun.speed
+);
         else {
             e->shootingData.shotgun.speed=100;
-            ShotgunShot(e,state,dt);
+            ShotgunShoot(
+    state,
+    e->shootingData.shotgun.direction,
+    e->shootingData.shotgun.amount,
+    e->shootingData.shotgun.rotationAngleRadians,
+    e->position,
+    e->shootingData.shotgun.size,
+    e->shootingData.shotgun.speed
+);
         }
     }
     if (e->speed <400) {
