@@ -56,7 +56,7 @@ void CheckCollisions(GameState *gameState) {
     for (int i = 0; i < ENEMY_CAP; i++) { //ENEMY/PLAYER COLLISION
         Enemy *enemy = &gameState->enemies[i];
         if (!enemy->active) {continue;}
-        if (CheckCollisionCircles(player->playerPos, player->playerSize,enemy->position, enemy->size) && enemy->type!=BOSS && player->isInvincible)
+        if (CheckCollisionCircles(player->playerPos, player->playerSize,enemy->position, enemy->size) && enemy->type!=BOSS && !player->isInvincible)
         {//Ne ubija bossa
             SetInvincibility(player, true);
             for (int k = 0; k < POWERUP_CAP; k++) {

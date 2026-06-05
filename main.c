@@ -23,16 +23,16 @@ int main() {
     srand(time(NULL));
     float fire_timer =0.0f;//Prebaciti ovo verovatno u logiku za igraca nekakvu
     float spawn_timer =4.0f;
-    float dashCooldownTimer = 0.0f;
+    //float dashCooldownTimer = 0.0f;
     GameState gamestate = InitGameState();//Inicijalizuje Igraca protivnike i metkove
 
 
     EnemyWave wave4 = {
         .enemies = {
-                {ENEMY_TURRET, {100, 450},1.0f},
-                {ENEMY_TURRET, {300, 450},2.0f},
-                {ENEMY_TURRET, {500, 450},3.0f},
-                {ENEMY_TURRET, {700, 450},3.0f}},
+                {ENEMY_MELEE_PLANE, {100, 750},1.0f},
+                {ENEMY_MELEE_PLANE, {300, 750},2.0f},
+                {ENEMY_MELEE_PLANE, {500, 750},3.0f},
+                {ENEMY_MELEE_PLANE, {700, 750},3.0f}},
                     3.0f, 4};
     EnemyWave wave2 = {
         .enemies = {
@@ -44,8 +44,8 @@ int main() {
     EnemyWave wave3 = {
         .enemies = {
                     {ENEMY_MELEE_PLANE, {100, 650},1.0f},
-                    {ENEMY_MELEE_PLANE, {100, 650},1.5f},
-                    {ENEMY_MELEE_PLANE, {100, 650},2.0f},
+                    {ENEMY_RANGED_PLANE, {100, 650},1.5f},
+                    {ENEMY_TURRET, {100, 650},2.0f},
                     {ENEMY_MELEE_PLANE, {100, 650},2.5f},
                     {ENEMY_MELEE_PLANE, {100, 650},3.0f}},
                         11.0f, 5};
