@@ -3,11 +3,8 @@
 
 #include"assets.h"
 
-void ResumeGame();
-void HighestScores2();
-void Settings2();
-void Controls2();
-void ExitAndSave();
+void ResumeGame(GraphicAssets *assets, int score);
+void ExitAndSave(GraphicAssets *assets, int score);
 
 void CrtajPause(GraphicAssets *assets);
 void InitPause(GraphicAssets *assets);

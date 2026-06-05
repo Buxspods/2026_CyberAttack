@@ -1,0 +1,4 @@
+W, S, A, D - Movements
+K - Shooting
+Shift - Dash
+ESC - Pause Menu

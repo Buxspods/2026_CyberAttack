@@ -9,15 +9,16 @@
 #include"assets.h"
 #include"highest-score.h"
 
-void StartNewGame(GraphicAssets *assets);
-void LoadGame(GraphicAssets *assets);
-void HighestScores(GraphicAssets *assets);
-void Settings(GraphicAssets *assets);
-void Controls(GraphicAssets *assets);
-void ExitGame(GraphicAssets *assets);
+void StartNewGame(GraphicAssets *assets, int score);
+void LoadGame(GraphicAssets *assets, int score);
+void HighestScores(GraphicAssets *assets, int score);
+void Settings(GraphicAssets *assets, int score);
+void Guide(GraphicAssets *assets, int score);
+void ExitGame(GraphicAssets *assets, int score);
 
 void CrtajMeni(Vector2 *pozicija,float *vreme, float *providnost, GraphicAssets *assets);
 void InitGlavni(GraphicAssets *assets);
 void UnloadAssets(GraphicAssets *assets);
+
 
 #endif //INC_2026_CYBERATTACK_GLAVNIMENI_H

@@ -55,6 +55,8 @@ add_executable(2026_CyberAttack main.c
         mech/EnemyWithTime.h
         mech/Level.h
         mech/Level.c
+        GUI/endScreen.c
+        GUI/endScreen.h
 )
 target_include_directories(2026_CyberAttack PRIVATE ${raylib_include_DIRS})
 
@@ -67,5 +69,5 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
-        "${CMAKE_CURRENT_SOURCE_DIR}/highest-score"
-        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/highest-score")
+        "${CMAKE_CURRENT_SOURCE_DIR}/documents"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/documents")

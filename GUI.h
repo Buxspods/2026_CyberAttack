@@ -10,5 +10,6 @@
 #include"GUI/stats.h"
 #include"GUI/highest-score.h"
 #include"GUI/planeGUI.h"
+#include"GUI/endScreen.h"
 
 #endif //INC_2026_CYBERATTACK_GUI_H

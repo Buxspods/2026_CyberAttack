@@ -70,6 +70,9 @@ int main() {
     Vector2 pozicija = {windowWidth / 2.0f - dimenzije.x / 2, windowHeight * 0.125f};
     float vreme = 0.0f;
     float providnost = 1.0f;
+    float rotation = 0.0f;
+    assets.currScore = 0;
+    bool guideMenu = false;
     SetExitKey(KEY_NULL);
     //Game Loop
 
@@ -132,24 +135,32 @@ int main() {
         PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
 
         //Test za crtanje metka i PowerUp-ova
+        //DrawEnemy(assets.meele, (Vector2){400, 100});
+        //DrawEnemy(assets.ranged, (Vector2){500, 100});
+        //DrawEnemy(assets.finalBoss, (Vector2){600, 100});
+        //DrawTurret(assets.turret, (Vector2){700, 100}, 0.0f);
         //DrawPowerUp(assets.powerUpAmmo, (Vector2){400, 100});
         //DrawPowerUp(assets.powerUpHealth, (Vector2){400, 200});
         //DrawPowerUp(assets.powerUpSpeed, (Vector2){400, 300});
         //DrawProjectile(assets.metak, (Vector2){400, 400});
         //Ovo ispod je za test glavnog menija, pauseMenija i GUI-a aviona, u nekom trenutku ce biti potrebno
-        /*if (assets.fja == NULL) {
+        /*if (assets.isPaused) {
+            CrtajPause(&assets);
+        }
+        else if (assets.fja == NULL) {
             CrtajMeni(&pozicija ,&vreme, &providnost, &assets);
+            //DrawTurret(assets.turret, (Vector2){100, 400}, rotation);
             //DrawRectangle(0, 0, windowWidth, windowHeight, BLACK);
             DrawPlaneGUI(&pozicijaAviona, &assets);
+            DrawExplosion(&assets, pozicijaAviona, IsKeyPressed(KEY_K));
+            guideMenu = true;
         }
         else {
-            assets.fja(&assets);
-            if (assets.isPaused) {
-                CrtajPause(&assets);
-                int score = 16;
-                int lives = 10;
-                int ammo = 100;
-                PrikaziStats(score, lives, ammo, &assets);
+            if (assets.fja == DrawGameOverScreen && guideMenu) {
+                assets.fja(&assets, assets.currScore);
+            }
+            else {
+                assets.fja(&assets, 0);
             }
         }*/
         //Linije iznad treba da se ukljuce kada budu bili potrebni glavni i pause meni

@@ -1,27 +1,18 @@
 #include"raylib.h"
 #include"glavniMeni.h"
 #include"pauseMeni.h"
+#include"endScreen.h"
 #include<string.h>
 
-void ResumeGame(GraphicAssets *assets) {
+void ResumeGame(GraphicAssets *assets, int score) {
     assets->isPaused = (assets->isPaused == 1)? 0: 1;
 }
-void HighestScores2(GraphicAssets *assets) {
-    return;
-}
-void Controls2(GraphicAssets *assets) {
-    return;
-}
-void Settings2(GraphicAssets *assets) {
-    return;
-}
-void ExitAndSave(GraphicAssets *assets) {
+void ExitAndSave(GraphicAssets *assets, int score) {
     //Za sad
     assets->isPaused = (assets->isPaused == 1)? 0: 1;
 }
 
 void CrtajPause(GraphicAssets *assets) {
-    //Vector2 misPozicija = GetMousePosition();
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
     for (int i = 0; i < 5; i++) {
         Color color1 = WHITE;
@@ -31,7 +22,7 @@ void CrtajPause(GraphicAssets *assets) {
             color1 = BLUE;
             color2 = WHITE;
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                assets->opcijePause[i].akcija(assets);
+                assets->opcijePause[i].akcija(assets, 0);
             }
         }
         DrawTextEx(assets->fontExo, assets->opcijePause[i].naziv, (Vector2){assets->opcijePause[i].pozicija.x - 1.5f, assets->opcijePause[i].pozicija.y + 1.5f}, 50, 2, color2);
@@ -42,9 +33,9 @@ void CrtajPause(GraphicAssets *assets) {
 void InitPause(GraphicAssets *assets) {
     memcpy(assets->opcijePause, (MeniOpcija[]){
     {"RESUME GAME", {0,0}, {0, 0}, ResumeGame},
-    {"HIGHEST SCORES", {0,0}, {0, 0}, HighestScores2},
-    {"CONTROLS", {0,0}, {0, 0}, Controls2},
-    {"SETTINGS",{0, 0}, {0, 0}, Settings2},
+    {"HIGHEST SCORES", {0,0}, {0, 0}, HighestScores},
+    {"GUIDE", {0,0}, {0, 0}, Guide},
+    {"SETTINGS",{0, 0}, {0, 0}, Settings},
     {"EXIT AND SAVE", {0,0}, {0, 0}, ExitAndSave}
 }, sizeof(assets->opcijePause));
 

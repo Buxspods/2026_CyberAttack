@@ -88,3 +88,11 @@ void DrawExplosion(GraphicAssets *assets, Vector2 pozicija, bool trigger) {
         }
     }
 }
+
+void DrawEnemy(Texture2D enemy, Vector2 position) {
+    DrawTexture(enemy, position.x, position.y, WHITE);
+}
+
+void DrawTurret(Texture2D turret, Vector2 position, float rotation) {
+    DrawTexturePro(turret, (Rectangle){0, 0, turret.width, turret.height}, (Rectangle){position.x, position.y, turret.width, turret.height}, (Vector2){turret.width/2.0f, turret.height/2.0f}, rotation, WHITE);
+}

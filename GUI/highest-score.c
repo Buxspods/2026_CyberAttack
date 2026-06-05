@@ -4,7 +4,7 @@
 #include<stdlib.h>
 
 int ReturnNumberOfLines(struct GraphicAssets *assets) {
-    FILE* fajl = fopen("highest-score/scores.bit", "rb");
+    FILE* fajl = fopen("documents/scores.bit", "rb");
     if (fajl == NULL) {
         printf("Greska pri otvaranju fajla!\n");
         return 0;
@@ -12,11 +12,11 @@ int ReturnNumberOfLines(struct GraphicAssets *assets) {
 
     fseek(fajl, 0, SEEK_END);
     long fileSize = ftell(fajl);
+    fclose(fajl);
     int numberOfLines = (int)(fileSize / sizeof(Score));
 
     if (numberOfLines <= 0) {
         printf("Fajl je prazan.\n");
-        fclose(fajl);
         return 0;
     }
     else {
@@ -25,7 +25,7 @@ int ReturnNumberOfLines(struct GraphicAssets *assets) {
 }
 
 void ReadScores(struct GraphicAssets *assets) {
-    FILE* fajl = fopen("highest-score/scores.bit", "rb");
+    FILE* fajl = fopen("documents/scores.bit", "rb");
     if (fajl == NULL) {
         printf("Greska pri otvaranju fajla!\n");
         return;
@@ -59,7 +59,7 @@ void ReadScores(struct GraphicAssets *assets) {
 }
 
 void DodajNoviRezultat(int d, int m, int g, int s) {
-    FILE *fajl = fopen("highest-score/scores.bit", "rb");
+    FILE *fajl = fopen("documents/scores.bit", "rb");
     Score *privremeniNiz = NULL;
     int brojElemenata = 0;
 
@@ -93,7 +93,7 @@ void DodajNoviRezultat(int d, int m, int g, int s) {
         noviNiz[j] = novi;
     }
 
-    fajl = fopen("highest-score/scores.bit", "wb");
+    fajl = fopen("documents/scores.bit", "wb");
     if (fajl != NULL) {
         fwrite(noviNiz, sizeof(Score), brojElemenata + 1, fajl);
         fclose(fajl);

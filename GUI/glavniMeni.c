@@ -1,30 +1,55 @@
 #include"raylib.h"
 #include"glavniMeni.h"
 #include<math.h>
+#include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+
+#include "endScreen.h"
 #include "stats.h"
 //#include"highest-score.h"
 
-void StartNewGame(GraphicAssets *assets) {
-    return;
-}
-void LoadGame(GraphicAssets *assets) {
-    DrawRectangle(20, 20, 20, 20, WHITE);
-    if (CheckCollisionPointRec(assets->mis, (Rectangle){20, 20, 20, 20}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+void StartNewGame(GraphicAssets *assets, int score) {
+    Rectangle backHitBox = { 40, 40, 180, 45 };
+    DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
+    DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
+    if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        assets->prethodnaFja = assets->fja;
         assets->fja = NULL;
     }
 }
-void HighestScores(GraphicAssets *assets) {
+void LoadGame(GraphicAssets *assets, int score) {
+    Rectangle backHitBox = { 40, 40, 180, 45 };
+    DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
+    DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
+    if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        assets->prethodnaFja = assets->fja;
+        assets->fja = NULL;
+    }
+}
+void HighestScores(GraphicAssets *assets, int score) {
     DrawTexture(assets->background, 0, 0, WHITE);
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
-    int numberOfLines = ReturnNumberOfLines(assets);
-    if (numberOfLines > 10) numberOfLines = 10;
+
+    static bool podaciUcitani = false;
+    static int numberOfLines = 0;
+
+    if (!podaciUcitani) {
+        ReadScores(assets);
+        numberOfLines = ReturnNumberOfLines(assets);
+        if (numberOfLines > 10) numberOfLines = 10;
+
+        podaciUcitani = true;
+    }
+
     Vector2 dimNaslov = MeasureTextEx(assets->fontOrbitron, "Highest scores", 60, 2);
     DrawTextEx(assets->fontOrbitron, "Highest Scores", (Vector2){windowWidth/2.0f - dimNaslov.x / 2, 150}, 60, 2, WHITE);
-    if (numberOfLines == 0) {
 
+    if (numberOfLines == 0 || assets->highestScores == NULL) {
+        Vector2 dimPrazno = MeasureTextEx(assets->fontExo, "NO RECORDS YET", 40, 2);
+        DrawTextEx(assets->fontExo, "NO RECORDS YET", (Vector2){windowWidth / 2.0f - dimPrazno.x / 2, windowHeight * 0.45f}, 40, 2, GRAY);
     }
+
     for (int i = 0; i < numberOfLines; i++) {
         const char* scoreTekst = TextFormat("%02d.%02d.%04d. \t %d",
                                         assets->highestScores[i].dan,
@@ -36,31 +61,80 @@ void HighestScores(GraphicAssets *assets) {
         Vector2 pozicija = {(float)windowWidth / 2.0f - dimenzije.x / 2, (float)i * windowHeight * 0.065f + windowHeight * 0.25f};
         DrawTextEx(assets->fontOrbitron, scoreTekst, pozicija, 30, 2, WHITE);
     }
-    DrawRectangle(20, 20, 20, 20, WHITE);
-    if (CheckCollisionPointRec(assets->mis, (Rectangle){20, 20, 20, 20}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        assets->fja = NULL;
+    Rectangle backHitBox = { 40, 40, 180, 45 };
+    DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
+    DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
+    if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        podaciUcitani = false;
+        assets->fja = assets->prethodnaFja;
+        assets->prethodnaFja = HighestScores;
     }
 }
-void Controls(GraphicAssets *assets) {
-    DrawRectangle(20, 20, 20, 20, WHITE);
-    if (CheckCollisionPointRec(assets->mis, (Rectangle){20, 20, 20, 20}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        assets->fja = NULL;
+void Guide(GraphicAssets *assets, int score) {
+    DrawTexture(assets->background, 0, 0, WHITE);
+    DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
+
+    Vector2 dimNaslov = MeasureTextEx(assets->fontOrbitron, "Guide", 60, 2);
+    DrawTextEx(assets->fontOrbitron, "Guide", (Vector2){windowWidth/2.0f - dimNaslov.x / 2, 150}, 60, 2, WHITE);
+
+    char *text[] = {"W, S, A, D - Movements (Up, Down, Left, Right)", "K - Shooting", "SHIFT - Dash","ESC - Pause Menu","- Power Up Health", " - Power Up Ammo", " - Power Up Speed", " - Turret", " - Ranged Plane", "\t - Meele Plane", "\t - Final Boss"};
+    Texture teksture[] = {assets->powerUpHealth, assets->powerUpAmmo, assets->powerUpSpeed, assets->turret, assets->ranged, assets->meele, assets->finalBoss};
+
+    FILE *fajl = fopen("documents/controls.txt", "r");
+    if (fajl != NULL) {
+        char temp[100];
+        int brojac = 0;
+
+        while (fgets(temp, sizeof(temp), fajl) != NULL && brojac < 4) {
+            temp[strcspn(temp, "\n")] = '\0';
+            text[brojac] = (char *)malloc((strlen(temp) + 1) * sizeof(char));
+            strcpy(text[brojac], temp);
+            brojac++;
+        }
+    }
+    fclose(fajl);
+
+
+    for (int i = 0; i< 11;i++) {
+        Vector2 rec = (Vector2)MeasureTextEx(assets->fontExo, text[i], 30, 2);
+        Vector2 pozicija = (Vector2){windowWidth / 2.0f - rec.x / 2, (float)i*windowHeight*0.055f + windowHeight*0.25f};
+        if (i>3) {
+            if (i == 10) {
+                pozicija = (Vector2){windowWidth / 2.0f - rec.x / 2, (float)(i+1)*windowHeight*0.055f + windowHeight*0.25f};
+                DrawTextEx(assets->fontExo, text[i], pozicija, 30, 2, WHITE);
+                DrawTexture(teksture[i-4], pozicija.x - 75, pozicija.y - 10, WHITE);
+            }
+            else {
+                DrawTexture(teksture[i-4], pozicija.x - 50, pozicija.y - 10, WHITE);
+            }
+        }
+        DrawTextEx(assets->fontExo, text[i], pozicija, 30, 2, WHITE);
+    }
+
+    Rectangle backHitBox = { 40, 40, 180, 45 };
+    DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
+    DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
+    if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        assets->fja = assets->prethodnaFja;
+        assets->prethodnaFja = Guide;
     }
 }
-void Settings(GraphicAssets *assets) {
-    DrawRectangle(20, 20, 20, 20, WHITE);
-    if (CheckCollisionPointRec(assets->mis, (Rectangle){20, 20, 20, 20}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-        assets->fja = NULL;
+void Settings(GraphicAssets *assets, int score) {
+    Rectangle backHitBox = { 40, 40, 180, 45 };
+    DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
+    DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
+    if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        assets->fja = assets->prethodnaFja;
+        assets->prethodnaFja = Settings;
     }
 }
-void ExitGame(GraphicAssets *assets) {
+void ExitGame(GraphicAssets *assets, int score) {
     CloseWindow();
     exit(0);
 }
 
 void CrtajMeni(Vector2 *pozicija,float *vreme, float *providnost, GraphicAssets *assets) {
     DrawTexture(assets->background, 0, 0, WHITE);
-    //Vector2 misPozicija = GetMousePosition();
     *vreme+= GetFrameTime();
     float lebdenje = sinf((*vreme)*2.0f)*0.5f;
 
@@ -76,8 +150,8 @@ void CrtajMeni(Vector2 *pozicija,float *vreme, float *providnost, GraphicAssets 
             color1 = BLUE;
             color2 = WHITE;
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                assets->prethodnaFja = assets->fja;
                 assets->fja = assets->opcije[i].akcija;
-                assets->opcije[i].akcija(assets);
             }
         }
         DrawTextEx(assets->fontExo, assets->opcije[i].naziv, (Vector2){assets->opcije[i].pozicija.x - 1.5f, assets->opcije[i].pozicija.y + 1.5f}, 50, 2, color2);
@@ -103,13 +177,21 @@ void InitGlavni(GraphicAssets *assets) {
     assets->powerUpSpeed = LoadTexture("resources/images/powerUpBrzina.png");
     assets->powerUpHealth = LoadTexture("resources/images/powerUpHealth.png");
     assets->eksplozija = LoadTexture("resources/images/eksplozija.png");
+    assets->turret = LoadTexture("resources/images/turret.png");
+    assets->meele = LoadTexture("resources/images/meele-plane.png");
+    assets->ranged = LoadTexture("resources/images/ranged.png");
+    assets->background1 = LoadTexture("resources/images/slika_1000px.png");
+    assets->background2 = LoadTexture("resources/images/slika2_1000px.png");
+    assets->background3 = LoadTexture("resources/images/slika3_1000px.png");
+    assets->finalBoss = LoadTexture("resources/images/final-boss.png");
+    assets->prethodnaFja = NULL;
     assets->fja = NULL;
 
     memcpy(assets->opcije, (MeniOpcija[]){
-    {"START NEW GAME", {0,0}, {0, 0}, StartNewGame},
+    {"START NEW GAME", {0,0}, {0, 0}, DrawGameOverScreen},
     {"LOAD GAME", {0,0}, {0, 0}, LoadGame},
     {"HIGHEST SCORES", {0,0}, {0, 0}, HighestScores},
-    {"CONTROLS", {0,0}, {0, 0}, Controls},
+    {"GUIDE", {0,0}, {0, 0}, Guide},
     {"SETTINGS",{0, 0}, {0, 0}, Settings},
     {"EXIT GAME", {0,0}, {0, 0}, ExitGame}
 }, sizeof(assets->opcije));
@@ -135,5 +217,12 @@ void UnloadAssets(GraphicAssets *assets) {
     UnloadTexture(assets->powerUpSpeed);
     UnloadTexture(assets->powerUpHealth);
     UnloadTexture(assets->eksplozija);
+    UnloadTexture(assets->turret);
+    UnloadTexture(assets->meele);
+    UnloadTexture(assets->ranged);
+    UnloadTexture(assets->background1);
+    UnloadTexture(assets->background2);
+    UnloadTexture(assets->background3);
+    UnloadTexture(assets->finalBoss);
     free(assets->highestScores);
 }
