@@ -57,6 +57,9 @@ add_executable(2026_CyberAttack main.c
         mech/Level.c
         GUI/endScreen.c
         GUI/endScreen.h
+        mech/Map.h
+        mech/Map.c
+        mech/Screens.h
 )
 target_include_directories(2026_CyberAttack PRIVATE ${raylib_include_DIRS})
 

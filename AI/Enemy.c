@@ -110,6 +110,7 @@ void InitBoss(Enemy *e) {
     e->shootingData.shotgun.direction = (Vector2){0,1};
     e->shootingData.shotgun.rotationAngleRadians = PI/4;
     e->shootingData.shotgun.amount =8;
+    e->laserActive = false;
 }
 void UpdateEnemies(GameState * state) {
     float dt = GetFrameTime();
@@ -129,6 +130,9 @@ void UpdateEnemies(GameState * state) {
 void DrawEnemies(Enemy enemies[]) {
     for (int i=0;i<ENEMY_CAP;i++) {
         if (enemies[i].active) {
+            if (enemies[i].laserActive) {
+                DrawRectangle(enemies[i].position.x - enemies[i].size/2, enemies[i].position.y, enemies[i].size, WINDOW_HEIGHT, ORANGE);
+            }
             DrawCircle(enemies[i].position.x,enemies[i].position.y,enemies[i].size, YELLOW);
         }
     }

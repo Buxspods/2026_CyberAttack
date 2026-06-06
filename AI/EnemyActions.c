@@ -129,9 +129,11 @@ void BossPhase2(Enemy *e,GameState *state,float dt) {
 void BossLaserShot(Enemy *e,GameState *state, float dt){
     e->actions[SHOOTING_ACTION].currentTime+=dt;
     if (e->actions[SHOOTING_ACTION].currentTime<e->actions[SHOOTING_ACTION].actionTimer) {
+        e->laserActive = true;
         FireLaser(e->position,state->player.playerPos,state,e->size);
     }
     else {
+        e->laserActive = false;
         e->actions[MOVEMENT_ACTION].update = BossPhase2;
         e->actions[SHOOTING_ACTION].update = NULL;
         e->actions[MOVEMENT_ACTION].currentTime = 0;

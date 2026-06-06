@@ -5,10 +5,12 @@
 #include "AI.h"
 #include"GUI.h"
 #include <time.h>
-
 #include "mech/EnemyWithTime.h"
 #include "mech/Level.h"
 #include "mech/Wave.h"
+#include  "mech/Map.h"
+#include "mech/Screens.h"
+
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 #define PROJECTILE_CAP 100
@@ -17,13 +19,16 @@
 
 int main() {
 
-    float localWaveTimer = 0.0f;
-    float globalLeveltimer = 0.0f;
+    SCREEN currScreen = LEVEL1;
+
+
+
+    float globalLeveltimer = 0.0f; //sluzi za tajmiranje talasa
 
     srand(time(NULL));
     float fire_timer =0.0f;//Prebaciti ovo verovatno u logiku za igraca nekakvu
     float spawn_timer =4.0f;
-    //float dashCooldownTimer = 0.0f;
+
     GameState gamestate = InitGameState();//Inicijalizuje Igraca protivnike i metkove
 
 
@@ -54,7 +59,8 @@ int main() {
 
     Level level = {.waves = {wave1, wave2, wave3, wave4}, 4};
     Vector2 vect = {100, 100};
-    //SpawnEnemy(gamestate.enemies, BOSS, vect);
+
+
     //pravljenje pocetnog prozora i postavljanje najveceg dozvoljenog FPS-a
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "2026: Cyber Attack");
     SetTargetFPS(60);
@@ -62,9 +68,17 @@ int main() {
     GraphicAssets assets = {0};
     assets.highestScores = NULL;
     Vector2 pozicijaAviona = {100, 100};
-
     InitGlavni(&assets);
     InitPause(&assets);
+
+    //mape za svaki nivo
+    float map1Offset = 1.0f, map1Speed = 100.0f;
+    float map2Offset = 1.0f, map2Speed = 100.0f;
+    float map3Offset = 1.0f, map3Speed = 100.0f;
+
+    Map level1Map = {assets.background1, map1Offset, map1Speed};
+    Map level2Map = {assets.background2, map2Offset, map2Offset};
+    Map level3Map = {assets.background3, map3Offset, map3Offset};
 
     Vector2 dimenzije = MeasureTextEx(assets.fontOrbitron, "2026: Cyber Attack", 70, 2);
     Vector2 pozicija = {windowWidth / 2.0f - dimenzije.x / 2, windowHeight * 0.125f};
@@ -74,19 +88,27 @@ int main() {
     assets.currScore = 0;
     bool guideMenu = false;
     SetExitKey(KEY_NULL);
+
     //Game Loop
-
-    //SpawnEnemy(gamestate.enemies,BOSS,(Vector2){WINDOW_HEIGHT/2,80});
-
     while(!WindowShouldClose()) {
         Color BackgroundColor = {67, 67, 69, 255}; //OVU BOJU CEMO SVAKAKO SKLONITI KAD TAD
         float dt = GetFrameTime(); //delta time potreban da bi na svakom kompu igra isla istom brzinom
         fire_timer+=dt;
         spawn_timer+=dt;
-        localWaveTimer+=dt;
+        //localWaveTimer+=dt;
         globalLeveltimer+=dt;
 
-        StartLevel(&level, &gamestate, &globalLeveltimer);
+        switch (currScreen) {
+            case LEVEL1:
+                StartLevel(&level, &gamestate, &globalLeveltimer);
+                break;
+            case LEVEL2:
+                StartLevel(&level, &gamestate, &globalLeveltimer);
+                break;
+
+            default:
+                break;
+        }
 
         //if (spawn_timer>3) {
         //    spawn_timer=0;
@@ -104,8 +126,9 @@ int main() {
             fire_timer = 0;
         }
 
-        if(IsKeyDown(KEY_H)) { //sluzi za dopunu municije samo dok se testira
+        if(IsKeyDown(KEY_H)) { //sluzi za dopunu municije i hp samo dok se testira
             gamestate.player.ammo = 100;
+            gamestate.player.lives = 10;
         }
 
         UpdatePlayerPosition(&gamestate.player);
@@ -123,15 +146,18 @@ int main() {
         //CRTANJE
         BeginDrawing();
         ClearBackground(BackgroundColor);
+        switch (currScreen) {
+            case LEVEL1:
+                MoveMap(&level1Map);
+            default:
+                break;
+        }
+
         DrawPlayer(gamestate.player, &assets);
 
-        //OVO JE KORISCENO SAMO DA SE VIDI HITBOX IGRACA I TO JE TOOOOOO
-        //Color newCol = {255, 0, 127, 200};
-        //DrawCircle(gamestate.player.playerPos.x, gamestate.player.playerPos.y, gamestate.player.playerSize / 1.5, newCol);
-
+        DrawPowerUps(gamestate.powerups);
         DrawProjectiles(gamestate.projectiles);
         DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
-        DrawPowerUps(gamestate.powerups);
         PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
 
         //Test za crtanje metka i PowerUp-ova

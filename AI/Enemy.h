@@ -25,6 +25,7 @@ typedef struct{
 }Action;
 struct Enemy{
     Vector2 position;
+    bool laserActive;
     int HP;
     int maxHP;
     float size;
