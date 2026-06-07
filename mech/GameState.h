@@ -10,6 +10,7 @@
 #include "../AI/Enemy.h"
 #include "../GUI/stats.h"
 #include "../GUI/assets.h"
+#include "Screens.h"
 typedef struct GameState{
     Projectile projectiles[PROJECTILE_CAP];
     Player player;

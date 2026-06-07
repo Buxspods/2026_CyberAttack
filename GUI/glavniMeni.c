@@ -230,7 +230,7 @@ void InitGlavni(GraphicAssets *assets) {
     assets->meele = LoadTexture("resources/images/meele-plane.png");
     assets->ranged = LoadTexture("resources/images/ranged.png");
     assets->background1 = LoadTexture("resources/images/slika_1000px.png");
-    assets->background2 = LoadTexture("resources/images/slika2_1000px.png");
+    assets->background2 = LoadTexture("resources/images/slika2-1000px.png");
     assets->background3 = LoadTexture("resources/images/slika3_1000px.png");
     assets->finalBoss = LoadTexture("resources/images/final-boss.png");
     assets->explosion = LoadSound("resources/audio/explosion.wav");

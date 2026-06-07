@@ -21,8 +21,6 @@ int main() {
 
     SCREEN currScreen = LEVEL1;
 
-
-
     float globalLeveltimer = 0.0f; //sluzi za tajmiranje talasa
 
     srand(time(NULL));
@@ -31,13 +29,12 @@ int main() {
 
     GameState gamestate = InitGameState();//Inicijalizuje Igraca protivnike i metkove
 
-
     EnemyWave wave4 = {
-        .enemies = {
-                {ENEMY_MELEE_PLANE, {100, 750},1.0f},
-                {ENEMY_MELEE_PLANE, {300, 750},2.0f},
-                {ENEMY_MELEE_PLANE, {500, 750},3.0f},
-                {ENEMY_MELEE_PLANE, {700, 750},3.0f}},
+        .enemies ={
+                    {ENEMY_MELEE_PLANE, {100, 750},0.0f},
+                    {ENEMY_MELEE_PLANE, {300, 750},2.0f},
+                    {ENEMY_MELEE_PLANE, {500, 750},3.0f},
+                    {ENEMY_MELEE_PLANE, {700, 750},3.0f}},
                     3.0f, 4};
     EnemyWave wave2 = {
         .enemies = {
@@ -79,8 +76,8 @@ int main() {
     float map3Offset = 1.0f, map3Speed = 100.0f;
 
     Map level1Map = {assets.background1, map1Offset, map1Speed};
-    Map level2Map = {assets.background2, map2Offset, map2Offset};
-    Map level3Map = {assets.background3, map3Offset, map3Offset};
+    Map level2Map = {assets.background2, map2Offset, map2Speed};
+    Map level3Map = {assets.background3, map3Offset, map3Speed};
 
     Vector2 dimenzije = MeasureTextEx(assets.fontOrbitron, "2026: Cyber Attack", 70, 2);
     Vector2 pozicija = {windowWidth / 2.0f - dimenzije.x / 2, windowHeight * 0.125f};
@@ -101,7 +98,6 @@ int main() {
         float dt = GetFrameTime(); //delta time potreban da bi na svakom kompu igra isla istom brzinom
         fire_timer+=dt;
         spawn_timer+=dt;
-        //localWaveTimer+=dt;
         if (!assets.isPaused) globalLeveltimer+=dt;
 
         switch (currScreen) {
@@ -111,7 +107,6 @@ int main() {
             case LEVEL2:
                 StartLevel(&level, &gamestate, &globalLeveltimer);
                 break;
-
             default:
                 break;
         }
@@ -145,37 +140,35 @@ int main() {
         UpdateEnemies(&gamestate);
         CheckCollisions(&gamestate);
 
-//
         //Ova linija treba da se ukljuci kada bude potreban pause meni
         assets.mis = GetMousePosition();
         if (IsKeyPressed(KEY_ESCAPE)) assets.isPaused = assets.isPaused == 0? 1: 0;
+
+        ///////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////
         //CRTANJE
         BeginDrawing();
-
         ClearBackground(BackgroundColor);
         switch (currScreen) {
-            case LEVEL1:
+            case 1:
                 MoveMap(&level1Map);
+                break;
+            case 2:
+                MoveMap(&level2Map);
+                break;
+            case 3:
+                MoveMap(&level3Map);
+                break;
             default:
                 break;
         }
 
         DrawPlayer(gamestate.player, &assets);
-
         DrawPowerUps(gamestate.powerups);
         DrawProjectiles(gamestate.projectiles);
         DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
         PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
 
-        //Test za crtanje metka i PowerUp-ova
-        //DrawEnemy(assets.meele, (Vector2){400, 100});
-        //DrawEnemy(assets.ranged, (Vector2){500, 100});
-        //DrawEnemy(assets.finalBoss, (Vector2){600, 100});
-        //DrawTurret(assets.turret, (Vector2){700, 100}, 0.0f);
-        //DrawPowerUp(assets.powerUpAmmo, (Vector2){400, 100});
-        //DrawPowerUp(assets.powerUpHealth, (Vector2){400, 200});
-        //DrawPowerUp(assets.powerUpSpeed, (Vector2){400, 300});
-        //DrawProjectile(assets.metak, (Vector2){400, 400});
         //Ovo ispod je za test glavnog menija, pauseMenija i GUI-a aviona, u nekom trenutku ce biti potrebno
         /*if (assets.isPaused) {
             CrtajPause(&assets);
@@ -198,6 +191,8 @@ int main() {
         }*/
         //Linije iznad treba da se ukljuce kada budu bili potrebni glavni i pause meni
         EndDrawing();
+        ///////////////////////////////////////////////////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////////
     }
     UnloadAssets(&assets);
     CloseWindow();
