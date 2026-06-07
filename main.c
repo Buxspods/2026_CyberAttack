@@ -102,7 +102,7 @@ int main() {
         fire_timer+=dt;
         spawn_timer+=dt;
         //localWaveTimer+=dt;
-        globalLeveltimer+=dt;
+        if (!assets.isPaused) globalLeveltimer+=dt;
 
         switch (currScreen) {
             case LEVEL1:
