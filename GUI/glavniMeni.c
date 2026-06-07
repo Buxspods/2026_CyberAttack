@@ -6,14 +6,61 @@
 #include<string.h>
 
 #include "endScreen.h"
-#include "stats.h"
-//#include"highest-score.h"
 
 void StartNewGame(GraphicAssets *assets, int score) {
+    DrawTexture(assets->background, 0, 0, WHITE);
+    DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
+
+    Vector2 dimPlayAgain = MeasureTextEx(assets->fontOrbitron, "LEVEL 1", 40, 2);
+    Rectangle recPlayAgain = {windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight, dimPlayAgain.x, dimPlayAgain.y};
+    DrawTextEx(assets->fontOrbitron, "LEVEL 1", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight}, 40, 2, WHITE);
+    bool isHovered = CheckCollisionPointRec(assets->mis, recPlayAgain);
+    if (isHovered) {
+        DrawTextEx(assets->fontOrbitron, "LEVEL 1", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight}, 40, 2, BLUE);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            StopMusicStream(assets->level2);
+            StopMusicStream(assets->level3);
+            StopMusicStream(assets->mainMenu);
+            PlayMusicStream(assets->level1);
+        }
+    }
+
+    Vector2 dimGuide = MeasureTextEx(assets->fontOrbitron, "LEVEL 2", 40, 2);
+    Rectangle recGuide = {windowWidth/2.0f - dimGuide.x/2.0f, 0.45f*windowHeight, dimGuide.x, dimGuide.y};
+    DrawTextEx(assets->fontOrbitron, "LEVEL 2", (Vector2){windowWidth/2.0f - dimGuide.x/2.0f, 0.45f*windowHeight}, 40, 2, WHITE);
+    bool isHovered2 = CheckCollisionPointRec(assets->mis, recGuide);
+    if (isHovered2) {
+        DrawTextEx(assets->fontOrbitron, "LEVEL 2", (Vector2){windowWidth/2.0f - dimGuide.x/2.0f, 0.45f*windowHeight}, 40, 2, BLUE);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            StopMusicStream(assets->level1);
+            StopMusicStream(assets->level3);
+            StopMusicStream(assets->mainMenu);
+            PlayMusicStream(assets->level2);
+        }
+    }
+
+    Vector2 dimMainMenu = MeasureTextEx(assets->fontOrbitron, "LEVEL 3", 40, 2);
+    Rectangle recMainMenu = {windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight, dimMainMenu.x, dimMainMenu.y};
+    DrawTextEx(assets->fontOrbitron, "LEVEL 3", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight}, 40, 2, WHITE);
+    bool isHovered3 = CheckCollisionPointRec(assets->mis, recMainMenu);
+    if (isHovered3) {
+        DrawTextEx(assets->fontOrbitron, "LEVEL 3", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight}, 40, 2, BLUE);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            StopMusicStream(assets->level1);
+            StopMusicStream(assets->level2);
+            StopMusicStream(assets->mainMenu);
+            PlayMusicStream(assets->level3);
+        }
+    }
+
     Rectangle backHitBox = { 40, 40, 180, 45 };
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
     if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        StopMusicStream(assets->level1);
+        StopMusicStream(assets->level3);
+        StopMusicStream(assets->level2);
+        PlayMusicStream(assets->mainMenu);
         assets->prethodnaFja = assets->fja;
         assets->fja = NULL;
     }
@@ -184,11 +231,58 @@ void InitGlavni(GraphicAssets *assets) {
     assets->background2 = LoadTexture("resources/images/slika2_1000px.png");
     assets->background3 = LoadTexture("resources/images/slika3_1000px.png");
     assets->finalBoss = LoadTexture("resources/images/final-boss.png");
+    assets->explosion = LoadSound("resources/audio/explosion.wav");
+    assets->gameOver = LoadSound("resources/audio/game-over.wav");
+    assets->hit1 = LoadSound("resources/audio/hit1.wav");
+    assets->hit2 = LoadSound("resources/audio/hit2.wav");
+    assets->powerUp = LoadSound("resources/audio/powerUp.wav");
+    assets->laser = LoadSound("resources/audio/laser.wav");
+    assets->bossLaser = LoadSound("resources/audio/boss-laser.wav");
+    assets->mainMenu = LoadMusicStream("resources/audio/mainMenu.mp3");
+    assets->level1 = LoadMusicStream("resources/audio/level1.mp3");
+    assets->level2 = LoadMusicStream("resources/audio/level2.mp3");
+    assets->level3 = LoadMusicStream("resources/audio/level3.mp3");
+
+    FILE *fajl = fopen("documents/audio.txt", "r");
+    if (fajl != NULL) {
+        char temp1[100], temp2[100];
+        char music1[4], sfx1[4];
+        float music = 0.0f, sfx = 0.0f;
+
+        fgets(temp1, sizeof(temp1), fajl);
+        fgets(temp2, sizeof(temp2), fajl);
+        char *p1 = strchr(temp1, ':');
+        char *p2 = strchr(temp2, ':');
+
+        if (p1 && p2) {
+            music = atof(p1+1)/100.0;
+            sfx = atof(p2+1)/100.0;
+        }
+        SetMusicVolume(assets->mainMenu, music);
+        SetMusicVolume(assets->level1, music);
+        SetMusicVolume(assets->level2, music);
+        SetMusicVolume(assets->level3, music);
+
+        SetSoundVolume(assets->hit1, sfx);
+        SetSoundVolume(assets->hit2, sfx);
+        SetSoundVolume(assets->laser, sfx);
+        SetSoundVolume(assets->bossLaser, sfx);
+        SetSoundVolume(assets->explosion, sfx);
+        SetSoundVolume(assets->powerUp, sfx);
+        SetSoundVolume(assets->gameOver, sfx);
+    }
+    fclose(fajl);
+
+    assets->mainMenu.looping = true;
+    assets->level1.looping = true;
+    assets->level2.looping = true;
+    assets->level3.looping = true;
+
     assets->prethodnaFja = NULL;
     assets->fja = NULL;
 
     memcpy(assets->opcije, (MeniOpcija[]){
-    {"START NEW GAME", {0,0}, {0, 0}, DrawGameOverScreen},
+    {"START NEW GAME", {0,0}, {0, 0}, StartNewGame},
     {"LOAD GAME", {0,0}, {0, 0}, LoadGame},
     {"HIGHEST SCORES", {0,0}, {0, 0}, HighestScores},
     {"GUIDE", {0,0}, {0, 0}, Guide},
@@ -207,6 +301,7 @@ void UnloadAssets(GraphicAssets *assets) {
     UnloadFont(assets->fontExo);
     UnloadFont(assets->fontOrbitron);
     UnloadFont(assets->fontCommando);
+
     UnloadTexture(assets->background);
     UnloadTexture(assets->srce);
     UnloadTexture(assets->avionDesno);
@@ -224,5 +319,14 @@ void UnloadAssets(GraphicAssets *assets) {
     UnloadTexture(assets->background2);
     UnloadTexture(assets->background3);
     UnloadTexture(assets->finalBoss);
+
+    UnloadSound(assets->bossLaser);
+    UnloadSound(assets->laser);
+    UnloadSound(assets->hit1);
+    UnloadSound(assets->hit2);
+    UnloadSound(assets->explosion);
+    UnloadSound(assets->powerUp);
+    UnloadSound(assets->gameOver);
+
     free(assets->highestScores);
 }

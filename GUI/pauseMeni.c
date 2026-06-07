@@ -1,7 +1,6 @@
 #include"raylib.h"
 #include"glavniMeni.h"
 #include"pauseMeni.h"
-#include"endScreen.h"
 #include<string.h>
 
 void ResumeGame(GraphicAssets *assets, int score) {

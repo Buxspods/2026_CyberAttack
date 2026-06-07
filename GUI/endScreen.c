@@ -1,4 +1,3 @@
-#include "endScreen.h"
 #include"raylib.h"
 #include"assets.h"
 #include<stdio.h>
@@ -65,5 +64,4 @@ void DrawGameOverScreen(GraphicAssets *assets, int score) {
             scores = false;
         }
     }
-
 }

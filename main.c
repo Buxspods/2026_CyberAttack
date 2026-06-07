@@ -63,6 +63,7 @@ int main() {
 
     //pravljenje pocetnog prozora i postavljanje najveceg dozvoljenog FPS-a
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "2026: Cyber Attack");
+    InitAudioDevice();
     SetTargetFPS(60);
 
     GraphicAssets assets = {0};
@@ -70,6 +71,7 @@ int main() {
     Vector2 pozicijaAviona = {100, 100};
     InitGlavni(&assets);
     InitPause(&assets);
+    //PlayMusicStream(assets.mainMenu);
 
     //mape za svaki nivo
     float map1Offset = 1.0f, map1Speed = 100.0f;
@@ -91,6 +93,10 @@ int main() {
 
     //Game Loop
     while(!WindowShouldClose()) {
+        UpdateMusicStream(assets.mainMenu);
+        UpdateMusicStream(assets.level1);
+        UpdateMusicStream(assets.level2);
+        UpdateMusicStream(assets.level3);
         Color BackgroundColor = {67, 67, 69, 255}; //OVU BOJU CEMO SVAKAKO SKLONITI KAD TAD
         float dt = GetFrameTime(); //delta time potreban da bi na svakom kompu igra isla istom brzinom
         fire_timer+=dt;
@@ -177,8 +183,8 @@ int main() {
             CrtajMeni(&pozicija ,&vreme, &providnost, &assets);
             //DrawTurret(assets.turret, (Vector2){100, 400}, rotation);
             //DrawRectangle(0, 0, windowWidth, windowHeight, BLACK);
-            DrawPlaneGUI(&pozicijaAviona, &assets);
-            DrawExplosion(&assets, pozicijaAviona, IsKeyPressed(KEY_K));
+            //DrawPlaneGUI(&pozicijaAviona, &assets);
+            //DrawExplosion(&assets, pozicijaAviona, IsKeyPressed(KEY_K));
             guideMenu = true;
         }
         else {
