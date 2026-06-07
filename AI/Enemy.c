@@ -49,10 +49,11 @@ void InitMeelePlane(Enemy *e) {
 void InitTurret(Enemy *e) {
     e->HP = 5;
     e->maxHP = 5;
-    e->speed = 0;
+    e->speed = 100;
     e->size = 20;
     e->fireRate = 2.73f;//The binding of Isaac reference
-    e->actions[MOVEMENT_ACTION].update = NULL;
+    e->actions[MOVEMENT_ACTION].update = &LinearMovement;//Dodaj Movement na dole speed 100 (da bi se kretali sa mapom)
+    e->movementData.linear.direction = (Vector2){0,1};
     e->actions[SHOOTING_ACTION] = InitAction(&PlayerShotLinear,1/e->fireRate);
     e->shootingData.single.direction = (Vector2){0,1};
     e->shootingData.single.size = 5;
