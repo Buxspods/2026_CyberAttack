@@ -15,6 +15,16 @@ typedef struct {
     MojaFja akcija;
 } MeniOpcija;
 
+typedef enum {
+    ACTION_UP,
+    ACTION_DOWN,
+    ACTION_LEFT,
+    ACTION_RIGHT,
+    ACTION_SHOOT,
+    ACTION_DASH,
+    ACTION_PAUSE
+} ActionID;
+
 typedef struct GraphicAssets {
     Font fontExo;
     Font fontOrbitron;
@@ -31,7 +41,9 @@ typedef struct GraphicAssets {
     Texture2D background1, background2, background3;
     Sound gameOver, explosion, powerUp, laser, bossLaser, hit1, hit2;
     Music mainMenu, level1, level2, level3;
+    float music, sfx;
     MeniOpcija opcije[6], opcijePause[5];
+    KeyboardKey keys[7];
     Vector2 mis;
     Score *highestScores;
     void (*fja)(struct GraphicAssets *assets, int score);
@@ -40,8 +52,5 @@ typedef struct GraphicAssets {
     int isPaused;
     int currScore;
 } GraphicAssets;
-
-
-
 
 #endif //INC_2026_CYBERATTACK_ASSETS_H

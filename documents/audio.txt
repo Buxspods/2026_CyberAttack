@@ -1,2 +1,2 @@
-Music:100%
+MUSIC:023%
 SFX:100%

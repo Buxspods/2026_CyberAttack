@@ -1,4 +1,4 @@
-W, S, A, D - Movements
-K - Shooting
-Shift - Dash
-ESC - Pause Menu
+87, 83, 65, 68 - Movements
+75 - Shooting
+340 - Dash
+256 - Pause Menu

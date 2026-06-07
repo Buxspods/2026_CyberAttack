@@ -4,8 +4,37 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-
 #include "endScreen.h"
+
+const char* keyString(int keyID) {
+    if (keyID == 341 || keyID == 345) return "CTRL";
+    if (keyID == 340) return "SHIFT";
+    if (keyID == 256) return "ESC";
+    if (keyID == 32)  return "SPACE";
+    return TextFormat("%c", (char)keyID);
+}
+
+void sacuvajSettings(GraphicAssets *assets) {
+    FILE *controls = fopen("documents/controls.txt", "w");
+    if (controls == NULL) {
+        printf("Fajl prazan!");
+        return;
+    }
+    char textControls[200];
+    sprintf(textControls, "%d, %d, %d, %d - Movements\n%d - Shooting\n%d - Dash\n%d - Pause Menu", assets->keys[ACTION_UP], assets->keys[ACTION_DOWN], assets->keys[ACTION_LEFT], assets->keys[ACTION_RIGHT], assets->keys[ACTION_SHOOT], assets->keys[ACTION_DASH], assets->keys[ACTION_PAUSE]);
+    fprintf(controls, "%s",textControls);
+    fclose(controls);
+
+    FILE *audio = fopen("documents/audio.txt", "w");
+    if (audio == NULL) {
+        printf("Fajl prazan!");
+        return;
+    }
+    char textAudio[100];
+    sprintf(textAudio, "MUSIC:%03d%%\nSFX:%03d%%", (int)(assets->music*100), (int)(assets->sfx*100));
+    fprintf(audio, "%s",textAudio);
+    fclose(audio);
+}
 
 void StartNewGame(GraphicAssets *assets, int score) {
     DrawTexture(assets->background, 0, 0, WHITE);
@@ -98,13 +127,7 @@ void HighestScores(GraphicAssets *assets, int score) {
     }
 
     for (int i = 0; i < numberOfLines; i++) {
-        const char* scoreTekst = TextFormat("%02d.%02d.%04d. %02d:%02d \t %d",
-                                        assets->highestScores[i].dan,
-                                        assets->highestScores[i].mesec,
-                                        assets->highestScores[i].godina,
-                                        assets->highestScores[i].sat,
-                                        assets->highestScores[i].minut,
-                                        assets->highestScores[i].score);
+        const char* scoreTekst = TextFormat("%02d.%02d.%04d. %02d:%02d \t %d", assets->highestScores[i].dan, assets->highestScores[i].mesec, assets->highestScores[i].godina, assets->highestScores[i].sat, assets->highestScores[i].minut, assets->highestScores[i].score);
 
         Vector2 dimenzije = MeasureTextEx(assets->fontOrbitron, scoreTekst, 30, 2);
         Vector2 pozicija = {(float)windowWidth / 2.0f - dimenzije.x / 2, (float)i * windowHeight * 0.065f + windowHeight * 0.25f};
@@ -126,22 +149,18 @@ void Guide(GraphicAssets *assets, int score) {
     Vector2 dimNaslov = MeasureTextEx(assets->fontOrbitron, "Guide", 60, 2);
     DrawTextEx(assets->fontOrbitron, "Guide", (Vector2){windowWidth/2.0f - dimNaslov.x / 2, 150}, 60, 2, WHITE);
 
-    char *text[] = {"W, S, A, D - Movements (Up, Down, Left, Right)", "K - Shooting", "SHIFT - Dash","ESC - Pause Menu","- Power Up Health", " - Power Up Ammo", " - Power Up Speed", " - Turret", " - Ranged Plane", "\t - Meele Plane", "\t - Final Boss"};
+    char kretanje[100];
+    char pucanje[100];
+    char dash[100];
+    char pauza[100];
+
+    sprintf(kretanje, "%s, %s, %s, %s - Movements (Up, Down, Left, Right)", keyString(assets->keys[ACTION_UP]), keyString(assets->keys[ACTION_DOWN]),  keyString(assets->keys[ACTION_LEFT]), keyString(assets->keys[ACTION_RIGHT]));
+    sprintf(pucanje, "%s - Shooting", keyString(assets->keys[ACTION_SHOOT]));
+    sprintf(dash, "%s - Dash", keyString(assets->keys[ACTION_DASH]));
+    sprintf(pauza, "%s - Pause Menu", keyString(assets->keys[ACTION_PAUSE]));
+
+    char *text[] = {kretanje, pucanje, dash, pauza,"- Power Up Health", " - Power Up Ammo", " - Power Up Speed", " - Turret", " - Ranged Plane", "\t - Meele Plane", "\t - Final Boss"};
     Texture teksture[] = {assets->powerUpHealth, assets->powerUpAmmo, assets->powerUpSpeed, assets->turret, assets->ranged, assets->meele, assets->finalBoss};
-
-    FILE *fajl = fopen("documents/controls.txt", "r");
-    if (fajl != NULL) {
-        char temp[100];
-        int brojac = 0;
-
-        while (fgets(temp, sizeof(temp), fajl) != NULL && brojac < 4) {
-            temp[strcspn(temp, "\n")] = '\0';
-            text[brojac] = (char *)malloc((strlen(temp) + 1) * sizeof(char));
-            strcpy(text[brojac], temp);
-            brojac++;
-        }
-    }
-    fclose(fajl);
 
 
     for (int i = 0; i< 11;i++) {
@@ -169,10 +188,151 @@ void Guide(GraphicAssets *assets, int score) {
     }
 }
 void Settings(GraphicAssets *assets, int score) {
+    static int music2 = -1;
+    static int sfx2 = -1;
+    static int promenjeno = 0;
+    static float blokadaTajmer = 0.0f;
+    static int keyChange = -1;
+    static KeyboardKey keys2[7] = {-1, -1, -1, -1, -1, -1, -1};
+    char akcije[7][30] = {"MOVE UP - ", "MOVE DOWN - ", "MOVE LEFT - ", "MOVE RIGHT - ", "SHOOT - ", "DASH - ", "PAUSE MENU - "};
+    Vector2 akcijeDim[7];
+    blokadaTajmer += GetFrameTime();
+
+    if (music2 == -1) {
+        music2 = (int)(assets->music*100);
+    }
+    if (sfx2 == -1) {
+        sfx2 = (int)(assets->sfx*100);
+    }
+
+    DrawTexture(assets->background, 0, 0, WHITE);
+    DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
+    Vector2 dimNaslov = MeasureTextEx(assets->fontOrbitron, "Settings", 60, 2);
+    DrawTextEx(assets->fontOrbitron, "Settings", (Vector2){windowWidth/2.0f - dimNaslov.x / 2, 0.1f*windowHeight}, 60, 2, WHITE);
+
+    Vector2 dimControls = MeasureTextEx(assets->fontOrbitron, "Controls", 40, 2);
+    DrawTextEx(assets->fontOrbitron, "Controls", (Vector2){windowWidth/2.0f - dimControls.x / 2, 0.2f*windowHeight}, 40, 2, WHITE);
+
+    for (int i = 0; i < 7; i++) {
+        if (keys2[i] == -1) {
+            keys2[i] = assets->keys[i];
+        }
+
+        char temp[30];
+        sprintf(temp, "%s%s", akcije[i], keyString(keys2[i]));
+        akcijeDim[i] = MeasureTextEx(assets->fontOrbitron, temp, 30, 2);
+        float kolona = (i % 2 == 0) ? (windowWidth * 0.1f) : (windowWidth * 0.6f);
+        float red = 0.28f * windowHeight + ((i / 2) * 0.05f * windowHeight);
+
+        Rectangle textHitBox = {kolona, red, akcijeDim[i].x, akcijeDim[i].y};
+        if (CheckCollisionPointRec(assets->mis, textHitBox)) {
+            DrawTextEx(assets->fontOrbitron, temp, (Vector2){kolona, red}, 30, 2, BLUE);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                keyChange = i;
+            }
+        } else {
+            DrawTextEx(assets->fontOrbitron, temp, (Vector2){kolona, red}, 30, 2, WHITE);
+        }
+    }
+
+    Vector2 dimAudioVideo = MeasureTextEx(assets->fontOrbitron, "Audio", 40, 2);
+    DrawTextEx(assets->fontOrbitron, "Audio", (Vector2){windowWidth/2.0f - dimAudioVideo.x / 2, 0.5f*windowHeight}, 40, 2, WHITE);
+
+    Rectangle muzikaBox = { windowWidth / 2.0f - 100, 0.6f*windowHeight, 200, 25 };
+    DrawTextEx(assets->fontExo, "MUSIC VOLUME:", (Vector2){muzikaBox.x - 220, muzikaBox.y - 2}, 25, 2, WHITE);
+    DrawRectangleRec(muzikaBox, DARKGRAY);
+    DrawRectangle(muzikaBox.x, muzikaBox.y, (int)(muzikaBox.width * music2/100.0f), muzikaBox.height, BLUE);
+    DrawTextEx(assets->fontExo, TextFormat("%d%%", music2), (Vector2){muzikaBox.x + muzikaBox.width + 20, muzikaBox.y - 2}, 25, 2, WHITE);
+
+    Rectangle sfxBox = { windowWidth / 2.0f - 100, 0.65f*windowHeight, 200, 25 };
+    DrawTextEx(assets->fontExo, "SFX VOLUME:", (Vector2){sfxBox.x - 180, sfxBox.y - 2}, 25, 2, WHITE);
+    DrawRectangleRec(sfxBox, DARKGRAY);
+    DrawRectangle(sfxBox.x, sfxBox.y, (int)(sfxBox.width * sfx2/100.0f), sfxBox.height, BLUE);
+    DrawTextEx(assets->fontExo, TextFormat("%d%%", sfx2), (Vector2){sfxBox.x + sfxBox.width + 20, sfxBox.y - 2}, 25, 2, WHITE);
+
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        if (CheckCollisionPointRec(assets->mis, muzikaBox) && blokadaTajmer > 0.5f) {
+            music2 = (int)(((assets->mis.x - muzikaBox.x) / muzikaBox.width) * 100);
+            if (music2 < 0) music2 = 0;
+            if (music2 > 100) music2 = 100;
+
+            float vol = (float)music2 / 100.0f;
+            SetMusicVolume(assets->mainMenu, vol);
+            SetMusicVolume(assets->level1, vol);
+            SetMusicVolume(assets->level2, vol);
+            SetMusicVolume(assets->level3, vol);
+        }
+        if (CheckCollisionPointRec(assets->mis, sfxBox) && blokadaTajmer > 0.5f) {
+            sfx2 = (int)(((assets->mis.x - sfxBox.x) / sfxBox.width) * 100);
+            if (sfx2 < 0) sfx2 = 0;
+            if (sfx2 > 100) sfx2 = 100;
+
+            float vol = (float)sfx2 / 100.0f;
+            SetSoundVolume(assets->hit1, vol);
+            SetSoundVolume(assets->hit2, vol);
+            SetSoundVolume(assets->laser, vol);
+            SetSoundVolume(assets->bossLaser, vol);
+            SetSoundVolume(assets->explosion, vol);
+            SetSoundVolume(assets->powerUp, vol);
+            SetSoundVolume(assets->gameOver, vol);
+        }
+    }
+
+    Vector2 dimSave = MeasureTextEx(assets->fontOrbitron, "Save", 40, 2);
+    DrawTextEx(assets->fontOrbitron, "Save", (Vector2){windowWidth/2.0f - dimNaslov.x / 2, 0.9f*windowHeight}, 40, 2, WHITE);
+    Rectangle saveHitBox = {windowWidth/2.0f - dimNaslov.x / 2, 0.9f*windowHeight, dimSave.x, dimSave.y};
+    if (CheckCollisionPointRec(assets->mis, saveHitBox)) {
+        DrawTextEx(assets->fontOrbitron, "Save", (Vector2){windowWidth/2.0f - dimNaslov.x / 2, 0.9f*windowHeight}, 40, 2, BLUE);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            promenjeno = 1;
+        }
+    }
+
     Rectangle backHitBox = { 40, 40, 180, 45 };
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
+
+    if (keyChange != -1) {
+        DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.7f));
+        Vector2 anyKey = MeasureTextEx(assets->fontOrbitron, "Press Any Key...", 40, 2);
+        DrawTextEx(assets->fontOrbitron, "Press Any Key...", (Vector2){windowWidth/2.0f - anyKey.x/2, 0.5f*windowHeight}, 40, 2, WHITE);
+        KeyboardKey newKey = GetKeyPressed();
+        if (newKey > 0) {
+            keys2[keyChange] = newKey;
+            keyChange = -1;
+        }
+    }
+
     if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        if (!promenjeno) {
+            SetMusicVolume(assets->mainMenu, assets->music);
+            SetMusicVolume(assets->level1, assets->music);
+            SetMusicVolume(assets->level2, assets->music);
+            SetMusicVolume(assets->level3, assets->music);
+            SetSoundVolume(assets->hit1, assets->sfx);
+            SetSoundVolume(assets->hit2, assets->sfx);
+            SetSoundVolume(assets->laser, assets->sfx);
+            SetSoundVolume(assets->bossLaser, assets->sfx);
+            SetSoundVolume(assets->explosion, assets->sfx);
+            SetSoundVolume(assets->powerUp, assets->sfx);
+            SetSoundVolume(assets->gameOver, assets->sfx);
+            music2 = -1;
+            sfx2 = -1;
+            for (int i = 0; i < 7; i++) {
+                keys2[i] = -1;
+            }
+        }
+        else {
+            assets->music = (float)music2/100;
+            assets->sfx = (float)sfx2/100;
+            for (int i = 0; i < 7; i++) {
+                assets->keys[i] = keys2[i];
+            }
+            sacuvajSettings(assets);
+        }
+        promenjeno = 0;
+        blokadaTajmer = 0.0f;
+
         assets->fja = assets->prethodnaFja;
         assets->prethodnaFja = Settings;
     }
@@ -257,23 +417,41 @@ void InitGlavni(GraphicAssets *assets) {
         char *p2 = strchr(temp2, ':');
 
         if (p1 && p2) {
-            music = atof(p1+1)/100.0;
-            sfx = atof(p2+1)/100.0;
+            assets->music = atof(p1+1)/100.0;
+            assets->sfx = atof(p2+1)/100.0;
         }
-        SetMusicVolume(assets->mainMenu, music);
-        SetMusicVolume(assets->level1, music);
-        SetMusicVolume(assets->level2, music);
-        SetMusicVolume(assets->level3, music);
+        SetMusicVolume(assets->mainMenu, assets->music);
+        SetMusicVolume(assets->level1, assets->music);
+        SetMusicVolume(assets->level2, assets->music);
+        SetMusicVolume(assets->level3, assets->music);
 
-        SetSoundVolume(assets->hit1, sfx);
-        SetSoundVolume(assets->hit2, sfx);
-        SetSoundVolume(assets->laser, sfx);
-        SetSoundVolume(assets->bossLaser, sfx);
-        SetSoundVolume(assets->explosion, sfx);
-        SetSoundVolume(assets->powerUp, sfx);
-        SetSoundVolume(assets->gameOver, sfx);
+        SetSoundVolume(assets->hit1, assets->sfx);
+        SetSoundVolume(assets->hit2, assets->sfx);
+        SetSoundVolume(assets->laser, assets->sfx);
+        SetSoundVolume(assets->bossLaser, assets->sfx);
+        SetSoundVolume(assets->explosion, assets->sfx);
+        SetSoundVolume(assets->powerUp, assets->sfx);
+        SetSoundVolume(assets->gameOver, assets->sfx);
     }
     fclose(fajl);
+
+    FILE *kontrole = fopen("documents/controls.txt", "r");
+
+    if (kontrole != NULL) {
+        fscanf(kontrole, "%d, %d, %d, %d - Movements (Up, Down, Left, Right)\n", &assets->keys[ACTION_UP], &assets->keys[ACTION_DOWN], &assets->keys[ACTION_LEFT], &assets->keys[ACTION_RIGHT]);
+        fscanf(kontrole, "%d - Shooting\n", &assets->keys[ACTION_SHOOT]);
+        fscanf(kontrole, "%d - Dash\n", &assets->keys[ACTION_DASH]);
+        fscanf(kontrole, "%d - Pause Menu\n", &assets->keys[ACTION_PAUSE]);
+        fclose(kontrole);
+    } else {
+        assets->keys[ACTION_UP] = 87;
+        assets->keys[ACTION_DOWN] = 83;
+        assets->keys[ACTION_LEFT] = 65;
+        assets->keys[ACTION_RIGHT] = 68;
+        assets->keys[ACTION_SHOOT] = 75;
+        assets->keys[ACTION_DASH] = 340;
+        assets->keys[ACTION_PAUSE] = 256;
+    }
 
     assets->mainMenu.looping = true;
     assets->level1.looping = true;
