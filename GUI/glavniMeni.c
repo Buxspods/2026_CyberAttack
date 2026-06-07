@@ -98,10 +98,12 @@ void HighestScores(GraphicAssets *assets, int score) {
     }
 
     for (int i = 0; i < numberOfLines; i++) {
-        const char* scoreTekst = TextFormat("%02d.%02d.%04d. \t %d",
+        const char* scoreTekst = TextFormat("%02d.%02d.%04d. %02d:%02d \t %d",
                                         assets->highestScores[i].dan,
                                         assets->highestScores[i].mesec,
                                         assets->highestScores[i].godina,
+                                        assets->highestScores[i].sat,
+                                        assets->highestScores[i].minut,
                                         assets->highestScores[i].score);
 
         Vector2 dimenzije = MeasureTextEx(assets->fontOrbitron, scoreTekst, 30, 2);

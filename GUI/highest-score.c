@@ -2,6 +2,7 @@
 #include"assets.h"
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 
 int ReturnNumberOfLines(struct GraphicAssets *assets) {
     FILE* fajl = fopen("documents/scores.bit", "rb");
@@ -49,16 +50,18 @@ void ReadScores(struct GraphicAssets *assets) {
 
     /*printf("\n--- TOP REZULTATI ---\n");
     for (int i = 0; i < numberOfLines; i++) {
-        printf("%02i.%02i.%04i.\t %d\n",
+        printf("%02i.%02i.%04i. %02d:%02d\t %d\n",
                 assets->highestScores[i].dan,
                 assets->highestScores[i].mesec,
                 assets->highestScores[i].godina,
+                assets->highestScores[i].sat,
+                assets->highestScores[i].minut,
                 assets->highestScores[i].score);
     }*/
 
 }
 
-void DodajNoviRezultat(int d, int m, int g, int s) {
+void DodajNoviRezultat(int s) {
     FILE *fajl = fopen("documents/scores.bit", "rb");
     Score *privremeniNiz = NULL;
     int brojElemenata = 0;
@@ -73,9 +76,16 @@ void DodajNoviRezultat(int d, int m, int g, int s) {
         fread(privremeniNiz, sizeof(Score), brojElemenata, fajl);
         fclose(fajl);
     }
+    time_t t = time(NULL);
+    struct tm *currTime = localtime(&t);
+    int dan = currTime->tm_mday;
+    int mesec = currTime->tm_mon+1;
+    int godina = currTime->tm_year + 1900;
+    int sat = currTime->tm_hour;
+    int minut = currTime->tm_min;
 
     Score *noviNiz = malloc((brojElemenata + 1) * sizeof(Score));
-    Score novi = {d, m, g, s};
+    Score novi = {dan, mesec, godina, sat, minut, s};
 
     int j = 0;
     int ubacen = 0;

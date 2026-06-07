@@ -151,6 +151,7 @@ int main() {
         if (IsKeyPressed(KEY_ESCAPE)) assets.isPaused = assets.isPaused == 0? 1: 0;
         //CRTANJE
         BeginDrawing();
+
         ClearBackground(BackgroundColor);
         switch (currScreen) {
             case LEVEL1:
