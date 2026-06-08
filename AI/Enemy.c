@@ -52,7 +52,7 @@ void InitTurret(Enemy *e) {
     e->speed = 100;
     e->size = 20;
     e->fireRate = 2.73f;//The binding of Isaac reference
-    e->actions[MOVEMENT_ACTION].update = &LinearMovement;//Dodaj Movement na dole speed 100 (da bi se kretali sa mapom)
+    e->actions[MOVEMENT_ACTION].update = &LinearMovement;
     e->movementData.linear.direction = (Vector2){0,1};
     e->actions[SHOOTING_ACTION] = InitAction(&PlayerShotLinear,1/e->fireRate);
     e->shootingData.single.direction = (Vector2){0,1};
