@@ -3,6 +3,8 @@
 #include "raylib.h"
 #include "highest-score.h"
 #include"assets.h"
+#include"../mech/GameState.h"
+#include"../mech/Map.h"
 struct GraphicAssets;
 
 typedef void (*MojaFja)(struct GraphicAssets *assets, int score);

@@ -11,4 +11,9 @@
 #include "mech/Projectile.h"
 #include "mech/EntityTypes.h"
 #include "mech/Collisions.h"
+#include "mech/EnemyWithTime.h"
+#include "mech/Level.h"
+#include "mech/Wave.h"
+#include  "mech/Map.h"
+#include "mech/Screens.h"
 #endif //INC_2026_CYBERATTACK_MECHANICS_H

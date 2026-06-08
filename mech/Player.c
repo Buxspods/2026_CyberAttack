@@ -25,11 +25,11 @@ Player InitPlayer(float score, Vector2 playerPos, float playerSize, float player
     player.invincibilityTimer = 0;
     return player;
 }
-void DrawPlayer(Player player, GraphicAssets *assets) {
+/*void DrawPlayer(Player player, GraphicAssets *assets) {
     //DrawCircleV(player.playerPos, player.playerSize, WHITE);
     Vector2 pos = (Vector2){player.playerPos.x, player.playerPos.y - 1.5 * player.playerSize};
     DrawPlaneGUI(&pos, assets);
-}
+}*/
 void UpdatePlayerPosition(Player *player) {
     float dt = GetFrameTime(); //delta time potreban da bi na svakom kompu igra isla istom brzinom
     Vector2 movement = {0, 0}; //vektor koji nam govori u kom smeru i pravcu se krece igrac

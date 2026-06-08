@@ -5,11 +5,6 @@
 #include "AI.h"
 #include"GUI.h"
 #include <time.h>
-#include "mech/EnemyWithTime.h"
-#include "mech/Level.h"
-#include "mech/Wave.h"
-#include  "mech/Map.h"
-#include "mech/Screens.h"
 
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
@@ -163,7 +158,8 @@ int main() {
                 break;
         }
 
-        DrawPlayer(gamestate.player, &assets);
+        //DrawPlayer(gamestate.player, &assets);
+        DrawPlaneGUI(&gamestate.player.playerPos, &assets);
         DrawPowerUps(gamestate.powerups);
         DrawProjectiles(gamestate.projectiles);
         DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState

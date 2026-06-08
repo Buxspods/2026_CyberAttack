@@ -40,7 +40,8 @@ void DrawPlaneGUI(Vector2 *pozicija, GraphicAssets *assets) {
     }
     float sirinaFrejma = (float)trenutnaTextura.width / (float)maxFrames;
     Rectangle sourceRec = { (int)(*aktivniFrame) * sirinaFrejma, 0, sirinaFrejma, (float)trenutnaTextura.height };
-    DrawTextureRec(trenutnaTextura, sourceRec, (Vector2){ pozicija->x - sirinaFrejma/2, pozicija->y }, WHITE);
+    DrawTextureRec(trenutnaTextura, sourceRec, (Vector2){ pozicija->x - sirinaFrejma/2, pozicija->y - 1.5*20.0f }, WHITE);
+    //DrawCircleV((Vector2){pozicija->x, pozicija->y}, 20.0f, WHITE);
 }
 
 void DrawPowerUp(Texture2D powerUp, Vector2 position) {
