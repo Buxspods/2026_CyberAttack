@@ -37,6 +37,9 @@ void MoveCircular(Vector2 *pos, Vector2 centerPos,float speed,int direction,floa
 }
 
 void LinearMovement(Enemy *e,GameState *state, float dt) {
+    if (e->type == ENEMY_TURRET && !e->movementData.restrictions.canMove){
+        return;
+    }
     MoveLinear(&e->position,e->speed,e->movementData.linear.direction,dt);
 }
 void CircularMovement(Enemy *e,GameState *state, float dt) {

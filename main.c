@@ -52,7 +52,7 @@ int main() {
                     {ENEMY_MELEE_PLANE, {100, 650},3.0f}},
                         11.0f, 5};
 
-    EnemyWave wave1 = {.enemies = { {BOSS, {100, 100}, 1}}, 14, 1};
+    EnemyWave wave1 = {.enemies = { {ENEMY_TURRET, {100, 100}, 1}}, 14, 1};
 
     Level level = {.waves = {wave1, wave2, wave3, wave4}, 4};
     Vector2 vect = {100, 100};
@@ -151,13 +151,13 @@ int main() {
         ClearBackground(BackgroundColor);
         switch (currScreen) {
             case 1:
-                MoveMap(&level1Map);
+                MoveMap(&level1Map, &gamestate);
                 break;
             case 2:
-                MoveMap(&level2Map);
+                MoveMap(&level2Map, &gamestate);
                 break;
             case 3:
-                MoveMap(&level3Map);
+                MoveMap(&level3Map, &gamestate);
                 break;
             default:
                 break;
@@ -170,7 +170,7 @@ int main() {
         PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
 
         //Ovo ispod je za test glavnog menija, pauseMenija i GUI-a aviona, u nekom trenutku ce biti potrebno
-        /*if (assets.isPaused) {
+        if (assets.isPaused) {
             CrtajPause(&assets);
         }
         else if (assets.fja == NULL) {
@@ -188,7 +188,7 @@ int main() {
             else {
                 assets.fja(&assets, 0);
             }
-        }*/
+        }
         //Linije iznad treba da se ukljuce kada budu bili potrebni glavni i pause meni
         EndDrawing();
         ///////////////////////////////////////////////////////////////////////////////////

@@ -36,6 +36,7 @@ struct Enemy{
     Action actions[MAX_ACTIONS];
     bool active;//Ista logika kao i za metkove
     union{
+        struct {bool canMove;} restrictions;
         struct {Vector2 direction;float acceleration;}linear;
         struct {Vector2 center;Vector2 position;int direction;} circular;//direction je +/- jedan da bi odlucio da li hoces na desnu ili levu stranu
         struct {Vector2 position;float amplitude;float frequency; float baseline;int direction;} sine;

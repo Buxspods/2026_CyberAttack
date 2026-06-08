@@ -47,6 +47,7 @@ void InitMeelePlane(Enemy *e) {
     e->movementData.linear.direction = (Vector2){0,-1};
 }
 void InitTurret(Enemy *e) {
+    e->movementData.restrictions.canMove = true;
     e->HP = 5;
     e->maxHP = 5;
     e->speed = 100;
