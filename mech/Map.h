@@ -7,8 +7,11 @@
 typedef struct{
     Texture2D map;
     float offset;
+    float originalOffset;
     float speed;
-    bool isMoving;} Map;
+    bool isMoving;
+    int numOfLoops;
+    int doneLoops; } Map;
 
 void MoveMap(Map *map, GameState *state);
 

@@ -6,7 +6,7 @@
 #include"GUI.h"
 #include <time.h>
 
-#define WINDOW_WIDTH 1000
+#define WINDOW_WIDTH 1000                ///////////
 #define WINDOW_HEIGHT 1000
 #define PROJECTILE_CAP 100
 #define ENEMY_CAP 100
@@ -14,7 +14,7 @@
 
 int main() {
 
-    SCREEN currScreen = LEVEL1;
+    SCREEN currScreen = LEVEL3;
 
     float globalLeveltimer = 0.0f; //sluzi za tajmiranje talasa
 
@@ -66,13 +66,13 @@ int main() {
     //PlayMusicStream(assets.mainMenu);
 
     //mape za svaki nivo
-    float map1Offset = 1.0f, map1Speed = 100.0f;
-    float map2Offset = 1.0f, map2Speed = 100.0f;
-    float map3Offset = 1.0f, map3Speed = 100.0f;
+    float map1Offset = 0.0f, map1Speed = 100.0f;
+    float map2Offset = 0.0f, map2Speed = 100.0f;
+    float map3Offset = 0.0f, map3Speed = 100.0f;
 
-    Map level1Map = {assets.background1, map1Offset, map1Speed};
-    Map level2Map = {assets.background2, map2Offset, map2Speed};
-    Map level3Map = {assets.background3, map3Offset, map3Speed};
+    Map level1Map = {assets.background1, map1Offset, map1Offset,  map1Speed, true, 3, 0};
+    Map level2Map = {assets.background2, map2Offset, map1Offset, map2Speed, true, 3, 0};
+    Map level3Map = {assets.background3, map3Offset, map1Offset,map3Speed, true, 5, 0};
 
     Vector2 dimenzije = MeasureTextEx(assets.fontOrbitron, "2026: Cyber Attack", 70, 2);
     Vector2 pozicija = {windowWidth / 2.0f - dimenzije.x / 2, windowHeight * 0.125f};
@@ -166,7 +166,7 @@ int main() {
         PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
 
         //Ovo ispod je za test glavnog menija, pauseMenija i GUI-a aviona, u nekom trenutku ce biti potrebno
-        if (assets.isPaused) {
+        /*if (assets.isPaused) {
             CrtajPause(&assets);
         }
         else if (assets.fja == NULL) {
@@ -184,7 +184,7 @@ int main() {
             else {
                 assets.fja(&assets, 0);
             }
-        }
+        }*/
         //Linije iznad treba da se ukljuce kada budu bili potrebni glavni i pause meni
         EndDrawing();
         ///////////////////////////////////////////////////////////////////////////////////
