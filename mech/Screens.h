@@ -6,6 +6,7 @@ typedef enum{
     LEVEL1,
     LEVEL2,
     LEVEL3,
+    PAUSE_MENU,
     INFINITE_LEVEL,
     SETTINGS
 }SCREEN;

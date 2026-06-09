@@ -2,13 +2,22 @@
 #include"glavniMeni.h"
 #include"pauseMeni.h"
 #include<string.h>
+#include<stdio.h>
 
 void ResumeGame(GraphicAssets *assets, int score) {
     assets->isPaused = (assets->isPaused == 1)? 0: 1;
+    assets->currScreen = assets->currLevel;
 }
 void ExitAndSave(GraphicAssets *assets, int score) {
     //Za sad
-    assets->isPaused = (assets->isPaused == 1)? 0: 1;
+    assets->isPaused = 0;
+    assets->currScreen = MAIN_MENU;
+    assets->fja = NULL;
+    StopMusicStream(assets->level1);
+    StopMusicStream(assets->level3);
+    StopMusicStream(assets->level2);
+    PlayMusicStream(assets->mainMenu);
+    gamestate = InitGameState();
 }
 
 void CrtajPause(GraphicAssets *assets) {

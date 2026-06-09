@@ -2,7 +2,10 @@
 #define INC_2026_CYBERATTACK_PAUSEMENI_H
 
 #include"assets.h"
+#include"../mech/Screens.h"
+#include"../mech/GameState.h"
 
+extern GameState gamestate;
 void ResumeGame(GraphicAssets *assets, int score);
 void ExitAndSave(GraphicAssets *assets, int score);
 

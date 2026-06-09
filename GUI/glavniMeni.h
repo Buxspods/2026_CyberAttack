@@ -7,7 +7,12 @@
 #define windowWidth 1000
 #define windowHeight 1000
 #include"assets.h"
+#include"../mech/GameState.h"
+#include"../mech/Level.h"
 
+
+extern GameState gamestate;
+void ResetLevel(Level *level);
 const char* keyString(int keyID);
 void StartNewGame(GraphicAssets *assets, int score);
 void LoadGame(GraphicAssets *assets, int score);

@@ -16,6 +16,8 @@ GameState InitGameState() {
         gamestate.powerups[i].active=false;
     }
 
+    gamestate.globalLevelTimer = 0.0f;
+
     gamestate.player = InitPlayer(0, (Vector2) {WINDOW_WIDTH / 2.0, WINDOW_HEIGHT / 1.25},20,500.0f,3,10, PROJECTILE_CAP);
     return gamestate;
 }

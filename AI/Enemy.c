@@ -45,6 +45,7 @@ void InitMeelePlane(Enemy *e) {
     e->actions[MOVEMENT_ACTION] = InitAction(&LinearMovement,GetFrameTime());
     e->actions[SHOOTING_ACTION].update = NULL;
     e->movementData.linear.direction = (Vector2){0,-1};
+    e->laserActive = false;
 }
 void InitTurret(Enemy *e) {
     e->movementData.restrictions.canMove = true;
@@ -59,6 +60,7 @@ void InitTurret(Enemy *e) {
     e->shootingData.single.direction = (Vector2){0,1};
     e->shootingData.single.size = 5;
     e->shootingData.single.speed = 700.0f;
+    e->laserActive = false;
 }
 //Dodati funkciju za inicijalizaciju uniona mozda
 void InitRangedPlane(Enemy *e) {
@@ -97,6 +99,7 @@ void InitRangedPlane(Enemy *e) {
     e->shootingData.shotgun.direction = (Vector2){0,1};
     e->shootingData.shotgun.rotationAngleRadians = PI/4;
     e->shootingData.shotgun.amount=3;
+    e->laserActive = false;
 }
 void InitBoss(Enemy *e) {
     e-> HP = 40;

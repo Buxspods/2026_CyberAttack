@@ -13,8 +13,10 @@ typedef struct GameState{
     Player player;
     Enemy enemies[ENEMY_CAP];
     PowerUp powerups[POWERUP_CAP];
+    float globalLevelTimer;
 }GameState;
 
 GameState InitGameState();
+void DrawGameState();
 
 #endif //INC_2026_CYBERATTACK_GAMESTATE_H

@@ -3,8 +3,8 @@
 #include "raylib.h"
 #include "highest-score.h"
 #include"assets.h"
-#include"../mech/GameState.h"
 #include"../mech/Map.h"
+#include"../mech/Screens.h"
 struct GraphicAssets;
 
 typedef void (*MojaFja)(struct GraphicAssets *assets, int score);
@@ -48,6 +48,12 @@ typedef struct GraphicAssets {
     KeyboardKey keys[7];
     Vector2 mis;
     Score *highestScores;
+    Map level1Map;// = {assets.background1, map1Offset, map1Offset,  map1Speed, true, 3, 0};
+    Map level2Map;// = {assets.background2, map2Offset, map1Offset, map2Speed, true, 3, 0};
+    Map level3Map;// = {assets.background3, map3Offset, map1Offset,map3Speed, true, 5, 0};
+    SCREEN currScreen;
+    SCREEN currLevel;
+
     void (*fja)(struct GraphicAssets *assets, int score);
     void (*prethodnaFja)(struct GraphicAssets *assets, int score);
     void (*fjaPause)(struct GraphicAssets *assets);

@@ -6,6 +6,16 @@
 #include<string.h>
 #include "endScreen.h"
 
+void ResetLevel(Level *level) {
+    for (int i = 0; i < level->level_size; i++) {
+        EnemyWave wave1 = level->waves[i];
+        for (int j = 0; j < wave1.waveSize; j++) {
+            wave1.enemies[j].spawned = false;
+        }
+        level->waves[i] = wave1;
+    }
+}
+
 const char* keyString(int keyID) {
     if (keyID == 341 || keyID == 345) return "CTRL";
     if (keyID == 340) return "SHIFT";
@@ -37,6 +47,7 @@ void sacuvajSettings(GraphicAssets *assets) {
 }
 
 void StartNewGame(GraphicAssets *assets, int score) {
+
     DrawTexture(assets->background, 0, 0, WHITE);
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
 
@@ -51,6 +62,9 @@ void StartNewGame(GraphicAssets *assets, int score) {
             StopMusicStream(assets->level3);
             StopMusicStream(assets->mainMenu);
             PlayMusicStream(assets->level1);
+            gamestate = InitGameState();
+            assets->currLevel = LEVEL1;
+            assets->currScreen = LEVEL1;
         }
     }
 
@@ -65,6 +79,9 @@ void StartNewGame(GraphicAssets *assets, int score) {
             StopMusicStream(assets->level3);
             StopMusicStream(assets->mainMenu);
             PlayMusicStream(assets->level2);
+            gamestate = InitGameState();
+            assets->currLevel = LEVEL2;
+            assets->currScreen = LEVEL2;
         }
     }
 
@@ -79,6 +96,9 @@ void StartNewGame(GraphicAssets *assets, int score) {
             StopMusicStream(assets->level2);
             StopMusicStream(assets->mainMenu);
             PlayMusicStream(assets->level3);
+            gamestate = InitGameState();
+            assets->currLevel = LEVEL3;
+            assets->currScreen = LEVEL3;
         }
     }
 
@@ -92,6 +112,7 @@ void StartNewGame(GraphicAssets *assets, int score) {
         PlayMusicStream(assets->mainMenu);
         assets->prethodnaFja = assets->fja;
         assets->fja = NULL;
+        //assets->currScreen = MAIN_MENU;
     }
 }
 void LoadGame(GraphicAssets *assets, int score) {
@@ -457,6 +478,13 @@ void InitGlavni(GraphicAssets *assets) {
     assets->level1.looping = true;
     assets->level2.looping = true;
     assets->level3.looping = true;
+
+    assets->level1Map = (Map){assets->background1, 0.0f, 0.0f, 100.0f, true, 3, 0};
+    assets->level2Map = (Map){assets->background2, 0.0f, 0.0f, 100.0f, true, 3, 0};
+    assets->level3Map = (Map){assets->background3, 0.0f, 0.0f, 100.0f, true, 5, 0};
+
+    assets->currScreen = MAIN_MENU;
+    assets->currLevel = MAIN_MENU;
 
     assets->prethodnaFja = NULL;
     assets->fja = NULL;

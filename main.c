@@ -11,18 +11,18 @@
 #define PROJECTILE_CAP 100
 #define ENEMY_CAP 100
 
-
+GameState gamestate;
 int main() {
 
-    SCREEN currScreen = LEVEL1;
+    //SCREEN currScreen = LEVEL1;
 
-    float globalLeveltimer = 0.0f; //sluzi za tajmiranje talasa
+    //float globalLeveltimer = 0.0f; //sluzi za tajmiranje talasa
 
     srand(time(NULL));
     float fire_timer =0.0f;//Prebaciti ovo verovatno u logiku za igraca nekakvu
     float spawn_timer =4.0f;
 
-    GameState gamestate = InitGameState();//Inicijalizuje Igraca protivnike i metkove
+    gamestate = InitGameState();//Inicijalizuje Igraca protivnike i metkove
 
     EnemyWave wave4 = {
         .enemies ={
@@ -30,14 +30,14 @@ int main() {
                     {ENEMY_RANGED_PLANE, {100, 750},0.5f},
                     {ENEMY_RANGED_PLANE, {100, 750},1.0f},
                     {ENEMY_RANGED_PLANE, {100, 750},1.5f}},
-                    3.0f, 4};
+                    2.0f, 4};
     EnemyWave wave2 = {
         .enemies = {
                     {ENEMY_TURRET, {100, 550},1.0f},
                     {ENEMY_TURRET, {300, 550},2.0f},
                     {ENEMY_TURRET, {500, 550},3.0f},
                     {ENEMY_TURRET, {700, 550},4.0f}},
-                        7.0f, 4};
+                        2.0f, 4};
     EnemyWave wave3 = {
         .enemies = {
                     {ENEMY_MELEE_PLANE, {100, 650},1.0f},
@@ -45,9 +45,9 @@ int main() {
                     {ENEMY_TURRET, {100, 650},2.0f},
                     {ENEMY_MELEE_PLANE, {100, 650},2.5f},
                     {ENEMY_MELEE_PLANE, {100, 650},3.0f}},
-                        11.0f, 5};
+                        2.0f, 5};
 
-    EnemyWave wave1 = {.enemies = { {ENEMY_TURRET, {100, 100}, 1}}, 14, 1};
+    EnemyWave wave1 = {.enemies = { {ENEMY_TURRET, {100, 100}, 1}}, 2.0f, 1};
 
     Level level = {.waves = {wave1, wave2, wave3, wave4}, 4};
     Vector2 vect = {100, 100};
@@ -63,16 +63,7 @@ int main() {
     Vector2 pozicijaAviona = {100, 100};
     InitGlavni(&assets);
     InitPause(&assets);
-    //PlayMusicStream(assets.mainMenu);
-
-    //mape za svaki nivo
-    float map1Offset = 0.0f, map1Speed = 100.0f;
-    float map2Offset = 0.0f, map2Speed = 100.0f;
-    float map3Offset = 0.0f, map3Speed = 100.0f;
-
-    Map level1Map = {assets.background1, map1Offset, map1Offset,  map1Speed, true, 3, 0};
-    Map level2Map = {assets.background2, map2Offset, map1Offset, map2Speed, true, 3, 0};
-    Map level3Map = {assets.background3, map3Offset, map1Offset,map3Speed, true, 5, 0};
+    PlayMusicStream(assets.mainMenu);
 
     Vector2 dimenzije = MeasureTextEx(assets.fontOrbitron, "2026: Cyber Attack", 70, 2);
     Vector2 pozicija = {windowWidth / 2.0f - dimenzije.x / 2, windowHeight * 0.125f};
@@ -93,14 +84,41 @@ int main() {
         float dt = GetFrameTime(); //delta time potreban da bi na svakom kompu igra isla istom brzinom
         fire_timer+=dt;
         spawn_timer+=dt;
-        if (!assets.isPaused) globalLeveltimer+=dt;
 
-        switch (currScreen) {
+        assets.mis = GetMousePosition();
+        if (IsKeyPressed(KEY_ESCAPE) && assets.currScreen != MAIN_MENU) {
+            assets.isPaused = assets.isPaused == 0? 1: 0;
+            assets.currScreen = (assets.currScreen == PAUSE_MENU)? assets.currLevel:PAUSE_MENU;
+        }
+
+        if (!assets.isPaused) {
+            assets.level1Map.isMoving = true;
+            assets.level2Map.isMoving = true;
+            assets.level3Map.isMoving = true;
+            UpdatePlayerPosition(&gamestate.player);
+            UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
+            UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
+
+            UpdateProjectiles(gamestate.projectiles);
+            UpdateEnemies(&gamestate);
+            CheckCollisions(&gamestate);
+        }
+        else {
+            assets.level1Map.isMoving = false;
+            assets.level2Map.isMoving = false;
+            assets.level3Map.isMoving = false;
+        }
+
+        if (!assets.isPaused && assets.currScreen != MAIN_MENU) {
+            gamestate.globalLevelTimer+=dt;
+        }
+
+        switch (assets.currScreen) {
             case LEVEL1:
-                StartLevel(&level, &gamestate, &globalLeveltimer);
+                StartLevel(&level, &gamestate, &gamestate.globalLevelTimer);
                 break;
             case LEVEL2:
-                StartLevel(&level, &gamestate, &globalLeveltimer);
+                StartLevel(&level, &gamestate, &gamestate.globalLevelTimer);
                 break;
             default:
                 break;
@@ -121,68 +139,75 @@ int main() {
             gamestate.player.lives = 10;
         }
 
-        UpdatePlayerPosition(&gamestate.player);
-        UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
-        UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
-
-        UpdateProjectiles(gamestate.projectiles);
-        UpdateEnemies(&gamestate);
-        CheckCollisions(&gamestate);
-
-        //Ova linija treba da se ukljuci kada bude potreban pause meni
-        assets.mis = GetMousePosition();
-        if (IsKeyPressed(KEY_ESCAPE)) assets.isPaused = assets.isPaused == 0? 1: 0;
-
-        ///////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////
         //CRTANJE
         BeginDrawing();
         ClearBackground(BackgroundColor);
-        switch (currScreen) {
+        switch (assets.currScreen) {
             case 1:
-                MoveMap(&level1Map, &gamestate);
+                MoveMap(&assets.level1Map, &gamestate);
+                DrawPlaneGUI(&gamestate.player.playerPos, &assets);
+                DrawPowerUps(gamestate.powerups);
+                DrawProjectiles(gamestate.projectiles);
+                DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
+                PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
                 break;
             case 2:
-                MoveMap(&level2Map, &gamestate);
+                MoveMap(&assets.level2Map, &gamestate);
+                DrawPlaneGUI(&gamestate.player.playerPos, &assets);
+                DrawPowerUps(gamestate.powerups);
+                DrawProjectiles(gamestate.projectiles);
+                DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
+                PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
                 break;
             case 3:
-                MoveMap(&level3Map, &gamestate);
+                MoveMap(&assets.level3Map, &gamestate);
+                DrawPlaneGUI(&gamestate.player.playerPos, &assets);
+                DrawPowerUps(gamestate.powerups);
+                DrawProjectiles(gamestate.projectiles);
+                DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
+                PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
+                break;
+            case 4:
+                switch (assets.currLevel) {
+                    case 1:
+                        MoveMap(&assets.level1Map, &gamestate);
+                        break;
+                    case 2:
+                        MoveMap(&assets.level2Map, &gamestate);
+                        break;
+                    case 3:
+                        MoveMap(&assets.level3Map, &gamestate);
+                        break;
+                    default:
+                        break;
+                }
+                DrawPlaneGUI(&gamestate.player.playerPos, &assets);
+                DrawPowerUps(gamestate.powerups);
+                DrawProjectiles(gamestate.projectiles);
+                DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
+                PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
+                CrtajPause(&assets);
+                if (assets.fja == Guide || assets.fja == HighestScores || assets.fja == Settings) {
+                    assets.fja(&assets, 0);
+                }
                 break;
             default:
+                ResetLevel(&level);
+                if (assets.fja == NULL) {
+                    CrtajMeni(&pozicija ,&vreme, &providnost, &assets);
+                    guideMenu = true;
+                }
+                else {
+                    if (assets.fja == DrawGameOverScreen && guideMenu) {
+                        assets.fja(&assets, assets.currScore);
+                    }
+                    else {
+                        assets.fja(&assets, 0);
+                    }
+                }
                 break;
         }
-
-        //DrawPlayer(gamestate.player, &assets);
-        DrawPlaneGUI(&gamestate.player.playerPos, &assets);
-        DrawPowerUps(gamestate.powerups);
-        DrawProjectiles(gamestate.projectiles);
-        DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
-        PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
-
-        //Ovo ispod je za test glavnog menija, pauseMenija i GUI-a aviona, u nekom trenutku ce biti potrebno
-        /*if (assets.isPaused) {
-            CrtajPause(&assets);
-        }
-        else if (assets.fja == NULL) {
-            CrtajMeni(&pozicija ,&vreme, &providnost, &assets);
-            //DrawTurret(assets.turret, (Vector2){100, 400}, rotation);
-            //DrawRectangle(0, 0, windowWidth, windowHeight, BLACK);
-            //DrawPlaneGUI(&pozicijaAviona, &assets);
-            //DrawExplosion(&assets, pozicijaAviona, IsKeyPressed(KEY_K));
-            guideMenu = true;
-        }
-        else {
-            if (assets.fja == DrawGameOverScreen && guideMenu) {
-                assets.fja(&assets, assets.currScore);
-            }
-            else {
-                assets.fja(&assets, 0);
-            }
-        }*/
-        //Linije iznad treba da se ukljuce kada budu bili potrebni glavni i pause meni
         EndDrawing();
-        ///////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////
     }
     UnloadAssets(&assets);
     CloseWindow();
