@@ -6,7 +6,7 @@
 #include"GUI.h"
 #include <time.h>
 
-#define WINDOW_WIDTH 1000                ///////////
+#define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
 #define PROJECTILE_CAP 100
 #define ENEMY_CAP 100
@@ -14,7 +14,7 @@
 
 int main() {
 
-    SCREEN currScreen = LEVEL3;
+    SCREEN currScreen = LEVEL1;
 
     float globalLeveltimer = 0.0f; //sluzi za tajmiranje talasa
 
@@ -26,10 +26,10 @@ int main() {
 
     EnemyWave wave4 = {
         .enemies ={
-                    {ENEMY_MELEE_PLANE, {100, 750},0.0f},
-                    {ENEMY_MELEE_PLANE, {300, 750},2.0f},
-                    {ENEMY_MELEE_PLANE, {500, 750},3.0f},
-                    {ENEMY_MELEE_PLANE, {700, 750},3.0f}},
+                    {ENEMY_RANGED_PLANE, {100, 750},0.0f},
+                    {ENEMY_RANGED_PLANE, {100, 750},0.5f},
+                    {ENEMY_RANGED_PLANE, {100, 750},1.0f},
+                    {ENEMY_RANGED_PLANE, {100, 750},1.5f}},
                     3.0f, 4};
     EnemyWave wave2 = {
         .enemies = {
@@ -106,12 +106,6 @@ int main() {
                 break;
         }
 
-        //if (spawn_timer>3) {
-        //    spawn_timer=0;
-            //SpawnEnemy(gamestate.enemies,ENEMY_MELEE_PLANE,(Vector2){500,1000});
-            //SpawnEnemy(gamestate.enemies,ENEMY_RANGED_PLANE,(Vector2){0,WINDOW_HEIGHT/2});
-            //Iz nekog razloga se ekran zacrni kada se ovde stavi window height
-        //}
         if (fire_timer > 600) {
             fire_timer = 0.0f; //ako je igrac bio afk duze od 10 minuta fire timer se resetuje
         }
