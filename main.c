@@ -14,10 +14,6 @@
 GameState gamestate;
 int main() {
 
-    //SCREEN currScreen = LEVEL1;
-
-    //float globalLeveltimer = 0.0f; //sluzi za tajmiranje talasa
-
     srand(time(NULL));
     float fire_timer =0.0f;//Prebaciti ovo verovatno u logiku za igraca nekakvu
     float spawn_timer =4.0f;
@@ -47,7 +43,7 @@ int main() {
                     {ENEMY_MELEE_PLANE, {100, 650},3.0f}},
                         2.0f, 5};
 
-    EnemyWave wave1 = {.enemies = { {ENEMY_TURRET, {100, 100}, 1}}, 2.0f, 1};
+    const EnemyWave wave1 = {.enemies = { {ENEMY_TURRET, {100, 100}, 1}}, 2.0f, 1};
 
     Level level = {.waves = {wave1, wave2, wave3, wave4}, 4};
     Vector2 vect = {100, 100};
@@ -87,14 +83,16 @@ int main() {
 
         assets.mis = GetMousePosition();
         if (IsKeyPressed(KEY_ESCAPE) && assets.currScreen != MAIN_MENU) {
+            if (assets.isPaused) {
+                assets.level1Map.isMoving = true;
+                assets.level2Map.isMoving = true;
+                assets.level3Map.isMoving = true;
+            }
             assets.isPaused = assets.isPaused == 0? 1: 0;
             assets.currScreen = (assets.currScreen == PAUSE_MENU)? assets.currLevel:PAUSE_MENU;
         }
 
         if (!assets.isPaused) {
-            assets.level1Map.isMoving = true;
-            assets.level2Map.isMoving = true;
-            assets.level3Map.isMoving = true;
             UpdatePlayerPosition(&gamestate.player);
             UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
             UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
@@ -120,12 +118,11 @@ int main() {
             case LEVEL2:
                 StartLevel(&level, &gamestate, &gamestate.globalLevelTimer);
                 break;
+            case LEVEL3:
+                StartLevel(&level, &gamestate, &gamestate.globalLevelTimer);
+                break;
             default:
                 break;
-        }
-
-        if (fire_timer > 600) {
-            fire_timer = 0.0f; //ako je igrac bio afk duze od 10 minuta fire timer se resetuje
         }
 
         if (fire_timer > (1/gamestate.player.fireRate) && IsKeyDown(KEY_K) && gamestate.player.ammo > 0) {

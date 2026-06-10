@@ -1,12 +1,12 @@
 #include "Map.h"
-
+#include <stdio.h>
 void MoveMap(Map *map, GameState *state){
     float dt = GetFrameTime();
     if (map->isMoving){
         map->offset += map->speed * dt;
         if (map->offset >= map->map.height){
             map->doneLoops++;
-            if (map->doneLoops >= map->numOfLoops){
+            if (map->doneLoops >= map->numOfLoops){///////////
                 map->isMoving = false;
             }
             else{
@@ -23,7 +23,7 @@ void MoveMap(Map *map, GameState *state){
     }
 
     float y = map->offset;
-
+    printf("%f\n", y);
     DrawTexture(map->map, 0, (int)(y - map->map.height), WHITE);
     DrawTexture(map->map, 0, (int)y, WHITE);
 }

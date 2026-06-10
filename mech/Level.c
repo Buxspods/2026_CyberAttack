@@ -9,3 +9,13 @@ void StartLevel(Level *level, GameState *gamestate, float *globalTimer) {
         }
     }
 }
+
+bool isLevelComplete(GameState *state) {
+    for (int i = 0; i < ENEMY_CAP; i++) {
+        if (state->enemies[i].active) {
+            return false;
+        }
+    }
+    return true;
+}
+
