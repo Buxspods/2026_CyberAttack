@@ -14,6 +14,7 @@ typedef struct GameState{
     Enemy enemies[ENEMY_CAP];
     PowerUp powerups[POWERUP_CAP];
     float globalLevelTimer;
+    KeyboardKey keys[7];
 }GameState;
 
 GameState InitGameState();

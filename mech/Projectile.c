@@ -6,6 +6,10 @@
 #include "raymath.h"
 #include "EntityTypes.h"
 #include "Player.h"
+#include"../GUI/assets.h"
+#include"../GUI/planeGUI.h"
+
+extern GraphicAssets assets;
 //Ova funkcija dodata da bi radila sa protivnicima
 void InitProjectile(Projectile projectiles[],EntityType projectile_tag,Vector2 pos,Vector2 dir,float speed,float size) {
     for (int i = 0; i < PROJECTILE_CAP; i++) {
@@ -70,6 +74,7 @@ void DrawProjectiles(Projectile projectiles[]) {
     for (int i = 0; i < PROJECTILE_CAP; i++) {
         if (projectiles[i].active) {
             DrawCircleV(projectiles[i].pos, projectiles[i].size, RED);
+            DrawProjectile(assets.metak, projectiles[i].pos);
         }
     }
 }

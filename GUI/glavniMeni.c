@@ -6,6 +6,12 @@
 #include<string.h>
 #include "endScreen.h"
 
+void Set_Keys(GraphicAssets *assets) {
+    for (int i = 0; i < 7; i++) {
+        gamestate.keys[i] = assets->keys[i];
+    }
+}
+
 void ResetLevel(Level *level) {
     for (int i = 0; i < level->level_size; i++) {
         EnemyWave wave1 = level->waves[i];
@@ -63,6 +69,7 @@ void StartNewGame(GraphicAssets *assets, int score) {
             StopMusicStream(assets->mainMenu);
             PlayMusicStream(assets->level1);
             gamestate = InitGameState();
+            Set_Keys(assets);
             assets->currLevel = LEVEL1;
             assets->currScreen = LEVEL1;
         }
@@ -80,6 +87,7 @@ void StartNewGame(GraphicAssets *assets, int score) {
             StopMusicStream(assets->mainMenu);
             PlayMusicStream(assets->level2);
             gamestate = InitGameState();
+            Set_Keys(assets);
             assets->currLevel = LEVEL2;
             assets->currScreen = LEVEL2;
         }
@@ -97,6 +105,7 @@ void StartNewGame(GraphicAssets *assets, int score) {
             StopMusicStream(assets->mainMenu);
             PlayMusicStream(assets->level3);
             gamestate = InitGameState();
+            Set_Keys(assets);
             assets->currLevel = LEVEL3;
             assets->currScreen = LEVEL3;
         }
@@ -349,6 +358,9 @@ void Settings(GraphicAssets *assets, int score) {
             for (int i = 0; i < 7; i++) {
                 assets->keys[i] = keys2[i];
             }
+            for (int i = 0; i <7; i++) {
+                gamestate.keys[i] = assets->keys[i];
+            }
             sacuvajSettings(assets);
         }
         promenjeno = 0;
@@ -414,6 +426,9 @@ void InitGlavni(GraphicAssets *assets) {
     assets->background2 = LoadTexture("resources/images/slika2-1000px.png");
     assets->background3 = LoadTexture("resources/images/slika3_1000px.png");
     assets->finalBoss = LoadTexture("resources/images/final-boss.png");
+    assets->metakBoss = LoadTexture("resources/images/metakBoss.png");
+    assets->laserBoss1 = LoadTexture("resources/images/bossLaserSprite.png");
+    assets->laserBoss2 = LoadTexture("resources/images/bossLaserSprite2.png");
     assets->explosion = LoadSound("resources/audio/explosion.wav");
     assets->gameOver = LoadSound("resources/audio/game-over.wav");
     assets->hit1 = LoadSound("resources/audio/hit1.wav");
@@ -472,6 +487,10 @@ void InitGlavni(GraphicAssets *assets) {
         assets->keys[ACTION_SHOOT] = 75;
         assets->keys[ACTION_DASH] = 340;
         assets->keys[ACTION_PAUSE] = 256;
+    }
+
+    for (int i = 0; i <7; i++) {
+        gamestate.keys[i] = assets->keys[i];
     }
 
     assets->mainMenu.looping = true;

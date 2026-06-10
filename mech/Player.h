@@ -6,7 +6,6 @@
 #define INC_2026_CYBERATTACK_PLAYER_H
 #include "raylib.h"
 #include "EntityTypes.h"
-//#include"../GUI/assets.h"
 typedef struct GameState GameState;
 typedef struct {
     EntityType entityType;

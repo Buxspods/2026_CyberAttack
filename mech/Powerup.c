@@ -2,6 +2,10 @@
 #include "GameState.h"
 #define POWERUP_CAP 5
 #include <stdlib.h>
+#include"../GUI/assets.h"
+#include"../GUI/planeGUI.h"
+
+extern GraphicAssets assets;
 
 EntityType ChooseRandomType() {
     EntityType types[3] = {SPEED_POWERUP, HEALTH_POWERUP, AMMO_POWERUP};
@@ -12,7 +16,7 @@ EntityType ChooseRandomType() {
 void InitPowerUp(PowerUp *powerup) {
     //powerup->active = false;
     powerup->type = ChooseRandomType();
-    powerup->size = 7;
+    powerup->size = 20;
 }
 //
 void SpawnPowerUp(PowerUp *powerup, Vector2 spawnPos) {
@@ -33,17 +37,24 @@ void DrawPowerUps(PowerUp powerups[]) {
 
         switch (powerup.type) {
             case SPEED_POWERUP:
-                DrawCircleV(powerup.position, powerup.size, SKYBLUE); break;
+                DrawCircleV(powerup.position, powerup.size, (Color){1,1,1,0});
+                DrawPowerUp(assets.powerUpSpeed, powerup.position);
+                break;
             case HEALTH_POWERUP:
-                DrawCircleV(powerup.position, powerup.size, RED); break;
+                DrawCircleV(powerup.position, powerup.size, RED);
+                DrawPowerUp(assets.powerUpHealth, powerup.position);
+                break;
             case AMMO_POWERUP:
-                DrawCircleV(powerup.position, powerup.size, DARKGREEN); break;
+                DrawCircleV(powerup.position, powerup.size, DARKGREEN);
+                DrawPowerUp(assets.powerUpAmmo, powerup.position);
+                break;
             default: break;
         }
     }
 }
 
 void PickUpPowerUp(PowerUp *powerup, Player *player) {
+    PlaySound(assets.powerUp);
     switch (powerup->type) {
         case SPEED_POWERUP:
             //JEDINO MOZDA DA SE DODA DA OVAJ SPEED POWERUP

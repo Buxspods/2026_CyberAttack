@@ -6,12 +6,18 @@
 
 void ResumeGame(GraphicAssets *assets, int score) {
     assets->isPaused = (assets->isPaused == 1)? 0: 1;
+    assets->level1Map.isMoving = true;
+    assets->level2Map.isMoving = true;
+    assets->level3Map.isMoving = true;
     assets->currScreen = assets->currLevel;
 }
 void ExitAndSave(GraphicAssets *assets, int score) {
     //Za sad
     assets->isPaused = 0;
     assets->currScreen = MAIN_MENU;
+    assets->level1Map.isMoving = true;
+    assets->level2Map.isMoving = true;
+    assets->level3Map.isMoving = true;
     assets->fja = NULL;
     StopMusicStream(assets->level1);
     StopMusicStream(assets->level3);

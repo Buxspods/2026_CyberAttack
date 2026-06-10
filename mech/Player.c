@@ -1,10 +1,11 @@
 #include "GameState.h"
 #include"../GUI/assets.h"
-#include"../GUI/planeGUI.h"
 #include <math.h>
 
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
+
+extern GameState gamestate;
 
 Player InitPlayer(float score, Vector2 playerPos, float playerSize, float playerSpeed, int lives, float fireRate, int ammo) {
     Player player = {0};
@@ -35,17 +36,17 @@ void UpdatePlayerPosition(Player *player) {
     Vector2 movement = {0, 0}; //vektor koji nam govori u kom smeru i pravcu se krece igrac
 
     //offset pozicije igraca sa vodjenjem racuna o granicama prozora
-    if (IsKeyDown(KEY_D)) movement.x += player->playerPos.x < WINDOW_WIDTH - player->playerSize? 1 : 0;
-    if (IsKeyDown(KEY_A)) movement.x -= player->playerPos.x > player->playerSize? 1 : 0;
-    if (IsKeyDown(KEY_W)) movement.y -= player->playerPos.y > player->playerSize? 1 : 0;
-    if (IsKeyDown(KEY_S)) movement.y += player->playerPos.y < WINDOW_HEIGHT - player->playerSize? 1 : 0;
+    if (IsKeyDown(gamestate.keys[ACTION_RIGHT])) movement.x += player->playerPos.x < WINDOW_WIDTH - player->playerSize? 1 : 0;
+    if (IsKeyDown(gamestate.keys[ACTION_LEFT])) movement.x -= player->playerPos.x > player->playerSize? 1 : 0;
+    if (IsKeyDown(gamestate.keys[ACTION_UP])) movement.y -= player->playerPos.y > player->playerSize? 1 : 0;
+    if (IsKeyDown(gamestate.keys[ACTION_DOWN])) movement.y += player->playerPos.y < WINDOW_HEIGHT - player->playerSize? 1 : 0;
 
     if (movement.x != 0 || movement.y != 0) {
         float le = sqrtf(movement.x * movement.x + movement.y * movement.y);
         movement.x /= le;
         movement.y /= le; //le znaci length kao duzina
     }
-    if (IsKeyDown(KEY_LEFT_SHIFT) && player->canDash) {
+    if (IsKeyDown(gamestate.keys[ACTION_DASH]) && player->canDash) {
         SetDash(player,true);
         player-> canDash = false;
     }

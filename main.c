@@ -12,6 +12,7 @@
 #define ENEMY_CAP 100
 
 GameState gamestate;
+GraphicAssets assets;
 int main() {
 
     srand(time(NULL));
@@ -54,7 +55,6 @@ int main() {
     InitAudioDevice();
     SetTargetFPS(60);
 
-    GraphicAssets assets = {0};
     assets.highestScores = NULL;
     Vector2 pozicijaAviona = {100, 100};
     InitGlavni(&assets);
@@ -82,7 +82,7 @@ int main() {
         spawn_timer+=dt;
 
         assets.mis = GetMousePosition();
-        if (IsKeyPressed(KEY_ESCAPE) && assets.currScreen != MAIN_MENU) {
+        if (IsKeyPressed(gamestate.keys[ACTION_PAUSE]) && assets.currScreen != MAIN_MENU) {
             if (assets.isPaused) {
                 assets.level1Map.isMoving = true;
                 assets.level2Map.isMoving = true;
@@ -125,7 +125,8 @@ int main() {
                 break;
         }
 
-        if (fire_timer > (1/gamestate.player.fireRate) && IsKeyDown(KEY_K) && gamestate.player.ammo > 0) {
+        if (fire_timer > (1/gamestate.player.fireRate) && IsKeyDown(gamestate.keys[ACTION_SHOOT]) && gamestate.player.ammo > 0) {
+            PlaySound(assets.laser);
             PlayerShootBullet(&gamestate,&gamestate.player);
             //Shoot(PLAYER, gamestate.projectiles, gamestate.player.playerPos, 5, 750, (Vector2){0, 0}, &gamestate.player);
             fire_timer = 0;

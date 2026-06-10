@@ -23,7 +23,7 @@ void MoveMap(Map *map, GameState *state){
     }
 
     float y = map->offset;
-    printf("%f\n", y);
+    //printf("%f\n", y);
     DrawTexture(map->map, 0, (int)(y - map->map.height), WHITE);
     DrawTexture(map->map, 0, (int)y, WHITE);
 }

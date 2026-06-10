@@ -45,10 +45,14 @@ void DrawPlaneGUI(Vector2 *pozicija, GraphicAssets *assets) {
 }
 
 void DrawPowerUp(Texture2D powerUp, Vector2 position) {
+    position.x -=25;
+    position.y -= 25;
     DrawTexture(powerUp, position.x, position.y, WHITE);
 }
 
 void DrawProjectile(Texture2D projectile, Vector2 position) {
+    position.x -= 3;
+    position.y -= 3;
     DrawTexture(projectile, position.x, position.y, WHITE);
 }
 
@@ -90,10 +94,28 @@ void DrawExplosion(GraphicAssets *assets, Vector2 pozicija, bool trigger) {
     }
 }
 
-void DrawEnemy(Texture2D enemy, Vector2 position) {
+void DrawEnemy(Texture2D enemy, Vector2 position, float size) {
+    position.x -= (size + 5.0f);
+    position.y -= (size + 5.0f);
     DrawTexture(enemy, position.x, position.y, WHITE);
 }
 
 void DrawTurret(Texture2D turret, Vector2 position, float rotation) {
     DrawTexturePro(turret, (Rectangle){0, 0, turret.width, turret.height}, (Rectangle){position.x, position.y, turret.width, turret.height}, (Vector2){turret.width/2.0f, turret.height/2.0f}, rotation, WHITE);
+}
+
+void DrawLaser(Vector2 position, Texture2D laserTexture){
+    static float frame = 0.0f;
+    float dt = GetFrameTime();
+    float animSpeed = 12.0f;
+
+    position.x += 60;
+    position.y += 64;
+    frame += animSpeed * dt;
+
+    if (frame >= 4.0f)
+        frame = 0.0f;
+
+    Rectangle sourceRec = {(int)frame * 53.0f, 0, 53.0f, 1000.0f};
+    DrawTextureRec(laserTexture, sourceRec, position, WHITE);
 }

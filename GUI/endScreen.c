@@ -13,6 +13,7 @@ void DrawGameOverScreen(GraphicAssets *assets, int score) {
     //Kada igrac umre, pre dodeljivanja funkcije, staviti assets.score = score koji je igrac imao pre nego sto je umro
     static bool scores = false;
     if (!scores) {
+        //DodajNoviRezultat(score);
         scores = true;
     }
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));

@@ -4,7 +4,9 @@
 #include "PowerUp.h"
 #include "EntityTypes.h"
 #include "GameState.h"
+#include"../GUI/assets.h"
 
+extern GraphicAssets assets;
 void CheckCollisions(GameState *gameState) {
     Player *player = &gameState->player;
 
@@ -22,7 +24,9 @@ void CheckCollisions(GameState *gameState) {
                 if (CheckCollisionCircles(enemy->position, enemy->size,project->pos, project->size)) {
                     project->active = false;
                     enemy->HP--;
+                    PlaySound(assets.hit1);
                     if (enemy->HP <= 0) { //ako negativac umre
+                        PlaySound(assets.explosion);
                         gameState->player.score += enemy->deathScore;
                         for (int k = 0; k < POWERUP_CAP; k++) {
                             PowerUp *powerup = &gameState->powerups[k];
@@ -41,12 +45,14 @@ void CheckCollisions(GameState *gameState) {
         if (project->entityType == ENEMY_PROJECTILE) {//PLAYER/ENEMY BULLET COLIISION
 
             if (CheckCollisionCircles(player->playerPos, player->playerSize,project->pos, project->size) && !player->isInvincible) {
+                PlaySound(assets.hit2);
                 project->active = false;
                 player->lives--;
 
                 SetInvincibility(player, true);
 
                 if (player->lives <= 0) {
+                    PlaySound(assets.gameOver);
                     //MARE MACOLA MORA DA MI DODA SCREEN ZA SMRT
                 }
             }

@@ -11,8 +11,13 @@
 
 #include "../mech/GameState.h"
 #include "EnemyActions.h"
+#include"../GUI/assets.h"
+#include"../GUI/planeGUI.h"
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
+
+extern GameState gamestate;
+extern GraphicAssets assets;
 void SpawnEnemy(Enemy enemies[],EntityType type,Vector2 position) {
     for (int i=0;i<ENEMY_CAP;i++) {
         if (!enemies[i].active) {
@@ -137,8 +142,38 @@ void DrawEnemies(Enemy enemies[]) {
         if (enemies[i].active) {
             if (enemies[i].laserActive) {
                 DrawRectangle(enemies[i].position.x - enemies[i].size/2, enemies[i].position.y, enemies[i].size, WINDOW_HEIGHT, ORANGE);
+                if (assets.currLevel == LEVEL1 || assets.currLevel == LEVEL3) {
+                    DrawLaser(enemies[i].position, assets.laserBoss1);
+                }
+                else {
+                    DrawLaser(enemies[i].position, assets.laserBoss2);
+                }
             }
-            DrawCircle(enemies[i].position.x,enemies[i].position.y,enemies[i].size, YELLOW);
+            Texture2D tekstura = {0};
+            switch (enemies[i].type) {
+                case ENEMY_TURRET:
+                    tekstura = assets.turret;
+                    break;
+                case ENEMY_MELEE_PLANE:
+                    tekstura = assets.meele;
+                    break;
+                case ENEMY_RANGED_PLANE:
+                    tekstura = assets.ranged;
+                    break;
+                case BOSS:
+                    tekstura = assets.finalBoss;
+                    break;
+                default:
+                    break;
+            }
+            DrawCircle(enemies[i].position.x,enemies[i].position.y,enemies[i].size, (Color){0,0,0, 0});
+            if (enemies[i].type == ENEMY_TURRET) {
+                float angle = atan2f(gamestate.player.playerPos.y - enemies[i].position.y, gamestate.player.playerPos.x - enemies[i].position.x) * RAD2DEG;
+                DrawTurret(tekstura, enemies[i].position, angle-90);
+            }
+            else {
+                DrawEnemy(tekstura, enemies[i].position, enemies[i].size);
+            }
         }
     }
 }

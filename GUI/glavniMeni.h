@@ -12,6 +12,7 @@
 
 
 extern GameState gamestate;
+void Set_Keys(GraphicAssets *assets);
 void ResetLevel(Level *level);
 const char* keyString(int keyID);
 void StartNewGame(GraphicAssets *assets, int score);
