@@ -15,6 +15,7 @@ typedef struct GameState{
     PowerUp powerups[POWERUP_CAP];
     float globalLevelTimer;
     KeyboardKey keys[7];
+    bool gameOver;
 }GameState;
 
 GameState InitGameState();

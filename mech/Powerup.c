@@ -9,7 +9,7 @@ extern GraphicAssets assets;
 
 EntityType ChooseRandomType() {
     EntityType types[3] = {SPEED_POWERUP, HEALTH_POWERUP, AMMO_POWERUP};
-    int idx = rand() % 3;
+    int idx = 0;//rand() % 3;
     return types[idx];
 }
 
@@ -20,7 +20,7 @@ void InitPowerUp(PowerUp *powerup) {
 }
 //
 void SpawnPowerUp(PowerUp *powerup, Vector2 spawnPos) {
-    int doSpawn = rand() % 5; //DA BI BILO 20% SANSE DA SE STVORI NEKI POWERUP
+    int doSpawn = 0;//rand() % 5; //DA BI BILO 20% SANSE DA SE STVORI NEKI POWERUP
     if (doSpawn == 0) {
         if (!powerup->active) {
             powerup->active = true;
@@ -57,13 +57,11 @@ void PickUpPowerUp(PowerUp *powerup, Player *player) {
     PlaySound(assets.powerUp);
     switch (powerup->type) {
         case SPEED_POWERUP:
-            //JEDINO MOZDA DA SE DODA DA OVAJ SPEED POWERUP
-            //TRAJE NEKO ODREDJENO VREME ALI TO CEMO SE DOGOVORITI
-            player->playerSpeed = 750; break;
+            player->speedPowerUpTimer += 5; break;
         case HEALTH_POWERUP:
             player->lives = 10; break;
         case AMMO_POWERUP:
-            player->ammo = 100; break;
+            player->ammo += 100; break;
             default: break;
     }
     powerup->active = false;

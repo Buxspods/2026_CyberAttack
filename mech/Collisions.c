@@ -36,6 +36,7 @@ void CheckCollisions(GameState *gameState) {
                                 break;
                             }
                         }
+                        player->ammo += enemy->ammoRefill;
                         DestroyEnemy(enemy);
                     }
                 }
@@ -76,6 +77,7 @@ void CheckCollisions(GameState *gameState) {
             gameState->player.score += enemy->deathScore;
             DestroyEnemy(enemy);
             player->lives -= enemy->HP;
+            player->ammo += enemy->ammoRefill;
         }
     }
 

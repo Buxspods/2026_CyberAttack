@@ -34,17 +34,17 @@ int main() {
                     {ENEMY_TURRET, {300, 550},2.0f},
                     {ENEMY_TURRET, {500, 550},3.0f},
                     {ENEMY_TURRET, {700, 550},4.0f}},
-                        2.0f, 4};
+                        12.0f, 4};
     EnemyWave wave3 = {
         .enemies = {
                     {ENEMY_MELEE_PLANE, {100, 650},1.0f},
-                    {ENEMY_RANGED_PLANE, {100, 650},1.5f},
-                    {ENEMY_TURRET, {100, 650},2.0f},
-                    {ENEMY_MELEE_PLANE, {100, 650},2.5f},
-                    {ENEMY_MELEE_PLANE, {100, 650},3.0f}},
-                        2.0f, 5};
+                    {ENEMY_MELEE_PLANE, {200, 650},2.5f},
+                    {ENEMY_MELEE_PLANE, {300, 650},3.0f},
+                    {ENEMY_MELEE_PLANE, {400, 650},4.5f},
+                    {ENEMY_MELEE_PLANE, {100, 650},5.0f}},
+                        5.0f, 5};
 
-    const EnemyWave wave1 = {.enemies = { {ENEMY_TURRET, {100, 100}, 1}}, 2.0f, 1};
+    const EnemyWave wave1 = {.enemies = { {ENEMY_TURRET, {100, 100}, 1}}, 22.0f, 1};
 
     Level level = {.waves = {wave1, wave2, wave3, wave4}, 4};
     Vector2 vect = {100, 100};
@@ -96,7 +96,7 @@ int main() {
             UpdatePlayerPosition(&gamestate.player);
             UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
             UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
-
+            UpdateSpeed(&gamestate.player, dt);
             UpdateProjectiles(gamestate.projectiles);
             UpdateEnemies(&gamestate);
             CheckCollisions(&gamestate);
@@ -134,7 +134,7 @@ int main() {
 
         if(IsKeyDown(KEY_H)) { //sluzi za dopunu municije i hp samo dok se testira
             gamestate.player.ammo = 100;
-            gamestate.player.lives = 10;
+            gamestate.player.lives = 20;
         }
 
         //CRTANJE
@@ -205,6 +205,8 @@ int main() {
                 }
                 break;
         }
+
+        UpdateLevelEnd(&assets, &gamestate);
         EndDrawing();
     }
     UnloadAssets(&assets);

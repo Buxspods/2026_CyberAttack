@@ -7,6 +7,7 @@
 #define windowWidth 1000
 #define windowHeight 1000
 
+extern GameState gamestate;
 
 void DrawGameOverScreen(GraphicAssets *assets, int score) {
     DrawTexture(assets->background, 0, 0, WHITE);
@@ -35,6 +36,14 @@ void DrawGameOverScreen(GraphicAssets *assets, int score) {
         DrawTextEx(assets->fontOrbitron, "PLAY AGAIN", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             //funkcija koja pokrece igru
+            StopMusicStream(assets->level1);
+            StopMusicStream(assets->level3);
+            StopMusicStream(assets->mainMenu);
+            PlayMusicStream(assets->level2);
+            gamestate = InitGameState();
+            Set_Keys(assets);
+            assets->currLevel = LEVEL2;
+            assets->currScreen = LEVEL2;
             scores = false;
         }
     }
@@ -62,6 +71,8 @@ void DrawGameOverScreen(GraphicAssets *assets, int score) {
             assets->prethodnaFja = assets->fja;
             assets->fja = NULL;
             scores = false;
+            assets->currLevel = MAIN_MENU; //mora se restartuje gamestate kada se vratimo na main meni da bi moglo da se igra opet
+            gamestate = InitGameState();
         }
     }
 }

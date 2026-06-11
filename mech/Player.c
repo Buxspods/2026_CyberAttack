@@ -24,6 +24,7 @@ Player InitPlayer(float score, Vector2 playerPos, float playerSize, float player
     player.score = 0;
     player.isInvincible = false;
     player.invincibilityTimer = 0;
+    player.speedPowerUpTimer = 0;
     return player;
 }
 /*void DrawPlayer(Player player, GraphicAssets *assets) {
@@ -99,4 +100,18 @@ void UpdateDash(Player *player, float tick, float time, Vector2 dash) {
             SetDash(player,false);
         }
     }
+}
+
+/// Funkcija koja izvrsava efekat speed powerup-a
+/// @param player igrac
+/// @param tick Uglavnom dt
+void UpdateSpeed(Player *player, float tick) {
+    if (player->speedPowerUpTimer > 0.0f) {
+        player->playerSpeed = 1000;
+        player->speedPowerUpTimer -= tick;
+    }
+    else {
+        player->speedPowerUpTimer = 0;
+        player->playerSpeed = 500;
+        }
 }

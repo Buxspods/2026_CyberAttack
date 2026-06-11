@@ -18,6 +18,7 @@ typedef struct {
     float dashSpeed;
     float dashTimer;
     float dashCooldown;
+    float speedPowerUpTimer;
     float score;
     int lives;
     float fireRate;
@@ -34,4 +35,5 @@ void SetInvincibility(Player *player, bool mode);
 void UpdateInvincibility(Player *player, float tick, float time);
 void SetDash(Player *player, bool mode);
 void UpdateDash(Player *player, float tick, float time, Vector2 dash);
+void UpdateSpeed(Player *player, float tick);
 #endif //INC_2026_CYBERATTACK_PLAYER_H

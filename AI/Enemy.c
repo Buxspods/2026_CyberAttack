@@ -43,7 +43,9 @@ Action InitAction(EnemyUpdateFunc f,float timer) {
     return res;
 }
 void InitMeelePlane(Enemy *e) {
-    e->HP = 5;//Za sad
+    e->ammoRefill = 20;
+    e->deathScore = 50;
+    e->HP = 10;//Za sad
     e->maxHP = 5;
     e->speed = 200.0f;
     e->size = 40;
@@ -53,6 +55,8 @@ void InitMeelePlane(Enemy *e) {
     e->laserActive = false;
 }
 void InitTurret(Enemy *e) {
+    e->ammoRefill = 15;
+    e->deathScore = 100;
     e->movementData.restrictions.canMove = true;
     e->HP = 5;
     e->maxHP = 5;
@@ -69,7 +73,9 @@ void InitTurret(Enemy *e) {
 }
 //Dodati funkciju za inicijalizaciju uniona mozda
 void InitRangedPlane(Enemy *e) {
-    e->HP = 5;
+    e->ammoRefill = 15;
+    e->deathScore = 250;
+    e->HP = 3;
     e->maxHP = 5;
     e->size = 15;
     e->fireRate = 2.73f;
@@ -107,8 +113,10 @@ void InitRangedPlane(Enemy *e) {
     e->laserActive = false;
 }
 void InitBoss(Enemy *e) {
-    e-> HP = 40;
-    e->maxHP = 40;
+    e->deathScore = 1000;
+    e->ammoRefill = 100;
+    e-> HP = 80;
+    e->maxHP = 80;
     e->speed = 200.0f;
     e->size = 80;
     e->actions[MOVEMENT_ACTION] = InitAction(&BossPhase1,300);//Timer ovde oznacava predjeni put nakon kog boss automatski puca oko sebe

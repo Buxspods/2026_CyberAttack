@@ -33,6 +33,7 @@ struct Enemy{
     float fireRate;
     EntityType type;
     float deathScore;
+    int ammoRefill;
     Action actions[MAX_ACTIONS];
     bool active;//Ista logika kao i za metkove
     union{
