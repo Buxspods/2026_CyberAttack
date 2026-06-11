@@ -23,7 +23,8 @@ void isLevelComplete(GameState *state) {
 void UpdateLevelEnd(GraphicAssets *assets, GameState *gamestate) {
     isLevelComplete(gamestate);
     if ((gamestate->globalLevelTimer > 5.0f && gamestate->gameOver) || gamestate->player.lives <= 0) {
-        DrawGameOverScreen(assets, (int)gamestate->player.score);
+        assets->currScore = (int)gamestate->player.score;
+        //DrawGameOverScreen(assets, (int)gamestate->player.score);
         StopMusicStream(assets->level1); //gasenje svih zvukova
         StopMusicStream(assets->level2);
         StopMusicStream(assets->level3);
@@ -44,7 +45,7 @@ void UpdateLevelEnd(GraphicAssets *assets, GameState *gamestate) {
             gamestate->powerups[i].active = false;
         }
 
-        assets->fja = NULL;
+        assets->fja = DrawGameOverScreen;
         assets->currScreen = MAIN_MENU;
         PlayMusicStream(assets->mainMenu);
     }

@@ -64,6 +64,7 @@ void StartNewGame(GraphicAssets *assets, int score) {
     if (isHovered) {
         DrawTextEx(assets->fontOrbitron, "LEVEL 1", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            PlaySound(assets->click);
             StopMusicStream(assets->level2);
             StopMusicStream(assets->level3);
             StopMusicStream(assets->mainMenu);
@@ -82,6 +83,7 @@ void StartNewGame(GraphicAssets *assets, int score) {
     if (isHovered2) {
         DrawTextEx(assets->fontOrbitron, "LEVEL 2", (Vector2){windowWidth/2.0f - dimGuide.x/2.0f, 0.45f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            PlaySound(assets->click);
             StopMusicStream(assets->level1);
             StopMusicStream(assets->level3);
             StopMusicStream(assets->mainMenu);
@@ -100,6 +102,7 @@ void StartNewGame(GraphicAssets *assets, int score) {
     if (isHovered3) {
         DrawTextEx(assets->fontOrbitron, "LEVEL 3", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            PlaySound(assets->click);
             StopMusicStream(assets->level1);
             StopMusicStream(assets->level2);
             StopMusicStream(assets->mainMenu);
@@ -115,6 +118,7 @@ void StartNewGame(GraphicAssets *assets, int score) {
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
     if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        PlaySound(assets->click);
         StopMusicStream(assets->level1);
         StopMusicStream(assets->level3);
         StopMusicStream(assets->level2);
@@ -129,12 +133,13 @@ void LoadGame(GraphicAssets *assets, int score) {
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
     if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        PlaySound(assets->click);
         assets->prethodnaFja = assets->fja;
         assets->fja = NULL;
     }
 }
 void HighestScores(GraphicAssets *assets, int score) {
-    DrawTexture(assets->background, 0, 0, WHITE);
+    if (assets->currScreen == MAIN_MENU) DrawTexture(assets->background, 0, 0, WHITE);
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
 
     static bool podaciUcitani = false;
@@ -167,13 +172,14 @@ void HighestScores(GraphicAssets *assets, int score) {
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
     if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        PlaySound(assets->click);
         podaciUcitani = false;
         assets->fja = assets->prethodnaFja;
         assets->prethodnaFja = HighestScores;
     }
 }
 void Guide(GraphicAssets *assets, int score) {
-    DrawTexture(assets->background, 0, 0, WHITE);
+    if (assets->currScreen == MAIN_MENU) DrawTexture(assets->background, 0, 0, WHITE);
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
 
     Vector2 dimNaslov = MeasureTextEx(assets->fontOrbitron, "Guide", 60, 2);
@@ -213,6 +219,7 @@ void Guide(GraphicAssets *assets, int score) {
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
     if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        PlaySound(assets->click);
         assets->fja = assets->prethodnaFja;
         assets->prethodnaFja = Guide;
     }
@@ -235,7 +242,7 @@ void Settings(GraphicAssets *assets, int score) {
         sfx2 = (int)(assets->sfx*100);
     }
 
-    DrawTexture(assets->background, 0, 0, WHITE);
+    if (assets->currScreen == MAIN_MENU) DrawTexture(assets->background, 0, 0, WHITE);
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
     Vector2 dimNaslov = MeasureTextEx(assets->fontOrbitron, "Settings", 60, 2);
     DrawTextEx(assets->fontOrbitron, "Settings", (Vector2){windowWidth/2.0f - dimNaslov.x / 2, 0.1f*windowHeight}, 60, 2, WHITE);
@@ -258,6 +265,7 @@ void Settings(GraphicAssets *assets, int score) {
         if (CheckCollisionPointRec(assets->mis, textHitBox)) {
             DrawTextEx(assets->fontOrbitron, temp, (Vector2){kolona, red}, 30, 2, BLUE);
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                PlaySound(assets->click);
                 keyChange = i;
             }
         } else {
@@ -309,11 +317,13 @@ void Settings(GraphicAssets *assets, int score) {
     }
 
     Vector2 dimSave = MeasureTextEx(assets->fontOrbitron, "Save", 40, 2);
-    DrawTextEx(assets->fontOrbitron, "Save", (Vector2){windowWidth/2.0f - dimNaslov.x / 2, 0.9f*windowHeight}, 40, 2, WHITE);
-    Rectangle saveHitBox = {windowWidth/2.0f - dimNaslov.x / 2, 0.9f*windowHeight, dimSave.x, dimSave.y};
+    DrawTextEx(assets->fontOrbitron, "Save", (Vector2){windowWidth/2.0f - dimSave.x / 2, 0.9f*windowHeight}, 40, 2, WHITE);
+    Rectangle saveHitBox = {windowWidth/2.0f - dimSave.x / 2, 0.9f*windowHeight, dimSave.x, dimSave.y};
     if (CheckCollisionPointRec(assets->mis, saveHitBox)) {
-        DrawTextEx(assets->fontOrbitron, "Save", (Vector2){windowWidth/2.0f - dimNaslov.x / 2, 0.9f*windowHeight}, 40, 2, BLUE);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        DrawTextEx(assets->fontOrbitron, "Save", (Vector2){windowWidth/2.0f - dimSave.x / 2, 0.9f*windowHeight}, 40, 2, BLUE);
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+            PlaySound(assets->click);
+            DrawTextEx(assets->fontOrbitron, "Save", (Vector2){windowWidth/2.0f - dimSave.x / 2, 0.9f*windowHeight}, 40, 2, GRAY);
             promenjeno = 1;
         }
     }
@@ -334,6 +344,7 @@ void Settings(GraphicAssets *assets, int score) {
     }
 
     if (CheckCollisionPointRec(assets->mis, (Rectangle){40, 40, 180, 45}) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+        PlaySound(assets->click);
         if (!promenjeno) {
             SetMusicVolume(assets->mainMenu, assets->music);
             SetMusicVolume(assets->level1, assets->music);
@@ -392,6 +403,7 @@ void CrtajMeni(Vector2 *pozicija,float *vreme, float *providnost, GraphicAssets 
             color1 = BLUE;
             color2 = WHITE;
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                PlaySound(assets->click);
                 assets->prethodnaFja = assets->fja;
                 assets->fja = assets->opcije[i].akcija;
             }
@@ -436,6 +448,7 @@ void InitGlavni(GraphicAssets *assets) {
     assets->powerUp = LoadSound("resources/audio/powerUp.wav");
     assets->laser = LoadSound("resources/audio/laser.wav");
     assets->bossLaser = LoadSound("resources/audio/boss-laser.wav");
+    assets->click = LoadSound("resources/audio/click.wav");
     assets->mainMenu = LoadMusicStream("resources/audio/mainMenu.mp3");
     assets->level1 = LoadMusicStream("resources/audio/level1.mp3");
     assets->level2 = LoadMusicStream("resources/audio/level2.mp3");
@@ -468,6 +481,7 @@ void InitGlavni(GraphicAssets *assets) {
         SetSoundVolume(assets->explosion, assets->sfx);
         SetSoundVolume(assets->powerUp, assets->sfx);
         SetSoundVolume(assets->gameOver, assets->sfx);
+        SetSoundVolume(assets->click, assets->sfx);
     }
     fclose(fajl);
 

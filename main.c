@@ -88,6 +88,10 @@ int main() {
                 assets.level2Map.isMoving = true;
                 assets.level3Map.isMoving = true;
             }
+            else {
+                if (assets.fja != CrtajPause)
+                    assets.fja = CrtajPause;
+            }
             assets.isPaused = assets.isPaused == 0? 1: 0;
             assets.currScreen = (assets.currScreen == PAUSE_MENU)? assets.currLevel:PAUSE_MENU;
         }
@@ -184,10 +188,12 @@ int main() {
                 DrawProjectiles(gamestate.projectiles);
                 DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
                 PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
-                CrtajPause(&assets);
-                if (assets.fja == Guide || assets.fja == HighestScores || assets.fja == Settings) {
+                //assets.fja = CrtajPause;
+                /*if (assets.fja != Guide && assets.fja != HighestScores && assets.fja != Settings && assets.fja != CrtajPause) {
+                    assets.fja = CrtajPause;
+                }*/
+                if (assets.fja!= NULL)
                     assets.fja(&assets, 0);
-                }
                 break;
             default:
                 ResetLevel(&level);

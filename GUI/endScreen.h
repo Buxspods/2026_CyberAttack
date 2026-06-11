@@ -2,5 +2,6 @@
 #define INC_2026_CYBERATTACK_ENDSCREEN_H
 #include"assets.h"
 
+void DrawYouWonScreen(GraphicAssets *assets, int score);
 void DrawGameOverScreen(GraphicAssets *assets, int score);
 #endif //INC_2026_CYBERATTACK_ENDSCREEN_H

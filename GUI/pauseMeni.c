@@ -26,7 +26,7 @@ void ExitAndSave(GraphicAssets *assets, int score) {
     gamestate = InitGameState();
 }
 
-void CrtajPause(GraphicAssets *assets) {
+void CrtajPause(GraphicAssets *assets, int score) {
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
     for (int i = 0; i < 5; i++) {
         Color color1 = WHITE;
@@ -36,7 +36,16 @@ void CrtajPause(GraphicAssets *assets) {
             color1 = BLUE;
             color2 = WHITE;
             if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-                assets->opcijePause[i].akcija(assets, 0);
+                PlaySound(assets->click);
+                //assets->opcijePause[i].akcija(assets, 0);
+                if (i == 0 || i == 4) {
+                    assets->opcijePause[i].akcija(assets, 0);
+                }
+                // Ako su u pitanju podmeniji (HIGHEST SCORES, GUIDE, SETTINGS)
+                else {
+                    assets->prethodnaFja = CrtajPause;           // Eksplicitno kažemo da je prethodna bila CrtajPause
+                    assets->fja = assets->opcijePause[i].akcija; // Prebacujemo na podmeni funkciju
+                }
             }
         }
         DrawTextEx(assets->fontExo, assets->opcijePause[i].naziv, (Vector2){assets->opcijePause[i].pozicija.x - 1.5f, assets->opcijePause[i].pozicija.y + 1.5f}, 50, 2, color2);
