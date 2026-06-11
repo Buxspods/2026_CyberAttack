@@ -55,6 +55,16 @@ int main() {
     InitAudioDevice();
     SetTargetFPS(60);
 
+    for (int i = 0; i < 30; i++) {
+        BeginDrawing();
+        ClearBackground((Color){15, 15, 20, 255}); // Cyberpunk tamna pozadina
+
+        // Koristimo običan tekst dok se fontovi ne učitaju
+        DrawText("2026: CYBER ATTACK", WINDOW_WIDTH / 2 - 220, WINDOW_HEIGHT / 2 - 40, 40, BLUE);
+        DrawText("Loading Assets...", WINDOW_WIDTH / 2 - 120, WINDOW_HEIGHT / 2 + 20, 20, GRAY);
+        EndDrawing();
+    }
+
     assets.highestScores = NULL;
     Vector2 pozicijaAviona = {100, 100};
     InitGlavni(&assets);

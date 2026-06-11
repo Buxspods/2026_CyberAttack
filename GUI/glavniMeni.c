@@ -206,7 +206,7 @@ void Guide(GraphicAssets *assets, int score) {
             if (i == 10) {
                 pozicija = (Vector2){windowWidth / 2.0f - rec.x / 2, (float)(i+1)*windowHeight*0.055f + windowHeight*0.25f};
                 DrawTextEx(assets->fontExo, text[i], pozicija, 30, 2, WHITE);
-                DrawTexture(teksture[i-4], pozicija.x - 75, pozicija.y - 10, WHITE);
+                DrawTexture(teksture[i-4], pozicija.x - 130, pozicija.y - 20, WHITE);
             }
             else {
                 DrawTexture(teksture[i-4], pozicija.x - 50, pozicija.y - 10, WHITE);
