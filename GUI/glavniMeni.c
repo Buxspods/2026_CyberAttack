@@ -4,6 +4,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include"loadGame.h"
 #include "endScreen.h"
 
 void Set_Keys(GraphicAssets *assets) {
@@ -53,7 +54,6 @@ void sacuvajSettings(GraphicAssets *assets) {
 }
 
 void StartNewGame(GraphicAssets *assets, int score) {
-
     DrawTexture(assets->background, 0, 0, WHITE);
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
 
@@ -129,6 +129,8 @@ void StartNewGame(GraphicAssets *assets, int score) {
     }
 }
 void LoadGame(GraphicAssets *assets, int score) {
+    DrawTexture(assets->background, 0, 0, WHITE);
+    DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
     Rectangle backHitBox = { 40, 40, 180, 45 };
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
@@ -137,7 +139,60 @@ void LoadGame(GraphicAssets *assets, int score) {
         assets->prethodnaFja = assets->fja;
         assets->fja = NULL;
     }
+
+    DrawTextEx(assets->fontExo, "SELECT SAVED GAME", (Vector2){ windowWidth / 2 - 180, 60 }, 40, 2, BLUE);
+    FilePathList saveFiles = LoadDirectoryFiles("savedGames");
+    int brFajlova = 0;
+
+    for (int i = 0; i < saveFiles.count; i++) {
+        if (DirectoryExists(saveFiles.paths[i])) continue;
+        const char* cistoImeFajla = GetFileName(saveFiles.paths[i]);
+
+        const char* slotText = TextFormat("#%d - %s", brFajlova + 1, cistoImeFajla);
+        Vector2 dimSlot = MeasureTextEx(assets->fontOrbitron, slotText, 30,2);
+        Rectangle recSlot = (Rectangle){windowWidth/2.0f - dimSlot.x / 2, 200.0f + (brFajlova * 80.0f), dimSlot.x, dimSlot.y};
+        bool hoverSlot = CheckCollisionPointRec(assets->mis, recSlot);
+        DrawTextEx(assets->fontExo, slotText, (Vector2){windowWidth/2.0f - dimSlot.x / 2, 200.0f + (brFajlova * 80.0f)}, 30, 2, (hoverSlot) ? BLUE : WHITE);
+
+
+        if (hoverSlot && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            PlaySound(assets->click);
+            InitGameState();
+            LoadGame2(cistoImeFajla);
+            Set_Keys(assets);
+
+            /*for (int j=0;j<ENEMY_CAP;j++) {
+                if (!gamestate.enemies[j].active) {
+                    gamestate.enemies[j].deathScore = DEFAULT_DEATH_SCORE;
+                    switch (gamestate.enemies[j].type) {
+                        case ENEMY_MELEE_PLANE:InitMeelePlane(&gamestate.enemies[j]);break;
+                        case ENEMY_TURRET:InitTurret(&gamestate.enemies[j]);break;
+                        case ENEMY_RANGED_PLANE:InitRangedPlane(&gamestate.enemies[j]);break;
+                        case BOSS:InitBoss(&gamestate.enemies[j]);break;
+                    }
+                    break;
+                }
+            }*/
+
+            StopMusicStream(assets->mainMenu);
+            if (assets->currLevel == LEVEL1) PlayMusicStream(assets->level1);
+            else if (assets->currLevel == LEVEL2) PlayMusicStream(assets->level2);
+            else if (assets->currLevel == LEVEL3) PlayMusicStream(assets->level3);
+            assets->fja = NULL;
+
+            remove(saveFiles.paths[i]);
+            UnloadDirectoryFiles(saveFiles);
+            return;
+        }
+        brFajlova++;
+    }
+
+    if (brFajlova == 0) {
+        DrawTextEx(assets->fontExo, "NO SAVED GAMES FOUND", (Vector2){ windowWidth / 2 - 170, windowHeight / 2 }, 30, 2, GRAY);
+    }
+    UnloadDirectoryFiles(saveFiles);
 }
+
 void HighestScores(GraphicAssets *assets, int score) {
     if (assets->currScreen == MAIN_MENU) DrawTexture(assets->background, 0, 0, WHITE);
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
@@ -313,6 +368,7 @@ void Settings(GraphicAssets *assets, int score) {
             SetSoundVolume(assets->explosion, vol);
             SetSoundVolume(assets->powerUp, vol);
             SetSoundVolume(assets->gameOver, vol);
+            SetSoundVolume(assets->click, vol);
         }
     }
 
@@ -357,6 +413,7 @@ void Settings(GraphicAssets *assets, int score) {
             SetSoundVolume(assets->explosion, assets->sfx);
             SetSoundVolume(assets->powerUp, assets->sfx);
             SetSoundVolume(assets->gameOver, assets->sfx);
+            SetSoundVolume(assets->click, assets->sfx);
             music2 = -1;
             sfx2 = -1;
             for (int i = 0; i < 7; i++) {

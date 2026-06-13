@@ -3,6 +3,7 @@
 #include"pauseMeni.h"
 #include<string.h>
 #include<stdio.h>
+#include"loadGame.h"
 
 void ResumeGame(GraphicAssets *assets, int score) {
     assets->isPaused = (assets->isPaused == 1)? 0: 1;
@@ -12,7 +13,30 @@ void ResumeGame(GraphicAssets *assets, int score) {
     assets->currScreen = assets->currLevel;
 }
 void ExitAndSave(GraphicAssets *assets, int score) {
-    //Za sad
+    char generisanoIme[32] = "";
+    bool nadjenSlot = false;
+
+    for (int i = 0; i <= 9; i++) {
+        const char* proveraPutanje = TextFormat("savedGames/slot%d.dat", i);
+
+        if (!FileExists(proveraPutanje)) {
+            sprintf(generisanoIme, "slot%d.dat", i);
+            nadjenSlot = true;
+            break;
+        }
+    }
+
+    if (!nadjenSlot) {
+        printf("Svi slotovi su puni!\n");
+    }
+    else {
+        if (SaveGame(generisanoIme)) {
+            printf("Igra uspesno sacuvana pod imenom: %s\n", generisanoIme);
+        } else {
+            printf("Greska prilikom automatskog cuvanja igre!\n");
+        }
+    }
+
     assets->isPaused = 0;
     assets->currScreen = MAIN_MENU;
     assets->level1Map.isMoving = true;

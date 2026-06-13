@@ -60,6 +60,8 @@ add_executable(2026_CyberAttack main.c
         mech/Map.h
         mech/Map.c
         mech/Screens.h
+        GUI/loadGame.c
+        GUI/loadGame.h
 )
 target_include_directories(2026_CyberAttack PRIVATE ${raylib_include_DIRS})
 
@@ -74,3 +76,8 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_CURRENT_SOURCE_DIR}/documents"
         "$<TARGET_FILE_DIR:${PROJECT_NAME}>/documents")
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/savedGames"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/savedGames")

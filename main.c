@@ -198,10 +198,6 @@ int main() {
                 DrawProjectiles(gamestate.projectiles);
                 DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
                 PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
-                //assets.fja = CrtajPause;
-                /*if (assets.fja != Guide && assets.fja != HighestScores && assets.fja != Settings && assets.fja != CrtajPause) {
-                    assets.fja = CrtajPause;
-                }*/
                 if (assets.fja!= NULL)
                     assets.fja(&assets, 0);
                 break;
