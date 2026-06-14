@@ -16,6 +16,7 @@ typedef struct GameState{
     float globalLevelTimer;
     KeyboardKey keys[7];
     bool gameOver;
+    bool gameLoaded;
 }GameState;
 
 GameState InitGameState();

@@ -8,6 +8,12 @@
 #define windowHeight 1000
 
 extern GameState gamestate;
+/*
+ * ZA MACOLU:
+ *  U OVE FUNKCIJE ISPOD SAM STAVIO DA SE KAO SCORE NA OVIM END SCREENOVIMA ISPISUJE
+ *  SCORE KOJI JE SMESTEN U GAMESTATE-OVOM IGRACU (OVAJ EXTERN GAMESTATE)
+ *  JER SE PRE TOGA NIJE LEPO ISPISIVALO I TO JE POPRAVILO PROBLEM//////
+*/
 
 void DrawYouWonScreen(GraphicAssets *assets, int score) {
     DrawTexture(assets->background, 0, 0, WHITE);
@@ -23,7 +29,7 @@ void DrawYouWonScreen(GraphicAssets *assets, int score) {
     DrawTextEx(assets->fontOrbitron, "YOU WON", (Vector2){windowWidth/2.0f - dimNaslov.x/2.0f, 0.15f*windowHeight}, 70, 2, WHITE);
 
     char scoreText[30];
-    sprintf(scoreText, "SCORE: %d", score);
+    sprintf(scoreText, "SCORE: %.0f", gamestate.player.score);
     Vector2 dimScore = MeasureTextEx(assets->fontOrbitron, scoreText, 40, 2);
     DrawTextEx(assets->fontOrbitron, scoreText, (Vector2){windowWidth/2.0f - dimScore.x/2.0f, 0.25f*windowHeight}, 40, 2, WHITE);
 
@@ -70,6 +76,7 @@ void DrawYouWonScreen(GraphicAssets *assets, int score) {
         DrawTextEx(assets->fontOrbitron, "BACK TO MAIN MENU", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             PlaySound(assets->click);
+            PlayMusicStream(assets->mainMenu);
             assets->prethodnaFja = assets->fja;
             assets->fja = NULL;
             scores = false;
@@ -93,7 +100,7 @@ void DrawGameOverScreen(GraphicAssets *assets, int score) {
     DrawTextEx(assets->fontOrbitron, "GAME OVER, YOU LOST", (Vector2){windowWidth/2.0f - dimNaslov.x/2.0f, 0.15f*windowHeight}, 70, 2, WHITE);
 
     char scoreText[30];
-    sprintf(scoreText, "SCORE: %d", score);
+    sprintf(scoreText, "SCORE: %.0f", gamestate.player.score);
     Vector2 dimScore = MeasureTextEx(assets->fontOrbitron, scoreText, 40, 2);
     DrawTextEx(assets->fontOrbitron, scoreText, (Vector2){windowWidth/2.0f - dimScore.x/2.0f, 0.25f*windowHeight}, 40, 2, WHITE);
 
@@ -143,6 +150,7 @@ void DrawGameOverScreen(GraphicAssets *assets, int score) {
             assets->prethodnaFja = assets->fja;
             assets->fja = NULL;
             scores = false;
+            PlayMusicStream(assets->mainMenu);
             assets->currLevel = MAIN_MENU; //mora se restartuje gamestate kada se vratimo na main meni da bi moglo da se igra opet
             gamestate = InitGameState();
         }

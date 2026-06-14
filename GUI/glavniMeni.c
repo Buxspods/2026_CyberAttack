@@ -159,6 +159,9 @@ void LoadGame(GraphicAssets *assets, int score) {
             PlaySound(assets->click);
             InitGameState();
             LoadGame2(cistoImeFajla);
+
+
+
             Set_Keys(assets);
 
             /*for (int j=0;j<ENEMY_CAP;j++) {
@@ -569,7 +572,7 @@ void InitGlavni(GraphicAssets *assets) {
     assets->level2.looping = true;
     assets->level3.looping = true;
 
-    assets->level1Map = (Map){assets->background1, 0.0f, 0.0f, 100.0f, true, 3, 0};
+    assets->level1Map = (Map){assets->background1, 0.0f, 0.0f, 100.0f, true, 1, 0};
     assets->level2Map = (Map){assets->background2, 0.0f, 0.0f, 100.0f, true, 4, 0};
     assets->level3Map = (Map){assets->background3, 0.0f, 0.0f, 100.0f, true, 5, 0};
 

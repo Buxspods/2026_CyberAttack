@@ -14,5 +14,5 @@ typedef struct {
 
 void StartLevel(Level *level, GameState *gamestate, float *globalTimer);
 void isLevelComplete(GameState *state);
-void UpdateLevelEnd(GraphicAssets *assets, GameState *state);/////////////
+void UpdateLevelEnd(GraphicAssets *assets, GameState *state, Level *level);/////////////
 #endif //INC_2026_CYBERATTACK_LEVEL_H

@@ -5,6 +5,7 @@
 #include "AI.h"
 #include"GUI.h"
 #include <time.h>
+#include "mech/PowerUp.h"
 
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
@@ -108,6 +109,7 @@ int main() {
 
         if (!assets.isPaused) {
             UpdatePlayerPosition(&gamestate.player);
+            UpdateShootingMode(&gamestate.player, dt);
             UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
             UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
             UpdateSpeed(&gamestate.player, dt);
@@ -158,7 +160,7 @@ int main() {
             case 1:
                 MoveMap(&assets.level1Map, &gamestate);
                 DrawPlaneGUI(&gamestate.player.playerPos, &assets);
-                DrawPowerUps(gamestate.powerups);
+                DrawPowerUps(gamestate.powerups, assets.level1Map.speed, dt,assets.level1Map.isMoving);
                 DrawProjectiles(gamestate.projectiles);
                 DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
                 PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
@@ -166,7 +168,7 @@ int main() {
             case 2:
                 MoveMap(&assets.level2Map, &gamestate);
                 DrawPlaneGUI(&gamestate.player.playerPos, &assets);
-                DrawPowerUps(gamestate.powerups);
+                DrawPowerUps(gamestate.powerups, assets.level1Map.speed, dt, assets.level1Map.isMoving);
                 DrawProjectiles(gamestate.projectiles);
                 DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
                 PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
@@ -174,7 +176,7 @@ int main() {
             case 3:
                 MoveMap(&assets.level3Map, &gamestate);
                 DrawPlaneGUI(&gamestate.player.playerPos, &assets);
-                DrawPowerUps(gamestate.powerups);
+                DrawPowerUps(gamestate.powerups, assets.level1Map.speed, dt, assets.level1Map.isMoving);
                 DrawProjectiles(gamestate.projectiles);
                 DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
                 PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
@@ -194,7 +196,7 @@ int main() {
                         break;
                 }
                 DrawPlaneGUI(&gamestate.player.playerPos, &assets);
-                DrawPowerUps(gamestate.powerups);
+                DrawPowerUps(gamestate.powerups, assets.level1Map.speed, dt, assets.level1Map.isMoving);
                 DrawProjectiles(gamestate.projectiles);
                 DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
                 PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
@@ -218,7 +220,7 @@ int main() {
                 break;
         }
 
-        UpdateLevelEnd(&assets, &gamestate);
+        UpdateLevelEnd(&assets, &gamestate, &level);
         EndDrawing();
     }
     UnloadAssets(&assets);

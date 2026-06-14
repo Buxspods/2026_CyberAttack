@@ -25,6 +25,7 @@ Player InitPlayer(float score, Vector2 playerPos, float playerSize, float player
     player.isInvincible = false;
     player.invincibilityTimer = 0;
     player.speedPowerUpTimer = 0;
+    player.shotgunTimer = 0;
     return player;
 }
 /*void DrawPlayer(Player player, GraphicAssets *assets) {
@@ -65,9 +66,29 @@ void UpdatePlayerPosition(Player *player) {
 }
 
 void PlayerShootBullet(GameState *state, Player *player) {
-    InitProjectile(state->projectiles,PLAYER_PROJECTILE,state->player.playerPos,(Vector2){0,-1},700,5);
+    if (player->shotgunTimer <= 0.0f) {
+        player->shotgunTimer = 0.0f;
+        InitProjectile(state->projectiles,PLAYER_PROJECTILE,state->player.playerPos,(Vector2){0,-1},700,5);
+    }
+    else {
+        InitProjectile(state->projectiles,PLAYER_PROJECTILE,state->player.playerPos,(Vector2){-0.25f,-1},700,5);
+        InitProjectile(state->projectiles,PLAYER_PROJECTILE,state->player.playerPos,(Vector2){0,-1},700,5);
+        InitProjectile(state->projectiles,PLAYER_PROJECTILE,state->player.playerPos,(Vector2){0.25f,-1},700,5);
+        InitProjectile(state->projectiles,PLAYER_PROJECTILE,state->player.playerPos,(Vector2){-0.125f,-1},700,5);
+        InitProjectile(state->projectiles,PLAYER_PROJECTILE,state->player.playerPos,(Vector2){0.125f,-1},700,5);
+    }
     player->ammo--;
 }
+
+void UpdateShootingMode(Player *player, float tick) {
+    if (player->shotgunTimer > 0.0f) {
+        player->shotgunTimer -= tick;
+    }
+    else {
+        player->shotgunTimer = 0;
+    }
+}
+
 
 void SetInvincibility(Player *player, bool mode) {
     player->isInvincible = mode;

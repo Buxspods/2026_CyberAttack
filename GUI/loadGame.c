@@ -51,14 +51,14 @@ bool SaveGame(const char* filename) {
     int playerType = (int)gamestate.player.entityType;
     fwrite(&playerType, sizeof(int), 1, f);
 
-    /*for (int i = 0; i < ENEMY_CAP; i++) {
+    for (int i = 0; i < ENEMY_CAP; i++) {
         fwrite(&gamestate.enemies[i], sizeof(Enemy), 1, f);
 
         for (int j = 0; j < MAX_ACTIONS; j++) {
             int functionID = FunctionID(gamestate.enemies[i].actions[j].update);
             fwrite(&functionID, sizeof(int), 1, f);
         }
-    }*/
+    }
 
     fclose(f);
     return true;
@@ -88,7 +88,7 @@ bool LoadGame2(const char* filename) {
 
     gamestate.gameOver = false;
 
-    /*for (int i = 0; i < ENEMY_CAP; i++) {
+    for (int i = 0; i < ENEMY_CAP; i++) {
         fread(&gamestate.enemies[i], sizeof(Enemy), 1, file);
 
         for (int j = 0; j < MAX_ACTIONS; j++) {
@@ -96,7 +96,8 @@ bool LoadGame2(const char* filename) {
             fread(&funcID, sizeof(int), 1, file);
             gamestate.enemies[i].actions[j].update = FunctionFromID(funcID);
         }
-    }*/
+    }
+    gamestate.gameLoaded = true;
 
     fclose(file);
     return true;

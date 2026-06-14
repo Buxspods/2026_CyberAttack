@@ -6,7 +6,7 @@ void MoveMap(Map *map, GameState *state){
         map->offset += map->speed * dt;
         if (map->offset >= map->map.height){
             map->doneLoops++;
-            if (map->doneLoops >= map->numOfLoops){///////////
+            if (map->doneLoops >= map->numOfLoops){
                 map->isMoving = false;
             }
             else{

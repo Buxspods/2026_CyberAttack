@@ -11,10 +11,11 @@ typedef struct {
     int size;
     bool active;
     Vector2 position;
+    float offset;
 }PowerUp;
 
 void InitPowerUp(PowerUp *powerup);
 void SpawnPowerUp(PowerUp *powerup, Vector2 position);
-void DrawPowerUps(PowerUp powerups[]);
+void DrawPowerUps(PowerUp powerups[], float mapSpeed, float dt, bool move);
 void PickUpPowerUp(PowerUp *powerup, Player *player);
 #endif //INC_2026_CYBERATTACK_POWERUP_H

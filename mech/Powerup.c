@@ -8,8 +8,8 @@
 extern GraphicAssets assets;
 
 EntityType ChooseRandomType() {
-    EntityType types[3] = {SPEED_POWERUP, HEALTH_POWERUP, AMMO_POWERUP};
-    int idx = 0;//rand() % 3;
+    EntityType types[4] = {SPEED_POWERUP, HEALTH_POWERUP, AMMO_POWERUP, SPECIAL_AMMO_POWERUP };
+    int idx = rand() % 4;
     return types[idx];
 }
 
@@ -17,10 +17,11 @@ void InitPowerUp(PowerUp *powerup) {
     //powerup->active = false;
     powerup->type = ChooseRandomType();
     powerup->size = 20;
+    powerup->offset = 0;
 }
 //
 void SpawnPowerUp(PowerUp *powerup, Vector2 spawnPos) {
-    int doSpawn = 0;//rand() % 5; //DA BI BILO 20% SANSE DA SE STVORI NEKI POWERUP
+    int doSpawn = rand() % 5; //DA BI BILO 20% SANSE DA SE STVORI NEKI POWERUP
     if (doSpawn == 0) {
         if (!powerup->active) {
             powerup->active = true;
@@ -30,23 +31,28 @@ void SpawnPowerUp(PowerUp *powerup, Vector2 spawnPos) {
     }
 }
 
-void DrawPowerUps(PowerUp powerups[]) {
+void DrawPowerUps(PowerUp powerups[], float mapSpeed, float dt, bool move) {
     for (int i = 0; i < POWERUP_CAP; i++) {
-        PowerUp powerup = powerups[i];
-        if (!powerup.active) continue;
+        PowerUp *powerup = &powerups[i];
+        if (!powerup->active) continue;
 
-        switch (powerup.type) {
+        if (move) powerup->position.y += mapSpeed * dt;///////////
+
+        switch (powerup->type) {
             case SPEED_POWERUP:
-                DrawCircleV(powerup.position, powerup.size, (Color){1,1,1,0});
-                DrawPowerUp(assets.powerUpSpeed, powerup.position);
+                DrawCircleV(powerup->position, powerup->size, (Color){1,1,1,0});
+                DrawPowerUp(assets.powerUpSpeed, powerup->position);
                 break;
             case HEALTH_POWERUP:
-                DrawCircleV(powerup.position, powerup.size, RED);
-                DrawPowerUp(assets.powerUpHealth, powerup.position);
+                DrawCircleV(powerup->position, powerup->size, RED);
+                DrawPowerUp(assets.powerUpHealth, powerup->position);
                 break;
             case AMMO_POWERUP:
-                DrawCircleV(powerup.position, powerup.size, DARKGREEN);
-                DrawPowerUp(assets.powerUpAmmo, powerup.position);
+                DrawCircleV(powerup->position, powerup->size, DARKGREEN);
+                DrawPowerUp(assets.powerUpAmmo, powerup->position);
+                break;
+            case SPECIAL_AMMO_POWERUP:
+                DrawCircleV(powerup->position, powerup->size, PINK);
                 break;
             default: break;
         }
@@ -62,8 +68,15 @@ void PickUpPowerUp(PowerUp *powerup, Player *player) {
             player->lives = 10; break;
         case AMMO_POWERUP:
             player->ammo += 100; break;
+        case SPECIAL_AMMO_POWERUP:
+            player->shotgunTimer += 5; break;
             default: break;
     }
     powerup->active = false;
 }
+
+void MovePowerUps() {
+
+}
+
 

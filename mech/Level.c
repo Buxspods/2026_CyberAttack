@@ -2,6 +2,23 @@
 #include <stdlib.h>
 
 void StartLevel(Level *level, GameState *gamestate, float *globalTimer) {
+    if (gamestate->gameLoaded) {
+        for (int i = 0; i < level->level_size; i++)
+        {
+            EnemyWave *wave = &level->waves[i];
+            float waveTimer = *globalTimer - wave->startingMoment;
+
+            if (waveTimer < 0) continue;
+
+            for (int j = 0; j < wave->waveSize; j++){
+                if (wave->enemies[j].spawnTime <= waveTimer){
+                    wave->enemies[j].spawned = true;
+                }
+            }
+        }
+        gamestate->gameLoaded = false;
+    }
+
     for(int i = 0; i < level->level_size; i++) {
         EnemyWave *wave = &level->waves[i];
         if (*globalTimer >= wave->startingMoment) {
@@ -20,35 +37,59 @@ void isLevelComplete(GameState *state) {
     state->gameOver = true;
 }
 
-void UpdateLevelEnd(GraphicAssets *assets, GameState *gamestate) {
+bool AreAllWavesFinished(Level *level)
+{
+    for (int i = 0; i < level->level_size; i++)
+    {
+        EnemyWave *wave = &level->waves[i];
+
+        for (int j = 0; j < wave->waveSize; j++)
+        {
+            if (!wave->enemies[j].spawned)
+            {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
+
+void UpdateLevelEnd(GraphicAssets *assets, GameState *gamestate, Level *level){
     isLevelComplete(gamestate);
-    if ((gamestate->globalLevelTimer > 5.0f && gamestate->gameOver) || gamestate->player.lives <= 0) {
+
+    bool allWavesFinished = AreAllWavesFinished(level);
+
+    if ((allWavesFinished && gamestate->gameOver)
+        || gamestate->player.lives <= 0)
+    {
         assets->currScore = (int)gamestate->player.score;
-        //DrawGameOverScreen(assets, (int)gamestate->player.score);
-        StopMusicStream(assets->level1); //gasenje svih zvukova
+
+        StopMusicStream(assets->level1);
         StopMusicStream(assets->level2);
         StopMusicStream(assets->level3);
         StopMusicStream(assets->mainMenu);
+
         StopSound(assets->explosion);
         StopSound(assets->powerUp);
         StopSound(assets->laser);
         StopSound(assets->bossLaser);
         StopSound(assets->hit1);
         StopSound(assets->hit2);
-        for (int i = 0; i < ENEMY_CAP; i++) { //gasenje svega sto se nalazilo na mapi
-            gamestate->enemies[i].active = false;
-        }
-        for (int i = 0; i < PROJECTILE_CAP; i++) {
-            gamestate->projectiles[i].active = false;
-        }
-        for (int i = 0; i < POWERUP_CAP; i++) {
-            gamestate->powerups[i].active = false;
-        }
 
-        assets->fja = DrawGameOverScreen;
+        for (int i = 0; i < ENEMY_CAP; i++)
+            gamestate->enemies[i].active = false;
+
+        for (int i = 0; i < PROJECTILE_CAP; i++)
+            gamestate->projectiles[i].active = false;
+
+        for (int i = 0; i < POWERUP_CAP; i++)
+            gamestate->powerups[i].active = false;
+
+        if (gamestate->player.lives > 0) assets->fja = DrawYouWonScreen;
+        else assets->fja = DrawGameOverScreen;
         assets->currScreen = MAIN_MENU;
-        PlayMusicStream(assets->mainMenu);
     }
 }
-
 

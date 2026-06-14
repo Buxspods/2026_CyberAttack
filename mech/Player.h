@@ -26,11 +26,13 @@ typedef struct {
     Texture2D texture;
     bool isInvincible;
     float invincibilityTimer;
+    float shotgunTimer;
 } Player;
 Player InitPlayer(float score, Vector2 playerPos, float playerSize, float playerSpeed, int lives, float fireRate, int ammo);
 //void DrawPlayer(Player player, GraphicAssets *assets);
 void UpdatePlayerPosition(Player *player);
 void PlayerShootBullet(GameState *state,Player *player);
+void UpdateShootingMode(Player *player, float tick);
 void SetInvincibility(Player *player, bool mode);
 void UpdateInvincibility(Player *player, float tick, float time);
 void SetDash(Player *player, bool mode);
