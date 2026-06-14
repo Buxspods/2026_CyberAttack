@@ -91,7 +91,8 @@ int main() {
         float dt = GetFrameTime(); //delta time potreban da bi na svakom kompu igra isla istom brzinom
         fire_timer+=dt;
         spawn_timer+=dt;
-
+        bool AutoRegime = true;//ZA AUTOMATSKI REZIM
+        bool aiShoot = false;
         assets.mis = GetMousePosition();
         if (IsKeyPressed(gamestate.keys[ACTION_PAUSE]) && assets.currScreen != MAIN_MENU) {
             if (assets.isPaused) {
@@ -109,6 +110,11 @@ int main() {
 
         if (!assets.isPaused) {
             UpdatePlayerPosition(&gamestate.player);
+            if (AutoRegime) {
+                AutoRegimePlayerUpdate(&gamestate,&aiShoot);
+                gamestate.player.playerPos.x += gamestate.player.mvmntVect.x * gamestate.player.playerSpeed *dt;
+                gamestate.player.playerPos.y += gamestate.player.mvmntVect.y * gamestate.player.playerSpeed *dt;
+            }
             UpdateShootingMode(&gamestate.player, dt);
             UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
             UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
@@ -141,7 +147,7 @@ int main() {
                 break;
         }
 
-        if (fire_timer > (1/gamestate.player.fireRate) && IsKeyDown(gamestate.keys[ACTION_SHOOT]) && gamestate.player.ammo > 0) {
+        if (fire_timer > (1/gamestate.player.fireRate) && (IsKeyDown(gamestate.keys[ACTION_SHOOT]) || aiShoot) && gamestate.player.ammo > 0) {//Ovo x je samo zbog testiranja
             PlaySound(assets.laser);
             PlayerShootBullet(&gamestate,&gamestate.player);
             //Shoot(PLAYER, gamestate.projectiles, gamestate.player.playerPos, 5, 750, (Vector2){0, 0}, &gamestate.player);

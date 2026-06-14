@@ -21,5 +21,5 @@ typedef struct GameState{
 
 GameState InitGameState();
 void DrawGameState();
-
+void AutoRegimePlayerUpdate(GameState *state, bool *shouldShoot);
 #endif //INC_2026_CYBERATTACK_GAMESTATE_H

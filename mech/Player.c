@@ -1,6 +1,9 @@
 #include "GameState.h"
 #include"../GUI/assets.h"
 #include <math.h>
+#include <stddef.h>
+
+#include "raymath.h"
 
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 1000
