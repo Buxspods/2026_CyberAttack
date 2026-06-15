@@ -27,7 +27,7 @@ int main() {
                     {ENEMY_RANGED_PLANE, {100, 750},0.0f},
                     {ENEMY_RANGED_PLANE, {100, 750},0.5f},
                     {ENEMY_RANGED_PLANE, {100, 750},1.0f},
-                    {ENEMY_RANGED_PLANE, {100, 750},1.5f}},
+                    {BOSS, {100, 750},1.5f}},
                     2.0f, 4};
     EnemyWave wave2 = {
         .enemies = {
@@ -108,28 +108,48 @@ int main() {
             assets.currScreen = (assets.currScreen == PAUSE_MENU)? assets.currLevel:PAUSE_MENU;
         }
 
-        if (!assets.isPaused) {
-            UpdatePlayerPosition(&gamestate.player);
-            if (AutoRegime) {
-                AutoRegimePlayerUpdate(&gamestate,&aiShoot);
-                gamestate.player.playerPos.x += gamestate.player.mvmntVect.x * gamestate.player.playerSpeed *dt;
-                gamestate.player.playerPos.y += gamestate.player.mvmntVect.y * gamestate.player.playerSpeed *dt;
+        /*if (!assets.isPaused) {
+            if (assets.odbrojavanje) {
+                assets.timer -= GetFrameTime();
+                if (assets.timer <= 0.0f) {
+                    assets.odbrojavanje = false;
+                }
             }
-            UpdateShootingMode(&gamestate.player, dt);
-            UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
-            UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
-            UpdateSpeed(&gamestate.player, dt);
-            UpdateProjectiles(gamestate.projectiles);
-            UpdateEnemies(&gamestate);
-            CheckCollisions(&gamestate);
+            else {
+                UpdatePlayerPosition(&gamestate.player);
+                if (AutoRegime) {
+                    AutoRegimePlayerUpdate(&gamestate,&aiShoot);
+                    gamestate.player.playerPos.x += gamestate.player.mvmntVect.x * gamestate.player.playerSpeed *dt;
+                    gamestate.player.playerPos.y += gamestate.player.mvmntVect.y * gamestate.player.playerSpeed *dt;
+                    if (gamestate.player.playerPos.x < 0) {
+                        gamestate.player.playerPos.x = 0;
+                    }
+                    if (gamestate.player.playerPos.y < 0) {
+                        gamestate.player.playerPos.y = 0;
+                    }
+                    if (gamestate.player.playerPos.x > WINDOW_WIDTH) {
+                        gamestate.player.playerPos.x = WINDOW_WIDTH;
+                    }
+                    if (gamestate.player.playerPos.y > WINDOW_HEIGHT) {
+                        gamestate.player.playerPos.y = WINDOW_HEIGHT;
+                    }
+                }
+                UpdateShootingMode(&gamestate.player, dt);
+                UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
+                UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
+                UpdateSpeed(&gamestate.player, dt);
+                UpdateProjectiles(gamestate.projectiles);
+                UpdateEnemies(&gamestate);
+                CheckCollisions(&gamestate);
+            }
         }
         else {
             assets.level1Map.isMoving = false;
             assets.level2Map.isMoving = false;
             assets.level3Map.isMoving = false;
-        }
+        }*/
 
-        if (!assets.isPaused && assets.currScreen != MAIN_MENU) {
+        if (!assets.isPaused && assets.currScreen != MAIN_MENU && !assets.odbrojavanje) {
             gamestate.globalLevelTimer+=dt;
         }
 
@@ -213,10 +233,9 @@ int main() {
                 ResetLevel(&level);
                 if (assets.fja == NULL) {
                     CrtajMeni(&pozicija ,&vreme, &providnost, &assets);
-                    guideMenu = true;
                 }
                 else {
-                    if (assets.fja == DrawGameOverScreen && guideMenu) {
+                    if (assets.fja == DrawGameOverScreen || assets.fja == DrawYouWonScreen) {
                         assets.fja(&assets, assets.currScore);
                     }
                     else {
@@ -224,6 +243,51 @@ int main() {
                     }
                 }
                 break;
+        }
+        if (assets.odbrojavanje) {
+            DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
+            DrawTextEx(assets.fontOrbitron, TextFormat("%d", (int)ceil(assets.timer)), (Vector2){windowWidth/2.0f - 60,windowHeight/2.0f - 60},120,2,WHITE);
+        }
+
+        if (!assets.isPaused) {
+            if (assets.odbrojavanje) {
+                assets.timer -= GetFrameTime();
+                if (assets.timer <= 0.0f) {
+                    assets.odbrojavanje = false;
+                }
+            }
+            else {
+                UpdatePlayerPosition(&gamestate.player);
+                /*if (AutoRegime) {
+                    AutoRegimePlayerUpdate(&gamestate,&aiShoot);
+                    gamestate.player.playerPos.x += gamestate.player.mvmntVect.x * gamestate.player.playerSpeed *dt;
+                    gamestate.player.playerPos.y += gamestate.player.mvmntVect.y * gamestate.player.playerSpeed *dt;
+                    if (gamestate.player.playerPos.x < 0) {
+                        gamestate.player.playerPos.x = 0;
+                    }
+                    if (gamestate.player.playerPos.y < 0) {
+                        gamestate.player.playerPos.y = 0;
+                    }
+                    if (gamestate.player.playerPos.x > WINDOW_WIDTH) {
+                        gamestate.player.playerPos.x = WINDOW_WIDTH;
+                    }
+                    if (gamestate.player.playerPos.y > WINDOW_HEIGHT) {
+                        gamestate.player.playerPos.y = WINDOW_HEIGHT;
+                    }
+                }*/
+                UpdateShootingMode(&gamestate.player, dt);
+                UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
+                UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
+                UpdateSpeed(&gamestate.player, dt);
+                UpdateProjectiles(gamestate.projectiles);
+                UpdateEnemies(&gamestate);
+                CheckCollisions(&gamestate);
+            }
+        }
+        else {
+            assets.level1Map.isMoving = false;
+            assets.level2Map.isMoving = false;
+            assets.level3Map.isMoving = false;
         }
 
         UpdateLevelEnd(&assets, &gamestate, &level);

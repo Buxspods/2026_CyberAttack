@@ -35,9 +35,10 @@ typedef struct GraphicAssets {
     Texture2D powerUpHealth;
     Texture2D powerUpAmmo;
     Texture2D powerUpSpeed;
+    Texture2D powerUpSuperAmmo;
     Texture2D eksplozija;
     Texture2D background;
-    Texture2D srce;
+    Texture2D srce, orangeSrce;
     Texture2D avionLevo, avionDesno, avionPravo;
     Texture2D meele, ranged, turret, finalBoss;
     Texture2D background1, background2, background3;
@@ -54,6 +55,8 @@ typedef struct GraphicAssets {
     Map level3Map;// = {assets.background3, map3Offset, map1Offset,map3Speed, true, 5, 0};
     SCREEN currScreen;
     SCREEN currLevel;
+    bool odbrojavanje;
+    float timer;
 
     void (*fja)(struct GraphicAssets *assets, int score);
     void (*prethodnaFja)(struct GraphicAssets *assets, int score);

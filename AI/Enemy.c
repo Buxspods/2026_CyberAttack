@@ -115,7 +115,7 @@ void InitRangedPlane(Enemy *e) {
 void InitBoss(Enemy *e) {
     e->deathScore = 1000;
     e->ammoRefill = 100;
-    e-> HP = 80;
+    e-> HP = 20;//80;
     e->maxHP = 80;
     e->speed = 200.0f;
     e->size = 80;
@@ -149,7 +149,7 @@ void DrawEnemies(Enemy enemies[]) {
     for (int i=0;i<ENEMY_CAP;i++) {
         if (enemies[i].active) {
             if (enemies[i].laserActive) {
-                DrawRectangle(enemies[i].position.x - enemies[i].size/2, enemies[i].position.y, enemies[i].size, WINDOW_HEIGHT, ORANGE);
+                DrawRectangle(enemies[i].position.x - enemies[i].size/2, enemies[i].position.y, enemies[i].size, WINDOW_HEIGHT, (Color){0,0,0,0});
                 if (assets.currLevel == LEVEL1 || assets.currLevel == LEVEL3) {
                     DrawLaser(enemies[i].position, assets.laserBoss1);
                 }

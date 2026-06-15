@@ -17,15 +17,20 @@ void DrawTextGlow(Font font, const char* text, Vector2 pos, float size, Color co
 }
 
 void PrikaziStats(int score, int lives, int ammo, GraphicAssets *assets) {
-    //DrawRectangle(0, 0, windowHeight, windowWidth,Fade(BLACK, 1.0f));
+    Color color1;
+    if (assets->currLevel == LEVEL2) color1 = ORANGE;
+    else color1 = SKYBLUE;
 
-    DrawTextGlow(assets->fontCommando, "SCORE", (Vector2){50, 50}, 40, SKYBLUE);
-    DrawTextGlow(assets->fontCommando, TextFormat("%07i", score), (Vector2){50, 90}, 40, SKYBLUE);
-    DrawTextGlow(assets->fontCommando, "AMMO", (Vector2){800, 850}, 40, SKYBLUE);
-    DrawTextGlow(assets->fontCommando, TextFormat("%07i", ammo), (Vector2){800, 900}, 40, SKYBLUE);
-    DrawTextGlow(assets->fontCommando, "LIVES", (Vector2){50, 850}, 40, SKYBLUE);
+    DrawTextGlow(assets->fontCommando, "SCORE", (Vector2){50, 50}, 40, color1);
+    DrawTextGlow(assets->fontCommando, TextFormat("%07i", score), (Vector2){50, 90}, 40, color1);
+    DrawTextGlow(assets->fontCommando, "AMMO", (Vector2){800, 850}, 40, color1);
+    DrawTextGlow(assets->fontCommando, TextFormat("%07i", ammo), (Vector2){800, 900}, 40, color1);
+    DrawTextGlow(assets->fontCommando, "LIVES", (Vector2){50, 850}, 40, color1);
 
+    Texture2D srce;
+    if (assets->currLevel == LEVEL2) srce = assets->orangeSrce;
+    else srce = assets->srce;
     for (int i = 0; i < lives; i++) {
-        DrawTexture(assets->srce, (float)i*45 + 35, 900, WHITE);
+        DrawTexture(srce, (float)i*45 + 35, 900, WHITE);
     }
 }

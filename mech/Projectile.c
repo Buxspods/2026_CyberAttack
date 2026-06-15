@@ -73,8 +73,14 @@ void UpdateProjectiles(Projectile projectiles[]) {
 void DrawProjectiles(Projectile projectiles[]) {
     for (int i = 0; i < PROJECTILE_CAP; i++) {
         if (projectiles[i].active) {
-            DrawCircleV(projectiles[i].pos, projectiles[i].size, RED);
-            DrawProjectile(assets.metak, projectiles[i].pos);
+            if (projectiles[i].size == 5) {
+                DrawCircleV(projectiles[i].pos, projectiles[i].size, (Color){0, 0, 0, 0});
+                DrawProjectile(assets.metak, projectiles[i].pos);
+            }
+            else {
+                DrawCircleV(projectiles[i].pos, projectiles[i].size, (Color){0, 0, 0, 0});
+                DrawProjectile(assets.metakBoss, projectiles[i].pos);
+            }
         }
     }
 }

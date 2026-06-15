@@ -44,15 +44,16 @@ void DrawPowerUps(PowerUp powerups[], float mapSpeed, float dt, bool move) {
                 DrawPowerUp(assets.powerUpSpeed, powerup->position);
                 break;
             case HEALTH_POWERUP:
-                DrawCircleV(powerup->position, powerup->size, RED);
+                DrawCircleV(powerup->position, powerup->size, (Color){1,1,1,0});
                 DrawPowerUp(assets.powerUpHealth, powerup->position);
                 break;
             case AMMO_POWERUP:
-                DrawCircleV(powerup->position, powerup->size, DARKGREEN);
+                DrawCircleV(powerup->position, powerup->size, (Color){1,1,1,0});
                 DrawPowerUp(assets.powerUpAmmo, powerup->position);
                 break;
             case SPECIAL_AMMO_POWERUP:
-                DrawCircleV(powerup->position, powerup->size, PINK);
+                DrawCircleV(powerup->position, powerup->size, (Color){1,1,1,0});
+                DrawPowerUp(assets.powerUpSuperAmmo, powerup->position);
                 break;
             default: break;
         }

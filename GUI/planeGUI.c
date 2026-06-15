@@ -109,8 +109,8 @@ void DrawLaser(Vector2 position, Texture2D laserTexture){
     float dt = GetFrameTime();
     float animSpeed = 12.0f;
 
-    position.x += 60;
-    position.y += 64;
+    position.x -= 25;
+    //position.y += 64;
     frame += animSpeed * dt;
 
     if (frame >= 4.0f)

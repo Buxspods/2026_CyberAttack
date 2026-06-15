@@ -58,11 +58,9 @@ bool AreAllWavesFinished(Level *level)
 
 void UpdateLevelEnd(GraphicAssets *assets, GameState *gamestate, Level *level){
     isLevelComplete(gamestate);
-
     bool allWavesFinished = AreAllWavesFinished(level);
 
-    if ((allWavesFinished && gamestate->gameOver)
-        || gamestate->player.lives <= 0)
+    if ((allWavesFinished && gamestate->gameOver) || gamestate->player.lives <= 0)
     {
         assets->currScore = (int)gamestate->player.score;
 

@@ -61,6 +61,12 @@ void DrawYouWonScreen(GraphicAssets *assets, int score) {
             StopMusicStream(assets->mainMenu);
             StopMusicStream(assets->level2);
             PlayMusicStream(muzika);
+            assets->level1Map.offset = 0;
+            assets->level2Map.offset = 0;
+            assets->level3Map.offset = 0;
+            assets->level1Map.isMoving = true;
+            assets->level2Map.isMoving = true;
+            assets->level3Map.isMoving = true;
             gamestate = InitGameState();
             Set_Keys(assets);
             assets->currScreen = assets->currLevel;
@@ -132,6 +138,12 @@ void DrawGameOverScreen(GraphicAssets *assets, int score) {
             StopMusicStream(assets->mainMenu);
             StopMusicStream(assets->level2);
             PlayMusicStream(muzika);
+            assets->level1Map.offset = 0;
+            assets->level2Map.offset = 0;
+            assets->level3Map.offset = 0;
+            assets->level1Map.isMoving = true;
+            assets->level2Map.isMoving = true;
+            assets->level3Map.isMoving = true;
             gamestate = InitGameState();
             Set_Keys(assets);
             assets->currScreen = assets->currLevel;

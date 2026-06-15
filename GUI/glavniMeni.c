@@ -69,6 +69,12 @@ void StartNewGame(GraphicAssets *assets, int score) {
             StopMusicStream(assets->level3);
             StopMusicStream(assets->mainMenu);
             PlayMusicStream(assets->level1);
+            assets->level1Map.offset = 0;
+            assets->level2Map.offset = 0;
+            assets->level3Map.offset = 0;
+            assets->level1Map.isMoving = true;
+            assets->level2Map.isMoving = true;
+            assets->level3Map.isMoving = true;
             gamestate = InitGameState();
             Set_Keys(assets);
             assets->currLevel = LEVEL1;
@@ -88,6 +94,12 @@ void StartNewGame(GraphicAssets *assets, int score) {
             StopMusicStream(assets->level3);
             StopMusicStream(assets->mainMenu);
             PlayMusicStream(assets->level2);
+            assets->level1Map.offset = 0;
+            assets->level2Map.offset = 0;
+            assets->level3Map.offset = 0;
+            assets->level1Map.isMoving = true;
+            assets->level2Map.isMoving = true;
+            assets->level3Map.isMoving = true;
             gamestate = InitGameState();
             Set_Keys(assets);
             assets->currLevel = LEVEL2;
@@ -107,6 +119,12 @@ void StartNewGame(GraphicAssets *assets, int score) {
             StopMusicStream(assets->level2);
             StopMusicStream(assets->mainMenu);
             PlayMusicStream(assets->level3);
+            assets->level1Map.offset = 0;
+            assets->level2Map.offset = 0;
+            assets->level3Map.offset = 0;
+            assets->level1Map.isMoving = true;
+            assets->level2Map.isMoving = true;
+            assets->level3Map.isMoving = true;
             gamestate = InitGameState();
             Set_Keys(assets);
             assets->currLevel = LEVEL3;
@@ -129,6 +147,8 @@ void StartNewGame(GraphicAssets *assets, int score) {
     }
 }
 void LoadGame(GraphicAssets *assets, int score) {
+    assets->odbrojavanje = false;
+    assets->timer = 0.0f;
     DrawTexture(assets->background, 0, 0, WHITE);
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
     Rectangle backHitBox = { 40, 40, 180, 45 };
@@ -146,36 +166,21 @@ void LoadGame(GraphicAssets *assets, int score) {
 
     for (int i = 0; i < saveFiles.count; i++) {
         if (DirectoryExists(saveFiles.paths[i])) continue;
-        const char* cistoImeFajla = GetFileName(saveFiles.paths[i]);
+        const char* imeFajla = GetFileName(saveFiles.paths[i]);
 
-        const char* slotText = TextFormat("#%d - %s", brFajlova + 1, cistoImeFajla);
+        const char* slotText = TextFormat("#%d - %s", brFajlova + 1, imeFajla);
         Vector2 dimSlot = MeasureTextEx(assets->fontOrbitron, slotText, 30,2);
         Rectangle recSlot = (Rectangle){windowWidth/2.0f - dimSlot.x / 2, 200.0f + (brFajlova * 80.0f), dimSlot.x, dimSlot.y};
         bool hoverSlot = CheckCollisionPointRec(assets->mis, recSlot);
         DrawTextEx(assets->fontExo, slotText, (Vector2){windowWidth/2.0f - dimSlot.x / 2, 200.0f + (brFajlova * 80.0f)}, 30, 2, (hoverSlot) ? BLUE : WHITE);
 
-
         if (hoverSlot && IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             PlaySound(assets->click);
             InitGameState();
-            LoadGame2(cistoImeFajla);
-
-
-
+            LoadGame2(imeFajla);
             Set_Keys(assets);
-
-            /*for (int j=0;j<ENEMY_CAP;j++) {
-                if (!gamestate.enemies[j].active) {
-                    gamestate.enemies[j].deathScore = DEFAULT_DEATH_SCORE;
-                    switch (gamestate.enemies[j].type) {
-                        case ENEMY_MELEE_PLANE:InitMeelePlane(&gamestate.enemies[j]);break;
-                        case ENEMY_TURRET:InitTurret(&gamestate.enemies[j]);break;
-                        case ENEMY_RANGED_PLANE:InitRangedPlane(&gamestate.enemies[j]);break;
-                        case BOSS:InitBoss(&gamestate.enemies[j]);break;
-                    }
-                    break;
-                }
-            }*/
+            assets->odbrojavanje = true;
+            assets->timer = 3.0f;
 
             StopMusicStream(assets->mainMenu);
             if (assets->currLevel == LEVEL1) PlayMusicStream(assets->level1);
@@ -253,7 +258,7 @@ void Guide(GraphicAssets *assets, int score) {
     sprintf(dash, "%s - Dash", keyString(assets->keys[ACTION_DASH]));
     sprintf(pauza, "%s - Pause Menu", keyString(assets->keys[ACTION_PAUSE]));
 
-    char *text[] = {kretanje, pucanje, dash, pauza,"- Power Up Health", " - Power Up Ammo", " - Power Up Speed", " - Turret", " - Ranged Plane", "\t - Meele Plane", "\t - Final Boss"};
+    char *text[] = {kretanje, pucanje, dash, pauza,"- Power Up Health", " - Power Up Ammo", " - Power Up Speed", " - Turret", " - Ranged Plane", "\t - Melee Plane", "\t - Final Boss"};
     Texture teksture[] = {assets->powerUpHealth, assets->powerUpAmmo, assets->powerUpSpeed, assets->turret, assets->ranged, assets->meele, assets->finalBoss};
 
 
@@ -380,7 +385,7 @@ void Settings(GraphicAssets *assets, int score) {
     Rectangle saveHitBox = {windowWidth/2.0f - dimSave.x / 2, 0.9f*windowHeight, dimSave.x, dimSave.y};
     if (CheckCollisionPointRec(assets->mis, saveHitBox)) {
         DrawTextEx(assets->fontOrbitron, "Save", (Vector2){windowWidth/2.0f - dimSave.x / 2, 0.9f*windowHeight}, 40, 2, BLUE);
-        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             PlaySound(assets->click);
             DrawTextEx(assets->fontOrbitron, "Save", (Vector2){windowWidth/2.0f - dimSave.x / 2, 0.9f*windowHeight}, 40, 2, GRAY);
             promenjeno = 1;
@@ -483,6 +488,7 @@ void InitGlavni(GraphicAssets *assets) {
     assets->fontCommando = LoadFontEx("resources/fonts/commando/commando.ttf", 64, 0 , 0);
     assets->background = LoadTexture("resources/images/background.png");
     assets->srce = LoadTexture("resources/images/srce2.png");
+    assets->orangeSrce = LoadTexture("resources/images/orangeSrce.png");
     assets->avionLevo = LoadTexture("resources/images/spritesheetAvionLevo.png");
     assets->avionDesno = LoadTexture("resources/images/spritesheetAvionDesno.png");
     assets->avionPravo = LoadTexture("resources/images/spritesheetAvionPravo.png");
@@ -490,6 +496,7 @@ void InitGlavni(GraphicAssets *assets) {
     assets->powerUpAmmo = LoadTexture("resources/images/powerUpAmmo.png");
     assets->powerUpSpeed = LoadTexture("resources/images/powerUpBrzina.png");
     assets->powerUpHealth = LoadTexture("resources/images/powerUpHealth.png");
+    assets->powerUpSuperAmmo = LoadTexture("resources/images/powerUpSuperAmmo.png");
     assets->eksplozija = LoadTexture("resources/images/eksplozija.png");
     assets->turret = LoadTexture("resources/images/turret.png");
     assets->meele = LoadTexture("resources/images/meele-plane.png");
@@ -605,6 +612,7 @@ void UnloadAssets(GraphicAssets *assets) {
 
     UnloadTexture(assets->background);
     UnloadTexture(assets->srce);
+    UnloadTexture(assets->orangeSrce);
     UnloadTexture(assets->avionDesno);
     UnloadTexture(assets->avionPravo);
     UnloadTexture(assets->avionLevo);
@@ -612,6 +620,7 @@ void UnloadAssets(GraphicAssets *assets) {
     UnloadTexture(assets->powerUpAmmo);
     UnloadTexture(assets->powerUpSpeed);
     UnloadTexture(assets->powerUpHealth);
+    UnloadTexture(assets->powerUpSuperAmmo);
     UnloadTexture(assets->eksplozija);
     UnloadTexture(assets->turret);
     UnloadTexture(assets->meele);
@@ -620,6 +629,9 @@ void UnloadAssets(GraphicAssets *assets) {
     UnloadTexture(assets->background2);
     UnloadTexture(assets->background3);
     UnloadTexture(assets->finalBoss);
+    UnloadTexture(assets->laserBoss1);
+    UnloadTexture(assets->laserBoss2);
+    UnloadTexture(assets->metakBoss);
 
     UnloadSound(assets->bossLaser);
     UnloadSound(assets->laser);
@@ -628,6 +640,12 @@ void UnloadAssets(GraphicAssets *assets) {
     UnloadSound(assets->explosion);
     UnloadSound(assets->powerUp);
     UnloadSound(assets->gameOver);
+    UnloadSound(assets->click);
+
+    UnloadMusicStream(assets->mainMenu);
+    UnloadMusicStream(assets->level1);
+    UnloadMusicStream(assets->level2);
+    UnloadMusicStream(assets->level3);
 
     free(assets->highestScores);
 }
