@@ -377,6 +377,7 @@ void Settings(GraphicAssets *assets, int score) {
             SetSoundVolume(assets->powerUp, vol);
             SetSoundVolume(assets->gameOver, vol);
             SetSoundVolume(assets->click, vol);
+            SetSoundVolume(assets->youWon, vol);
         }
     }
 
@@ -422,6 +423,7 @@ void Settings(GraphicAssets *assets, int score) {
             SetSoundVolume(assets->powerUp, assets->sfx);
             SetSoundVolume(assets->gameOver, assets->sfx);
             SetSoundVolume(assets->click, assets->sfx);
+            SetSoundVolume(assets->youWon, assets->sfx);
             music2 = -1;
             sfx2 = -1;
             for (int i = 0; i < 7; i++) {
@@ -516,6 +518,7 @@ void InitGlavni(GraphicAssets *assets) {
     assets->laser = LoadSound("resources/audio/laser.wav");
     assets->bossLaser = LoadSound("resources/audio/boss-laser.wav");
     assets->click = LoadSound("resources/audio/click.wav");
+    assets->youWon = LoadSound("resources/audio/youWon.wav");
     assets->mainMenu = LoadMusicStream("resources/audio/mainMenu.mp3");
     assets->level1 = LoadMusicStream("resources/audio/level1.mp3");
     assets->level2 = LoadMusicStream("resources/audio/level2.mp3");
@@ -549,6 +552,7 @@ void InitGlavni(GraphicAssets *assets) {
         SetSoundVolume(assets->powerUp, assets->sfx);
         SetSoundVolume(assets->gameOver, assets->sfx);
         SetSoundVolume(assets->click, assets->sfx);
+        SetSoundVolume(assets->youWon, assets->sfx);
     }
     fclose(fajl);
 
@@ -641,6 +645,7 @@ void UnloadAssets(GraphicAssets *assets) {
     UnloadSound(assets->powerUp);
     UnloadSound(assets->gameOver);
     UnloadSound(assets->click);
+    UnloadSound(assets->youWon);
 
     UnloadMusicStream(assets->mainMenu);
     UnloadMusicStream(assets->level1);

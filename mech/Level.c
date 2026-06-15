@@ -85,7 +85,10 @@ void UpdateLevelEnd(GraphicAssets *assets, GameState *gamestate, Level *level){
         for (int i = 0; i < POWERUP_CAP; i++)
             gamestate->powerups[i].active = false;
 
-        if (gamestate->player.lives > 0) assets->fja = DrawYouWonScreen;
+        if (gamestate->player.lives > 0) {
+            PlaySound(assets->youWon);
+            assets->fja = DrawYouWonScreen;
+        }
         else assets->fja = DrawGameOverScreen;
         assets->currScreen = MAIN_MENU;
     }
