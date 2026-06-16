@@ -57,12 +57,12 @@ void StartNewGame(GraphicAssets *assets, int score) {
     DrawTexture(assets->background, 0, 0, WHITE);
     DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
 
-    Vector2 dimPlayAgain = MeasureTextEx(assets->fontOrbitron, "LEVEL 1", 40, 2);
-    Rectangle recPlayAgain = {windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight, dimPlayAgain.x, dimPlayAgain.y};
-    DrawTextEx(assets->fontOrbitron, "LEVEL 1", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight}, 40, 2, WHITE);
-    bool isHovered = CheckCollisionPointRec(assets->mis, recPlayAgain);
+    Vector2 dimLevel1 = MeasureTextEx(assets->fontOrbitron, "LEVEL 1", 40, 2);
+    Rectangle recLevel1 = {windowWidth/2.0f - dimLevel1.x/2.0f, 0.4f*windowHeight, dimLevel1.x, dimLevel1.y};
+    DrawTextEx(assets->fontOrbitron, "LEVEL 1", (Vector2){windowWidth/2.0f - dimLevel1.x/2.0f, 0.4f*windowHeight}, 40, 2, WHITE);
+    bool isHovered = CheckCollisionPointRec(assets->mis, recLevel1);
     if (isHovered) {
-        DrawTextEx(assets->fontOrbitron, "LEVEL 1", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight}, 40, 2, BLUE);
+        DrawTextEx(assets->fontOrbitron, "LEVEL 1", (Vector2){windowWidth/2.0f - dimLevel1.x/2.0f, 0.4f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             PlaySound(assets->click);
             StopMusicStream(assets->level2);
@@ -82,12 +82,12 @@ void StartNewGame(GraphicAssets *assets, int score) {
         }
     }
 
-    Vector2 dimGuide = MeasureTextEx(assets->fontOrbitron, "LEVEL 2", 40, 2);
-    Rectangle recGuide = {windowWidth/2.0f - dimGuide.x/2.0f, 0.45f*windowHeight, dimGuide.x, dimGuide.y};
-    DrawTextEx(assets->fontOrbitron, "LEVEL 2", (Vector2){windowWidth/2.0f - dimGuide.x/2.0f, 0.45f*windowHeight}, 40, 2, WHITE);
-    bool isHovered2 = CheckCollisionPointRec(assets->mis, recGuide);
+    Vector2 dimLevel2 = MeasureTextEx(assets->fontOrbitron, "LEVEL 2", 40, 2);
+    Rectangle recLevel2 = {windowWidth/2.0f - dimLevel2.x/2.0f, 0.45f*windowHeight, dimLevel2.x, dimLevel2.y};
+    DrawTextEx(assets->fontOrbitron, "LEVEL 2", (Vector2){windowWidth/2.0f - dimLevel2.x/2.0f, 0.45f*windowHeight}, 40, 2, WHITE);
+    bool isHovered2 = CheckCollisionPointRec(assets->mis, recLevel2);
     if (isHovered2) {
-        DrawTextEx(assets->fontOrbitron, "LEVEL 2", (Vector2){windowWidth/2.0f - dimGuide.x/2.0f, 0.45f*windowHeight}, 40, 2, BLUE);
+        DrawTextEx(assets->fontOrbitron, "LEVEL 2", (Vector2){windowWidth/2.0f - dimLevel2.x/2.0f, 0.45f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             PlaySound(assets->click);
             StopMusicStream(assets->level1);
@@ -107,12 +107,12 @@ void StartNewGame(GraphicAssets *assets, int score) {
         }
     }
 
-    Vector2 dimMainMenu = MeasureTextEx(assets->fontOrbitron, "LEVEL 3", 40, 2);
-    Rectangle recMainMenu = {windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight, dimMainMenu.x, dimMainMenu.y};
-    DrawTextEx(assets->fontOrbitron, "LEVEL 3", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight}, 40, 2, WHITE);
-    bool isHovered3 = CheckCollisionPointRec(assets->mis, recMainMenu);
+    Vector2 dimLevel3 = MeasureTextEx(assets->fontOrbitron, "LEVEL 3", 40, 2);
+    Rectangle recLevel3 = {windowWidth/2.0f - dimLevel3.x/2.0f, 0.5f*windowHeight, dimLevel3.x, dimLevel3.y};
+    DrawTextEx(assets->fontOrbitron, "LEVEL 3", (Vector2){windowWidth/2.0f - dimLevel3.x/2.0f, 0.5f*windowHeight}, 40, 2, WHITE);
+    bool isHovered3 = CheckCollisionPointRec(assets->mis, recLevel3);
     if (isHovered3) {
-        DrawTextEx(assets->fontOrbitron, "LEVEL 3", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight}, 40, 2, BLUE);
+        DrawTextEx(assets->fontOrbitron, "LEVEL 3", (Vector2){windowWidth/2.0f - dimLevel3.x/2.0f, 0.5f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             PlaySound(assets->click);
             StopMusicStream(assets->level1);
@@ -132,6 +132,56 @@ void StartNewGame(GraphicAssets *assets, int score) {
         }
     }
 
+    Vector2 dimInfLevel = MeasureTextEx(assets->fontOrbitron, "INFINITE LEVEL", 40, 2);
+    Rectangle recInfLevel = {windowWidth/2.0f - dimInfLevel.x/2.0f, 0.55f*windowHeight, dimInfLevel.x, dimInfLevel.y};
+    DrawTextEx(assets->fontOrbitron, "INFINITE LEVEL", (Vector2){windowWidth/2.0f - dimInfLevel.x/2.0f, 0.55f*windowHeight}, 40, 2, WHITE);
+    bool isHovered4 = CheckCollisionPointRec(assets->mis, recInfLevel);
+    if (isHovered4) {
+        DrawTextEx(assets->fontOrbitron, "INFINITE LEVEL", (Vector2){windowWidth/2.0f - dimInfLevel.x/2.0f, 0.55f*windowHeight}, 40, 2, BLUE);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            PlaySound(assets->click);
+            StopMusicStream(assets->level3);
+            StopMusicStream(assets->level2);
+            StopMusicStream(assets->mainMenu);
+            PlayMusicStream(assets->level1);
+            assets->level1Map.offset = 0;
+            assets->level2Map.offset = 0;
+            assets->level3Map.offset = 0;
+            assets->level1Map.isMoving = true;
+            assets->level2Map.isMoving = true;
+            assets->level3Map.isMoving = true;
+            gamestate = InitGameState();
+            Set_Keys(assets);
+            assets->currLevel = INFINITE_LEVEL;
+            assets->currScreen = INFINITE_LEVEL;
+        }
+    }
+
+    Vector2 dimDemo = MeasureTextEx(assets->fontOrbitron, "DEMO MODE", 40, 2);
+    Rectangle recDemo = {windowWidth/2.0f - dimDemo.x/2.0f, 0.6f*windowHeight, dimDemo.x, dimDemo.y};
+    DrawTextEx(assets->fontOrbitron, "DEMO MODE", (Vector2){windowWidth/2.0f - dimDemo.x/2.0f, 0.6f*windowHeight}, 40, 2, WHITE);
+    bool isHovered5 = CheckCollisionPointRec(assets->mis, recDemo);
+    if (isHovered5) {
+        DrawTextEx(assets->fontOrbitron, "DEMO MODE", (Vector2){windowWidth/2.0f - dimDemo.x/2.0f, 0.6f*windowHeight}, 40, 2, BLUE);
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            PlaySound(assets->click);
+            StopMusicStream(assets->level3);
+            StopMusicStream(assets->level2);
+            StopMusicStream(assets->mainMenu);
+            PlayMusicStream(assets->level1);
+            assets->level1Map.offset = 0;
+            assets->level2Map.offset = 0;
+            assets->level3Map.offset = 0;
+            assets->level1Map.isMoving = true;
+            assets->level2Map.isMoving = true;
+            assets->level3Map.isMoving = true;
+            gamestate = InitGameState();
+            Set_Keys(assets);
+            assets->currLevel = DEMO_MODE;
+            assets->currScreen = DEMO_MODE;
+        }
+    }
+
     Rectangle backHitBox = { 40, 40, 180, 45 };
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x + 2, backHitBox.y + 2 }, 35, 2, DARKBLUE);
     DrawTextEx(assets->fontExo, "< BACK", (Vector2){ backHitBox.x, backHitBox.y }, 35, 2, WHITE);
@@ -143,7 +193,6 @@ void StartNewGame(GraphicAssets *assets, int score) {
         PlayMusicStream(assets->mainMenu);
         assets->prethodnaFja = assets->fja;
         assets->fja = NULL;
-        //assets->currScreen = MAIN_MENU;
     }
 }
 void LoadGame(GraphicAssets *assets, int score) {

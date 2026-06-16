@@ -281,6 +281,7 @@ int main() {
                 UpdateSpeed(&gamestate.player, dt);
                 UpdateProjectiles(gamestate.projectiles);
                 UpdateEnemies(&gamestate);
+                DrawExplosion(&assets);
                 CheckCollisions(&gamestate);
             }
         }

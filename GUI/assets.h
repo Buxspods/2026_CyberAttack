@@ -5,10 +5,19 @@
 #include"assets.h"
 #include"../mech/Map.h"
 #include"../mech/Screens.h"
+#define EXPLOSION_CAP 100
+
 struct GraphicAssets;
 
 typedef void (*MojaFja)(struct GraphicAssets *assets, int score);
 typedef void (*MojaFja2)(struct GraphicAssets *assets);
+
+typedef struct {
+    bool active;
+    Vector2 pozicija;
+    int currentFrame;
+    float timer;
+}Explosion;
 
 typedef struct {
     char naziv[20];
@@ -57,6 +66,7 @@ typedef struct GraphicAssets {
     SCREEN currLevel;
     bool odbrojavanje;
     float timer;
+    Explosion eksplozije[EXPLOSION_CAP];
 
     void (*fja)(struct GraphicAssets *assets, int score);
     void (*prethodnaFja)(struct GraphicAssets *assets, int score);

@@ -8,6 +8,7 @@ typedef enum{
     LEVEL3,
     PAUSE_MENU,
     INFINITE_LEVEL,
+    DEMO_MODE,
     SETTINGS
 }SCREEN;
 

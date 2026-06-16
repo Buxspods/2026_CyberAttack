@@ -115,7 +115,7 @@ void InitRangedPlane(Enemy *e) {
 void InitBoss(Enemy *e) {
     e->deathScore = 1000;
     e->ammoRefill = 100;
-    e-> HP = 20;//80;
+    e-> HP = 80;//80;
     e->maxHP = 80;
     e->speed = 200.0f;
     e->size = 80;
@@ -174,6 +174,7 @@ void DrawEnemies(Enemy enemies[]) {
                 default:
                     break;
             }
+            DrawHealthBar(&enemies[i], enemies[i].position);
             DrawCircle(enemies[i].position.x,enemies[i].position.y,enemies[i].size, (Color){0,0,0, 0});
             if (enemies[i].type == ENEMY_TURRET) {
                 float angle = atan2f(gamestate.player.playerPos.y - enemies[i].position.y, gamestate.player.playerPos.x - enemies[i].position.x) * RAD2DEG;
@@ -187,5 +188,6 @@ void DrawEnemies(Enemy enemies[]) {
 }
 
 void DestroyEnemy(Enemy *enemy) {
+    SpawnExplosion(&assets, enemy->position);
     enemy->active = false;
 }

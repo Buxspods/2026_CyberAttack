@@ -1,4 +1,7 @@
 #include "planeGUI.h"
+
+#include "glavniMeni.h"
+
 void DrawPlaneGUI(Vector2 *pozicija, GraphicAssets *assets) {
     float dt = GetFrameTime();
 
@@ -56,41 +59,45 @@ void DrawProjectile(Texture2D projectile, Vector2 position) {
     DrawTexture(projectile, position.x, position.y, WHITE);
 }
 
-void DrawExplosion(GraphicAssets *assets, Vector2 pozicija, bool trigger) {
-    static int currentFrame = 0;
-    static float frameTimer = 0.0f;
-    static bool isPlaying = false;
+void SpawnExplosion(GraphicAssets *assets, Vector2 pozicija){
+    for (int i = 0; i < EXPLOSION_CAP; i++) {
 
+        if (!assets->eksplozije[i].active) {
+            assets->eksplozije[i].active = true;
+            assets->eksplozije[i].pozicija = pozicija;
+            assets->eksplozije[i].currentFrame = 0;
+            assets->eksplozije[i].timer = 0.0f;
+            break;
+        }
+    }
+}
+
+void DrawExplosion(GraphicAssets *assets){
     int maxFrames = 9;
     float frameSpeed = 15.0f;
+    float dt = GetFrameTime();
 
-    if (trigger) {
-        isPlaying = true;
-        currentFrame = 0;
-        frameTimer = 0.0f;
-    }
+    for (int i = 0; i < EXPLOSION_CAP; i++) {
+        if (!assets->eksplozije[i].active) continue;
+        assets->eksplozije[i].timer += dt;
 
-    if (isPlaying) {
-        frameTimer += GetFrameTime();
+        if (assets->eksplozije[i].timer >= (1.0f / frameSpeed)) {
+            assets->eksplozije[i].timer = 0.0f;
+            assets->eksplozije[i].currentFrame++;
 
-        if (frameTimer >= (1.0f / frameSpeed)) {
-            frameTimer = 0.0f;
-            currentFrame++;
-
-            if (currentFrame >= maxFrames) {
-                isPlaying = false;
-                currentFrame = 0;
+            if (assets->eksplozije[i].currentFrame >= maxFrames) {
+                assets->eksplozije[i].active = false;
+                continue;
             }
         }
 
-        if (isPlaying) {
-            float frameWidth = (float)assets->eksplozija.width / maxFrames;
-            Rectangle sourceRec = { (float)currentFrame * frameWidth, 0, frameWidth, (float)assets->eksplozija.height };
+        float frameWidth = (float)assets->eksplozija.width / maxFrames;
+        Rectangle sourceRec = {assets->eksplozije[i].currentFrame * frameWidth,0,frameWidth, (float)assets->eksplozija.height};
+        Vector2 pozicijaEksplozije = {assets->eksplozije[i].pozicija.x - frameWidth / 2,assets->eksplozije[i].pozicija.y - assets->eksplozija.height / 2};
 
-            BeginBlendMode(BLEND_ADDITIVE);
-            DrawTextureRec(assets->eksplozija, sourceRec, pozicija, WHITE);
-            EndBlendMode();
-        }
+        BeginBlendMode(BLEND_ADDITIVE);
+        DrawTextureRec(assets->eksplozija, sourceRec,pozicijaEksplozije,WHITE);
+        EndBlendMode();
     }
 }
 
@@ -118,4 +125,24 @@ void DrawLaser(Vector2 position, Texture2D laserTexture){
 
     Rectangle sourceRec = {(int)frame * 53.0f, 0, 53.0f, 1000.0f};
     DrawTextureRec(laserTexture, sourceRec, position, WHITE);
+}
+
+void DrawHealthBar(Enemy *e,Vector2 position) {
+    Rectangle rec = (Rectangle) {0, 0, 0, 0};
+    if (e->type == BOSS) {
+        position.x -= 40;
+        position.y -= 90;
+        rec.width = 80;
+    }
+    else {
+        position.x -= 30;
+        position.y -= 40;
+        rec.width = 60;
+    }
+    rec.height = 5;
+    rec = (Rectangle){position.x, position.y, rec.width, rec.height};
+    Rectangle rec2 = (Rectangle){rec.x, rec.y, ((float)(e->HP)/(float)e->maxHP)*rec.width, rec.height};
+    DrawRectangle((int)rec.x - 2, (int)rec.y - 2, (int)rec.width + 4, (int)rec.height + 4, BLACK);
+    DrawRectangle((int)rec.x, (int)rec.y, (int)rec.width, (int)rec.height, GRAY);
+    DrawRectangle((int)rec2.x, (int)rec2.y, (int)rec2.width, (int)rec2.height, RED);
 }
