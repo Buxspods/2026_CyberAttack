@@ -37,21 +37,16 @@ void isLevelComplete(GameState *state) {
     state->gameOver = true;
 }
 
-bool AreAllWavesFinished(Level *level)
-{
-    for (int i = 0; i < level->level_size; i++)
-    {
+bool AreAllWavesFinished(Level *level){
+    for (int i = 0; i < level->level_size; i++){
         EnemyWave *wave = &level->waves[i];
 
-        for (int j = 0; j < wave->waveSize; j++)
-        {
-            if (!wave->enemies[j].spawned)
-            {
+        for (int j = 0; j < wave->waveSize; j++){
+            if (!wave->enemies[j].spawned){
                 return false;
             }
         }
     }
-
     return true;
 }
 
@@ -89,7 +84,9 @@ void UpdateLevelEnd(GraphicAssets *assets, GameState *gamestate, Level *level){
             PlaySound(assets->youWon);
             assets->fja = DrawYouWonScreen;
         }
-        else assets->fja = DrawGameOverScreen;
+        else {
+            assets->fja = DrawGameOverScreen;
+        }
         assets->currScreen = MAIN_MENU;
     }
 }

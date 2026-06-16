@@ -7,6 +7,7 @@
 //#include "EnemyTypes.h"
 #include "raylib.h"
 #include "../mech/EntityTypes.h"
+#include "../Mech/EnemyWithTime.h"
 
 #define ENEMY_CAP 100
 #define DEFAULT_DEATH_SCORE 50
@@ -36,6 +37,8 @@ struct Enemy{
     int ammoRefill;
     Action actions[MAX_ACTIONS];
     bool active;//Ista logika kao i za metkove
+    int movementType; //za ranged plane
+    int leftOrRight;
     union{
         struct {bool canMove;} restrictions;
         struct {Vector2 direction;float acceleration;}linear;
@@ -49,10 +52,10 @@ struct Enemy{
 };
 typedef struct GameState GameState;
 //Funkcije za inicijalizaciju razlicitih tipova protivnika
-void SpawnEnemy(Enemy enemies[],EntityType type,Vector2 position);
+Enemy* SpawnEnemy(Enemy enemies[],EntityType type,Vector2 position, enum movementType mvType, Vector2 center);
 void InitMeelePlane(Enemy *e);
 void InitTurret(Enemy *e);
-void InitRangedPlane(Enemy *e);
+void InitRangedPlane(Enemy *e, enum movementType mvType, Vector2 center);
 void InitBoss(Enemy *e);
 void DrawEnemies(Enemy enemies[]);
 void DestroyEnemy(Enemy *enemy);

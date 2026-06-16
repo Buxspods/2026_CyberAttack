@@ -30,7 +30,7 @@ void MoveCircular(Vector2 *pos, Vector2 centerPos,float speed,int direction,floa
     float dy = pos->y - centerPos.y;
     float radius = sqrtf(dx * dx + dy * dy);
     float angle = atan2f(dy, dx);
-    angle += dt * speed/radius;
+    angle += direction * dt * speed/radius;
 
     pos->x = centerPos.x + cosf(angle) * radius;
     pos->y = centerPos.y + sinf(angle) * radius;
@@ -90,7 +90,8 @@ void PlayerShotLinear(Enemy *e,GameState *state, float dt) {
 }
 void ShotgunShot(Enemy *e,GameState *state, float dt) {
     e->actions[SHOOTING_ACTION].currentTime+=dt;
-    if (e->actions[SHOOTING_ACTION].currentTime>=e->actions[SHOOTING_ACTION].actionTimer) {
+    if (e->actions[SHOOTING_ACTION].currentTime>=e->actions[SHOOTING_ACTION].actionTimer &&
+        e->position.x >= 0 && e->position.x <= 1000 && e->position.y >= 0 && e->position.y <= 1000) {
         e->actions[SHOOTING_ACTION].currentTime=0;
         ShotgunShoot(state,e->shootingData.shotgun.direction,e->shootingData.shotgun.amount,
             e->shootingData.shotgun.rotationAngleRadians,e->position,e->shootingData.shotgun.size,e->shootingData.shotgun.speed);

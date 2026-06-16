@@ -1,5 +1,6 @@
 //#include "raylib.h" Ne treba include jer je raylib vec ukljucen u drugim header fajlovima
 #include <math.h>
+#include <stdio.h>
 #include<stdlib.h>
 #include "mechanics.h"
 #include "AI.h"
@@ -22,34 +23,42 @@ int main() {
 
     gamestate = InitGameState();//Inicijalizuje Igraca protivnike i metkove
 
-    EnemyWave wave4 = {
+    EnemyWave wave11 = {
         .enemies ={
-                    {ENEMY_RANGED_PLANE, {100, 750},0.0f},
-                    {ENEMY_RANGED_PLANE, {100, 750},0.5f},
-                    {ENEMY_RANGED_PLANE, {100, 750},1.0f},
-                    {BOSS, {100, 750},1.5f}},
-                    2.0f, 4};
-    EnemyWave wave2 = {
-        .enemies = {
-                    {ENEMY_TURRET, {100, 550},1.0f},
-                    {ENEMY_TURRET, {300, 550},2.0f},
-                    {ENEMY_TURRET, {500, 550},3.0f},
-                    {ENEMY_TURRET, {700, 550},4.0f}},
-                        12.0f, 4};
-    EnemyWave wave3 = {
-        .enemies = {
-                    {ENEMY_MELEE_PLANE, {100, 650},1.0f},
-                    {ENEMY_MELEE_PLANE, {200, 650},2.5f},
-                    {ENEMY_MELEE_PLANE, {300, 650},3.0f},
-                    {ENEMY_MELEE_PLANE, {400, 650},4.5f},
-                    {ENEMY_MELEE_PLANE, {100, 650},5.0f}},
-                        5.0f, 5};
+                        {.type = ENEMY_MELEE_PLANE, .position = {100, -50},.spawnTime = 1.0f, .direction = {0, 1}},
+                        {.type = ENEMY_MELEE_PLANE, .position = {300, -50},.spawnTime = 1.5f, .direction = {0, 1}},
+                        {.type = ENEMY_MELEE_PLANE, .position = {500, -50},.spawnTime = 2.0f, .direction = {0, 1}},
+                        {.type = ENEMY_MELEE_PLANE, .position = {700, -50},.spawnTime = 2.5f, .direction = {0, 1}},
+                        {.type = ENEMY_MELEE_PLANE, .position = {900, -50},.spawnTime = 3.0f, .direction = {0, 1}}},
+                    2.0f, 5};
+    EnemyWave wave12 = {
+        .enemies ={
+                        {.type = ENEMY_MELEE_PLANE, .position = {-50, -50},.spawnTime = 3.5f, .direction = {1, 1}},
+                        {.type = ENEMY_MELEE_PLANE, .position = {1050, -50},.spawnTime = 3.5f, .direction = {-1, 1}}},
+                        2.5f, 2};
 
-    const EnemyWave wave1 = {.enemies = { {ENEMY_TURRET, {100, 100}, 1}}, 22.0f, 1};
+    EnemyWave wave13 = {
+        .enemies ={
+                        {.type = ENEMY_MELEE_PLANE, .position = {100, -50},.spawnTime = 4.75f, .direction = {0, 1}},
+                        {.type = ENEMY_MELEE_PLANE, .position = {300, -50},.spawnTime = 4.5f, .direction = {0, 1}},
+                        {.type = ENEMY_MELEE_PLANE, .position = {500, -50},.spawnTime = 4.5f, .direction = {0, 1}},
+                        {.type = ENEMY_MELEE_PLANE, .position = {700, -50},.spawnTime = 4.5f, .direction = {0, 1}},
+                        {.type = ENEMY_MELEE_PLANE, .position = {900, -50},.spawnTime = 4.75f, .direction = {0, 1}},
+                        {.type = ENEMY_TURRET, .position = {300, -15},.spawnTime = 5.0f, .direction = {0, 1}},
+                        {.type = ENEMY_TURRET, .position = {700, -15},.spawnTime = 5.0f, .direction = {0, 1}},
+                        {.type = ENEMY_TURRET, .position = {500, -15},.spawnTime = 5.5f, .direction = {0, 1}},
+                        {.type = ENEMY_TURRET, .position = {100, -15},.spawnTime = 6.75f, .direction = {0, 1}},
+                        {.type = ENEMY_TURRET, .position = {900, -15},.spawnTime = 5.75f, .direction = {0, 1}}},
+                            3.5f, 10};
 
-    Level level = {.waves = {wave1, wave2, wave3, wave4}, 4};
-    Vector2 vect = {100, 100};
+    EnemyWave wave14 = {
+        .enemies ={
+                        {.type = ENEMY_RANGED_PLANE, .position = {450, 0},.spawnTime = 5.5f, .movementMode = RIGHT_CIRCULAR, .center = {-150, -150}},
+                        {.type = ENEMY_RANGED_PLANE, .position = {550, 0},.spawnTime = 5.5f, .movementMode = LEFT_CIRCULAR, .center = {1150, -150}}},
+                            5.5f, 2};
 
+
+    Level level1 = {.waves = {wave11, wave12, wave13, wave14}, 4};
 
     //pravljenje pocetnog prozora i postavljanje najveceg dozvoljenog FPS-a
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "2026: Cyber Attack");
@@ -151,17 +160,18 @@ int main() {
 
         if (!assets.isPaused && assets.currScreen != MAIN_MENU && !assets.odbrojavanje) {
             gamestate.globalLevelTimer+=dt;
+            printf("%f\n", gamestate.globalLevelTimer);
         }
 
         switch (assets.currScreen) {
             case LEVEL1:
-                StartLevel(&level, &gamestate, &gamestate.globalLevelTimer);
+                StartLevel(&level1, &gamestate, &gamestate.globalLevelTimer);
                 break;
             case LEVEL2:
-                StartLevel(&level, &gamestate, &gamestate.globalLevelTimer);
+                StartLevel(&level1, &gamestate, &gamestate.globalLevelTimer);
                 break;
             case LEVEL3:
-                StartLevel(&level, &gamestate, &gamestate.globalLevelTimer);
+                StartLevel(&level1, &gamestate, &gamestate.globalLevelTimer);
                 break;
             default:
                 break;
@@ -230,7 +240,7 @@ int main() {
                     assets.fja(&assets, 0);
                 break;
             default:
-                ResetLevel(&level);
+                ResetLevel(&level1);
                 if (assets.fja == NULL) {
                     CrtajMeni(&pozicija ,&vreme, &providnost, &assets);
                 }
@@ -291,7 +301,7 @@ int main() {
             assets.level3Map.isMoving = false;
         }
 
-        UpdateLevelEnd(&assets, &gamestate, &level);
+        UpdateLevelEnd(&assets, &gamestate, &level1);
         EndDrawing();
     }
     UnloadAssets(&assets);

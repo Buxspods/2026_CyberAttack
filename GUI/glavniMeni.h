@@ -1,7 +1,3 @@
-//
-// Created by Asus on 6.5.2026..
-//
-
 #ifndef INC_2026_CYBERATTACK_GLAVNIMENI_H
 #define INC_2026_CYBERATTACK_GLAVNIMENI_H
 #define windowWidth 1000

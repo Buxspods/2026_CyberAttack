@@ -23,7 +23,7 @@ Player InitPlayer(float score, Vector2 playerPos, float playerSize, float player
     player.playerSize = 20;
     player.lives = 5;
     player.fireRate = 10;
-    player.ammo = ammo;
+    player.ammo = 50;
     player.score = 0;
     player.isInvincible = false;
     player.invincibilityTimer = 0;
