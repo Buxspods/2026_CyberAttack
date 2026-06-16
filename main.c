@@ -100,7 +100,7 @@ int main() {
         float dt = GetFrameTime(); //delta time potreban da bi na svakom kompu igra isla istom brzinom
         fire_timer+=dt;
         spawn_timer+=dt;
-        bool AutoRegime = true;//ZA AUTOMATSKI REZIM
+        bool AutoRegime = false;//ZA AUTOMATSKI REZIM
         bool aiShoot = false;
         assets.mis = GetMousePosition();
         if (IsKeyPressed(gamestate.keys[ACTION_PAUSE]) && assets.currScreen != MAIN_MENU) {
@@ -173,6 +173,11 @@ int main() {
             case LEVEL3:
                 StartLevel(&level1, &gamestate, &gamestate.globalLevelTimer);
                 break;
+            case INFINITE_LEVEL:
+                break;
+            case DEMO_MODE:
+                StartLevel(&level1, &gamestate, &gamestate.globalLevelTimer);
+                break;
             default:
                 break;
         }
@@ -239,6 +244,18 @@ int main() {
                 if (assets.fja!= NULL)
                     assets.fja(&assets, 0);
                 break;
+            case 5:
+                //INFINITE LEVEL
+                break;
+            case 6:
+                AutoRegime = true;
+                MoveMap(&assets.level1Map, &gamestate);
+                DrawPlaneGUI(&gamestate.player.playerPos, &assets);
+                DrawPowerUps(gamestate.powerups, assets.level1Map.speed, dt,assets.level1Map.isMoving);
+                DrawProjectiles(gamestate.projectiles);
+                DrawEnemies(gamestate.enemies);//Wrappuj ove tri funkcije u DrawGameState
+                PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
+                break;
             default:
                 ResetLevel(&level1);
                 if (assets.fja == NULL) {
@@ -268,7 +285,7 @@ int main() {
             }
             else {
                 UpdatePlayerPosition(&gamestate.player);
-                /*if (AutoRegime) {
+                if (AutoRegime) {
                     AutoRegimePlayerUpdate(&gamestate,&aiShoot);
                     gamestate.player.playerPos.x += gamestate.player.mvmntVect.x * gamestate.player.playerSpeed *dt;
                     gamestate.player.playerPos.y += gamestate.player.mvmntVect.y * gamestate.player.playerSpeed *dt;
@@ -284,7 +301,7 @@ int main() {
                     if (gamestate.player.playerPos.y > WINDOW_HEIGHT) {
                         gamestate.player.playerPos.y = WINDOW_HEIGHT;
                     }
-                }*/
+                }
                 UpdateShootingMode(&gamestate.player, dt);
                 UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
                 UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
