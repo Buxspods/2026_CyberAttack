@@ -340,7 +340,7 @@ int main() {
             }
             else {
                 UpdatePlayerPosition(&gamestate.player);
-                if (AutoRegime) {
+                if (assets.currScreen == DEMO_MODE) {
                     AutoRegimePlayerUpdate(&gamestate,&aiShoot);
                     gamestate.player.playerPos.x += gamestate.player.mvmntVect.x * gamestate.player.playerSpeed *dt;
                     gamestate.player.playerPos.y += gamestate.player.mvmntVect.y * gamestate.player.playerSpeed *dt;

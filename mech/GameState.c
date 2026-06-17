@@ -81,29 +81,29 @@ Vector2 AutoMove(GameState *state) {
             }
         }
     }
-    if (closest_enemy_distance<100) {//Izbegava najblizeg protivnika
+    if (closest_enemy_distance < 100) {
         Vector2 difference = Vector2Subtract(closest_enemy->position, state->player.playerPos);
         Vector2 normal1 = {-difference.y, difference.x};
         Vector2 normal2 = {difference.y, -difference.x};
-        if (Vector2DotProduct(state->player.mvmntVect, normal1)>0) {
+        if (Vector2DotProduct(state->player.mvmntVect, normal1) > 0) {
             movementDirection = Vector2Normalize(normal1);
         }
         else
             movementDirection = Vector2Normalize(normal2);
         return movementDirection;
     }
-    Vector2 desiredPos,toDesired;
+    Vector2 desiredPos, toDesired;
     if (!closest_powerup) {
         if (closest_enemy) {
-            desiredPos =(Vector2){ closest_enemy->position.x, closest_enemy->position.y + 200.0f };
+            desiredPos = (Vector2){ closest_enemy->position.x, closest_enemy->position.y + 200.0f };
             toDesired = Vector2Subtract(desiredPos, state->player.playerPos);
         }
         else {
-            return (Vector2){0,0};
+            return (Vector2){0, 0};
         }
     }
     else {
-        desiredPos =(Vector2){ closest_powerup->position.x, closest_powerup->position.y};
+        desiredPos = (Vector2){ closest_powerup->position.x, closest_powerup->position.y};
         toDesired = Vector2Subtract(desiredPos, state->player.playerPos);
     }
     if (Vector2Length(toDesired) > 5.0f) {
@@ -114,7 +114,6 @@ Vector2 AutoMove(GameState *state) {
 
 bool ShootDecision(GameState *state) {
     for (int i = 0; i < ENEMY_CAP; i++) {
-        // Added fabsf to prevent negative coordinate false-positives
         if (state->enemies[i].active && fabsf(state->enemies[i].position.x - state->player.playerPos.x) < 50.0f) {
             return true;
         }
