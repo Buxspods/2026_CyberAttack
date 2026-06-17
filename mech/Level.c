@@ -52,6 +52,8 @@ bool AreAllWavesFinished(Level *level){
 
 
 void UpdateLevelEnd(GraphicAssets *assets, GameState *gamestate, Level *level){
+    if (gamestate->exitingToMenu) return;
+
     isLevelComplete(gamestate);
     bool allWavesFinished = AreAllWavesFinished(level);
 

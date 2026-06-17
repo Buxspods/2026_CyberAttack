@@ -47,7 +47,7 @@ int main() {
                         {.type = ENEMY_TURRET, .position = {300, -15},.spawnTime = 5.0f, .direction = {0, 1}},
                         {.type = ENEMY_TURRET, .position = {700, -15},.spawnTime = 5.0f, .direction = {0, 1}},
                         {.type = ENEMY_TURRET, .position = {500, -15},.spawnTime = 5.5f, .direction = {0, 1}},
-                        {.type = ENEMY_TURRET, .position = {100, -15},.spawnTime = 6.75f, .direction = {0, 1}},
+                        {.type = ENEMY_TURRET, .position = {100, -15},.spawnTime = 5.75f, .direction = {0, 1}},
                         {.type = ENEMY_TURRET, .position = {900, -15},.spawnTime = 5.75f, .direction = {0, 1}}},
                             3.5f, 10};
 
@@ -56,9 +56,14 @@ int main() {
                         {.type = ENEMY_RANGED_PLANE, .position = {450, 0},.spawnTime = 5.5f, .movementMode = RIGHT_CIRCULAR, .center = {-150, -150}},
                         {.type = ENEMY_RANGED_PLANE, .position = {550, 0},.spawnTime = 5.5f, .movementMode = LEFT_CIRCULAR, .center = {1150, -150}}},
                             5.5f, 2};
+    EnemyWave wave15 = {
+        .enemies ={
+                        {.type = ENEMY_TURRET, .position = {450, 0},.spawnTime = 0.0f, .movementMode = RIGHT_CIRCULAR, .center = {-150, -150}},
+                        {.type = ENEMY_TURRET, .position = {550, 0},.spawnTime = 0.0f, .movementMode = LEFT_CIRCULAR, .center = {1150, -150}}},
+                                17.0f, 2};
 
 
-    Level level1 = {.waves = {wave11, wave12, wave13, wave14}, 4};
+    Level level1 = {.waves = {wave11, wave12, wave13, wave14, wave15}, 5};
 
     //pravljenje pocetnog prozora i postavljanje najveceg dozvoljenog FPS-a
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "2026: Cyber Attack");

@@ -17,6 +17,7 @@ typedef struct GameState{
     KeyboardKey keys[7];
     bool gameOver;
     bool gameLoaded;
+    bool exitingToMenu;
 }GameState;
 
 GameState InitGameState();

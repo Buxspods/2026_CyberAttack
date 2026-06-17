@@ -54,7 +54,6 @@ void CheckCollisions(GameState *gameState) {
 
                 if (player->lives <= 0) {
                     PlaySound(assets.gameOver);
-                    //MARE MACOLA MORA DA MI DODA SCREEN ZA SMRT
                 }
             }
         }
@@ -86,5 +85,13 @@ void CheckCollisions(GameState *gameState) {
         if (CheckCollisionCircles(player->playerPos, player->playerSize,powerup->position, powerup->size) && powerup->active) {
             PickUpPowerUp(powerup, player);
         }
+
+        for (int j = 0; j < ENEMY_CAP; j++) { //ENEMY/POWERUP COLLISION
+            if (CheckCollisionCircles(powerup->position, powerup->size, gameState->enemies[j].position, gameState->enemies[j].size) && gameState->enemies[j].active) {
+                  powerup->active = false;
+            }
+        }
     }
+
+
 }

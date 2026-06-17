@@ -21,6 +21,7 @@ GameState InitGameState() {
     gamestate.globalLevelTimer = 0.0f;/////////
     gamestate.gameOver = false;
     gamestate.gameLoaded = false;
+    gamestate.exitingToMenu = false;
 
     //gamestate.player.lives = 5;
     gamestate.player = InitPlayer(0, (Vector2) {WINDOW_WIDTH / 2.0, WINDOW_HEIGHT / 1.25},20,500.0f,3,10, PROJECTILE_CAP);

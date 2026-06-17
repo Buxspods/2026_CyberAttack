@@ -5,6 +5,8 @@
 #include<stdio.h>
 #include"loadGame.h"
 
+extern GameState gamestate;
+
 void ResumeGame(GraphicAssets *assets, int score) {
     assets->isPaused = (assets->isPaused == 1)? 0: 1;
     assets->level1Map.isMoving = true;
@@ -13,6 +15,7 @@ void ResumeGame(GraphicAssets *assets, int score) {
     assets->currScreen = assets->currLevel;
 }
 void ExitAndSave(GraphicAssets *assets, int score) {
+    gamestate.exitingToMenu = true;
     char generisanoIme[32] = "";
     bool nadjenSlot = false;
 
