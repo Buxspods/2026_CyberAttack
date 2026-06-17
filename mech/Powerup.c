@@ -21,7 +21,7 @@ void InitPowerUp(PowerUp *powerup) {
 }
 //
 void SpawnPowerUp(PowerUp *powerup, Vector2 spawnPos) {
-    int doSpawn = 0;//rand() % 5; //DA BI BILO 20% SANSE DA SE STVORI NEKI POWERUP
+    int doSpawn = rand() % 4;
     if (doSpawn == 0) {
         if (!powerup->active) {
             powerup->active = true;

@@ -164,6 +164,7 @@ int main() {
     Level level1 = {.waves = {wave11, wave12, wave13, wave14, wave15}, 5};
     Level level2 = {.waves = {wave21, wave22, wave23, wave24, wave25}, 5};
     Level level3 ={.waves = {wave31, wave32,wave33,wave34,wave35}, 5};
+    Level *currLevel = &level1;
     //pravljenje pocetnog prozora i postavljanje najveceg dozvoljenog FPS-a
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "2026: Cyber Attack");
     InitAudioDevice();
@@ -280,7 +281,7 @@ int main() {
             case INFINITE_LEVEL:
                 break;
             case DEMO_MODE:
-                StartLevel(&level1, &gamestate, &gamestate.globalLevelTimer);
+                StartLevel(&level3, &gamestate, &gamestate.globalLevelTimer);
                 break;
             default:
                 break;
@@ -293,7 +294,7 @@ int main() {
             fire_timer = 0;
         }
 
-        if(IsKeyDown(KEY_H)) { //sluzi za dopunu municije i hp samo dok se testira
+        if(IsKeyDown(KEY_H) && assets.currScreen == DEMO_MODE) { //sluzi za dopunu municije i hp samo dok se testira
             gamestate.player.ammo = 100;
             gamestate.player.lives = 20;
         }
@@ -360,7 +361,7 @@ int main() {
                 PrikaziStats(gamestate.player.score, gamestate.player.lives,gamestate.player.ammo , &assets);
                 break;
             default:
-                ResetLevel(&level1);
+                ResetLevel(currLevel);
                 if (assets.fja == NULL) {
                     CrtajMeni(&pozicija ,&vreme, &providnost, &assets);
                 }
@@ -421,7 +422,24 @@ int main() {
             assets.level3Map.isMoving = false;
         }
 
-        UpdateLevelEnd(&assets, &gamestate, &level1);
+        switch (assets.currScreen) {
+            case LEVEL1:
+                currLevel = &level1;
+                break;
+            case LEVEL2:
+                currLevel = &level2;
+                break;
+            case LEVEL3:
+                currLevel = &level3;
+                break;
+            case DEMO_MODE:
+                currLevel = &level1;
+                break;
+            default:
+                currLevel = &level1;
+                break;
+        }
+        UpdateLevelEnd(&assets, &gamestate, currLevel);
         EndDrawing();
     }
     UnloadAssets(&assets);

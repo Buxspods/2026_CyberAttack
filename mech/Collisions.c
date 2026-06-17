@@ -76,6 +76,9 @@ void CheckCollisions(GameState *gameState) {
             gameState->player.score += enemy->deathScore;
             DestroyEnemy(enemy);
             player->lives -= enemy->HP;
+            if (player->lives <= 0) {
+                PlaySound(assets.gameOver);
+            }
             player->ammo += enemy->ammoRefill;
         }
     }
