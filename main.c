@@ -350,17 +350,17 @@ int main() {
                 break;
         }
         if (assets.odbrojavanje) {
-            assets.level1Map.isMoving = false;
+            /*assets.level1Map.isMoving = false;
             assets.level2Map.isMoving = false;
-            assets.level3Map.isMoving = false;
+            assets.level3Map.isMoving = false;*/
             DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
             DrawTextEx(assets.fontOrbitron, TextFormat("%d", (int)ceil(assets.timer)), (Vector2){windowWidth/2.0f - 60,windowHeight/2.0f - 60},120,2,WHITE);
         }
-        else {
+        /*else {
             assets.level1Map.isMoving = true;
             assets.level2Map.isMoving = true;
             assets.level3Map.isMoving = true;
-        }
+        }*/
 
         if (!assets.isPaused) {
             if (assets.odbrojavanje) {

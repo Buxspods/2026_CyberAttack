@@ -632,7 +632,7 @@ void InitGlavni(GraphicAssets *assets) {
     assets->level2.looping = true;
     assets->level3.looping = true;
 
-    assets->level1Map = (Map){assets->background1, 0.0f, 0.0f, 100.0f, true, 1, 0};
+    assets->level1Map = (Map){assets->background1, 0.0f, 0.0f, 100.0f, true, 2, 0};
     assets->level2Map = (Map){assets->background2, 0.0f, 0.0f, 100.0f, true, 4, 0};
     assets->level3Map = (Map){assets->background3, 0.0f, 0.0f, 100.0f, true, 5, 0};
 
