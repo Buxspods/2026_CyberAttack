@@ -92,7 +92,7 @@ void InitRangedPlane(Enemy *e, enum movementType mvType, Vector2 center) {
         e->movementData.sine.direction = e->leftOrRight;
         e->movementData.sine.amplitude = 30.f;
         e->movementData.sine.frequency= 0.02f;
-        e->movementData.sine.baseline = WINDOW_HEIGHT/2;
+        e->movementData.sine.baseline = e->position.y;
         e->movementData.sine.position = e->position;
     }
     if (e->movementType ==1) {

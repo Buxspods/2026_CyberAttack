@@ -16,7 +16,6 @@
 GameState gamestate;
 GraphicAssets assets;
 int main() {
-
     srand(time(NULL));
     float fire_timer =0.0f;//Prebaciti ovo verovatno u logiku za igraca nekakvu
     float spawn_timer =4.0f;
@@ -25,45 +24,97 @@ int main() {
 
     EnemyWave wave11 = {
         .enemies ={
-                        {.type = ENEMY_MELEE_PLANE, .position = {100, -50},.spawnTime = 1.0f, .direction = {0, 1}},
-                        {.type = ENEMY_MELEE_PLANE, .position = {300, -50},.spawnTime = 1.5f, .direction = {0, 1}},
-                        {.type = ENEMY_MELEE_PLANE, .position = {500, -50},.spawnTime = 2.0f, .direction = {0, 1}},
-                        {.type = ENEMY_MELEE_PLANE, .position = {700, -50},.spawnTime = 2.5f, .direction = {0, 1}},
-                        {.type = ENEMY_MELEE_PLANE, .position = {900, -50},.spawnTime = 3.0f, .direction = {0, 1}}},
-                    2.0f, 5};
+                            {.type = ENEMY_MELEE_PLANE, .position = {100, -50},.spawnTime = 1.0f, .direction = {0, 1}},
+                            {.type = ENEMY_MELEE_PLANE, .position = {300, -50},.spawnTime = 1.5f, .direction = {0, 1}},
+                            {.type = ENEMY_MELEE_PLANE, .position = {500, -50},.spawnTime = 2.0f, .direction = {0, 1}},
+                            {.type = ENEMY_MELEE_PLANE, .position = {700, -50},.spawnTime = 2.5f, .direction = {0, 1}},
+                            {.type = ENEMY_MELEE_PLANE, .position = {900, -50},.spawnTime = 3.0f, .direction = {0, 1}}},
+                        2.0f, 5};
     EnemyWave wave12 = {
         .enemies ={
-                        {.type = ENEMY_MELEE_PLANE, .position = {-50, -50},.spawnTime = 3.5f, .direction = {1, 1}},
-                        {.type = ENEMY_MELEE_PLANE, .position = {1050, -50},.spawnTime = 3.5f, .direction = {-1, 1}}},
-                        2.5f, 2};
+                            {.type = ENEMY_MELEE_PLANE, .position = {-50, -50},.spawnTime = 3.5f, .direction = {1, 1}},
+                            {.type = ENEMY_MELEE_PLANE, .position = {1050, -50},.spawnTime = 3.5f, .direction = {-1, 1}}},
+                            2.5f, 2};
 
     EnemyWave wave13 = {
         .enemies ={
-                        {.type = ENEMY_MELEE_PLANE, .position = {100, -50},.spawnTime = 4.75f, .direction = {0, 1}},
-                        {.type = ENEMY_MELEE_PLANE, .position = {300, -50},.spawnTime = 4.5f, .direction = {0, 1}},
-                        {.type = ENEMY_MELEE_PLANE, .position = {500, -50},.spawnTime = 4.5f, .direction = {0, 1}},
-                        {.type = ENEMY_MELEE_PLANE, .position = {700, -50},.spawnTime = 4.5f, .direction = {0, 1}},
-                        {.type = ENEMY_MELEE_PLANE, .position = {900, -50},.spawnTime = 4.75f, .direction = {0, 1}},
-                        {.type = ENEMY_TURRET, .position = {300, -15},.spawnTime = 5.0f, .direction = {0, 1}},
-                        {.type = ENEMY_TURRET, .position = {700, -15},.spawnTime = 5.0f, .direction = {0, 1}},
-                        {.type = ENEMY_TURRET, .position = {500, -15},.spawnTime = 5.5f, .direction = {0, 1}},
-                        {.type = ENEMY_TURRET, .position = {100, -15},.spawnTime = 5.75f, .direction = {0, 1}},
-                        {.type = ENEMY_TURRET, .position = {900, -15},.spawnTime = 5.75f, .direction = {0, 1}}},
-                            3.5f, 10};
+                            {.type = ENEMY_MELEE_PLANE, .position = {100, -50},.spawnTime = 4.75f, .direction = {0, 1}},
+                            {.type = ENEMY_MELEE_PLANE, .position = {300, -50},.spawnTime = 4.5f, .direction = {0, 1}},
+                            {.type = ENEMY_MELEE_PLANE, .position = {500, -50},.spawnTime = 4.5f, .direction = {0, 1}},
+                            {.type = ENEMY_MELEE_PLANE, .position = {700, -50},.spawnTime = 4.5f, .direction = {0, 1}},
+                            {.type = ENEMY_MELEE_PLANE, .position = {900, -50},.spawnTime = 4.75f, .direction = {0, 1}},
+                            {.type = ENEMY_TURRET, .position = {300, -15},.spawnTime = 5.0f, .direction = {0, 1}},
+                            {.type = ENEMY_TURRET, .position = {700, -15},.spawnTime = 5.0f, .direction = {0, 1}},
+                            {.type = ENEMY_TURRET, .position = {500, -15},.spawnTime = 5.5f, .direction = {0, 1}},
+                            {.type = ENEMY_TURRET, .position = {100, -15},.spawnTime = 5.75f, .direction = {0, 1}},
+                            {.type = ENEMY_TURRET, .position = {900, -15},.spawnTime = 5.75f, .direction = {0, 1}}},
+                                3.5f, 10};
 
     EnemyWave wave14 = {
         .enemies ={
-                        {.type = ENEMY_RANGED_PLANE, .position = {450, 0},.spawnTime = 5.5f, .movementMode = RIGHT_CIRCULAR, .center = {-150, -150}},
-                        {.type = ENEMY_RANGED_PLANE, .position = {550, 0},.spawnTime = 5.5f, .movementMode = LEFT_CIRCULAR, .center = {1150, -150}}},
-                            5.5f, 2};
+                            {.type = ENEMY_RANGED_PLANE, .position = {450, 0},.spawnTime = 5.5f, .movementMode = RIGHT_CIRCULAR, .center = {-150, -150}},
+                            {.type = ENEMY_RANGED_PLANE, .position = {550, 0},.spawnTime = 5.5f, .movementMode = LEFT_CIRCULAR, .center = {1150, -150}}},
+                                5.5f, 2};
     EnemyWave wave15 = {
         .enemies ={
-                        {.type = ENEMY_TURRET, .position = {450, 0},.spawnTime = 0.0f, .movementMode = RIGHT_CIRCULAR, .center = {-150, -150}},
-                        {.type = ENEMY_TURRET, .position = {550, 0},.spawnTime = 0.0f, .movementMode = LEFT_CIRCULAR, .center = {1150, -150}}},
-                                17.0f, 2};
+                            {.type = ENEMY_TURRET, .position = {450, 0},.spawnTime = 0.0f, .movementMode = RIGHT_CIRCULAR, .center = {-150, -150}},
+                            {.type = ENEMY_TURRET, .position = {550, 0},.spawnTime = 0.0f, .movementMode = LEFT_CIRCULAR, .center = {1150, -150}}},
+                                    17.0f, 2};
 
+    EnemyWave wave21 = {
+        .enemies ={
+            {.type = ENEMY_RANGED_PLANE, .position = {WINDOW_WIDTH, 200},.spawnTime = 1.0f, .movementMode = LEFT_SINE},
+        {.type = ENEMY_RANGED_PLANE, .position = {0, 200},.spawnTime = 1.0f, .movementMode = RIGHT_SINE,},
+        {.type = ENEMY_MELEE_PLANE,.position = {WINDOW_WIDTH/3,0},.spawnTime = 2.0f, .direction = {0, 1}},
+        {.type = ENEMY_MELEE_PLANE,.position = {2*WINDOW_WIDTH/3,0},.spawnTime = 2.0f, .direction = {0, 1}},
+        {.type = ENEMY_RANGED_PLANE,.position = {WINDOW_HEIGHT/2,0},.spawnTime = 2.2f,.movementMode=LEFT_CIRCULAR,.center = {WINDOW_WIDTH,0}},
+        {.type = ENEMY_RANGED_PLANE,.position = {WINDOW_HEIGHT/2,0},.spawnTime = 2.4f,.movementMode=RIGHT_CIRCULAR,.center = {0,0}},
+        {.type = ENEMY_RANGED_PLANE,.position = {WINDOW_HEIGHT/2,0},.spawnTime = 2.7f,.movementMode=LEFT_CIRCULAR,.center = {WINDOW_WIDTH,0}},
+        {.type = ENEMY_RANGED_PLANE,.position = {WINDOW_HEIGHT/2,0},.spawnTime = 2.9f,.movementMode=RIGHT_CIRCULAR,.center = {0,0}},
+        },.startingMoment = 0.0f, .waveSize = 8
+    };
+    EnemyWave wave22 = {
+        .enemies ={
+            {.type = ENEMY_MELEE_PLANE,.position = {WINDOW_WIDTH,WINDOW_HEIGHT},.spawnTime = 0.0f, .direction = {-3, -1}},
+            {.type = ENEMY_MELEE_PLANE,.position = {0,WINDOW_HEIGHT},.spawnTime = 0.0f, .direction = {3, -1}},
+            {.type = ENEMY_RANGED_PLANE, .position = {WINDOW_WIDTH, 600},.spawnTime = 1.0f, .movementMode = LEFT_SINE},
+            {.type = ENEMY_RANGED_PLANE, .position = {0, 600},.spawnTime = 1.0f, .movementMode = RIGHT_SINE},
+            {.type = ENEMY_MELEE_PLANE,.position = {WINDOW_WIDTH/4,WINDOW_HEIGHT},.spawnTime = 1.5f, .direction = {0, -1}},
+            {.type = ENEMY_MELEE_PLANE,.position = {3*WINDOW_WIDTH/4,WINDOW_HEIGHT},.spawnTime = 1.5f, .direction = {0, -1}}
 
+        },.startingMoment = 3.0f, .waveSize = 6
+    };
+    EnemyWave wave23 = {
+        .enemies ={
+        {.type = ENEMY_TURRET, .position = {2*WINDOW_WIDTH/5,WINDOW_WIDTH/5},.spawnTime = 0.0f},
+        {.type = ENEMY_TURRET, .position = {4*WINDOW_WIDTH/5,WINDOW_WIDTH/5},.spawnTime = 0.0f},
+        {.type = ENEMY_TURRET, .position = {WINDOW_WIDTH-50,2*WINDOW_WIDTH/5},.spawnTime = 0.5f},
+        {.type = ENEMY_TURRET, .position = {50,2*WINDOW_WIDTH/5},.spawnTime = 0.5f},
+        },.startingMoment = 5.0f, .waveSize = 4
+    };
+    EnemyWave wave24 = {
+        .enemies ={
+            {.type = ENEMY_MELEE_PLANE, .position = {WINDOW_WIDTH, 250},.spawnTime = 0.0f, .direction = {-1, 0}},
+            {.type = ENEMY_MELEE_PLANE, .position = {0, 450},.spawnTime = 0.5f, .direction = {1, 0}},
+            {.type = ENEMY_MELEE_PLANE, .position = {WINDOW_WIDTH, 650},.spawnTime = 1.0f, .direction = {-1, 0}},
+            {.type = ENEMY_MELEE_PLANE, .position = {0, 850},.spawnTime = 1.5f, .direction = {1, 0}},
+            {.type = ENEMY_RANGED_PLANE, .position = {WINDOW_WIDTH, 50},.spawnTime = 4.75f,.movementMode = LEFT_LINEAR},
+            {.type = ENEMY_RANGED_PLANE, .position = {0, 100},.spawnTime = 5.0f,.movementMode = RIGHT_LINEAR},
+            {.type = ENEMY_RANGED_PLANE, .position = {WINDOW_WIDTH, 150},.spawnTime = 5.0f,.movementMode = LEFT_LINEAR},
+            {.type = ENEMY_RANGED_PLANE, .position = {0, 200},.spawnTime = 5.5f,.movementMode = RIGHT_LINEAR},
+            {.type = ENEMY_RANGED_PLANE, .position = {WINDOW_WIDTH, 250},.spawnTime = 5.75f,.movementMode = LEFT_LINEAR},
+            {.type = ENEMY_RANGED_PLANE, .position = {0, 300},.spawnTime = 5.75f,.movementMode = RIGHT_LINEAR}},
+            9.0f, 10};
+    EnemyWave wave25 = {
+        .enemies ={
+            {.type = ENEMY_TURRET, .position = {2*WINDOW_WIDTH/5,WINDOW_WIDTH/20},.spawnTime = 0.0f},
+            {.type = ENEMY_TURRET, .position = {4*WINDOW_WIDTH/5,WINDOW_WIDTH/20},.spawnTime = 0.0f},
+            {.type = ENEMY_TURRET, .position = {WINDOW_WIDTH-50,2*WINDOW_WIDTH/20},.spawnTime = 0.5f},
+            {.type = ENEMY_TURRET, .position = {50,2*WINDOW_WIDTH/20},.spawnTime = 0.5f},
+            },.startingMoment = 16.0f, .waveSize = 4
+        };
     Level level1 = {.waves = {wave11, wave12, wave13, wave14, wave15}, 5};
+    Level level2 = {.waves = {wave21, wave22, wave23, wave24, wave25}, 5};
 
     //pravljenje pocetnog prozora i postavljanje najveceg dozvoljenog FPS-a
     InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "2026: Cyber Attack");
@@ -173,7 +224,7 @@ int main() {
                 StartLevel(&level1, &gamestate, &gamestate.globalLevelTimer);
                 break;
             case LEVEL2:
-                StartLevel(&level1, &gamestate, &gamestate.globalLevelTimer);
+                StartLevel(&level2, &gamestate, &gamestate.globalLevelTimer);
                 break;
             case LEVEL3:
                 StartLevel(&level1, &gamestate, &gamestate.globalLevelTimer);
@@ -253,7 +304,6 @@ int main() {
                 //INFINITE LEVEL
                 break;
             case 6:
-                AutoRegime = true;
                 MoveMap(&assets.level1Map, &gamestate);
                 DrawPlaneGUI(&gamestate.player.playerPos, &assets);
                 DrawPowerUps(gamestate.powerups, assets.level1Map.speed, dt,assets.level1Map.isMoving);
