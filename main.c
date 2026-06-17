@@ -222,50 +222,10 @@ int main() {
             assets.currScreen = (assets.currScreen == PAUSE_MENU)? assets.currLevel:PAUSE_MENU;
         }
 
-        /*if (!assets.isPaused) {
-            if (assets.odbrojavanje) {
-                assets.timer -= GetFrameTime();
-                if (assets.timer <= 0.0f) {
-                    assets.odbrojavanje = false;
-                }
-            }
-            else {
-                UpdatePlayerPosition(&gamestate.player);
-                if (AutoRegime) {
-                    AutoRegimePlayerUpdate(&gamestate,&aiShoot);
-                    gamestate.player.playerPos.x += gamestate.player.mvmntVect.x * gamestate.player.playerSpeed *dt;
-                    gamestate.player.playerPos.y += gamestate.player.mvmntVect.y * gamestate.player.playerSpeed *dt;
-                    if (gamestate.player.playerPos.x < 0) {
-                        gamestate.player.playerPos.x = 0;
-                    }
-                    if (gamestate.player.playerPos.y < 0) {
-                        gamestate.player.playerPos.y = 0;
-                    }
-                    if (gamestate.player.playerPos.x > WINDOW_WIDTH) {
-                        gamestate.player.playerPos.x = WINDOW_WIDTH;
-                    }
-                    if (gamestate.player.playerPos.y > WINDOW_HEIGHT) {
-                        gamestate.player.playerPos.y = WINDOW_HEIGHT;
-                    }
-                }
-                UpdateShootingMode(&gamestate.player, dt);
-                UpdateInvincibility(&gamestate.player, dt, INVINCIBILITY_TIME);
-                UpdateDash(&gamestate.player, dt, DASH_TIME, gamestate.player.mvmntVect);
-                UpdateSpeed(&gamestate.player, dt);
-                UpdateProjectiles(gamestate.projectiles);
-                UpdateEnemies(&gamestate);
-                CheckCollisions(&gamestate);
-            }
-        }
-        else {
-            assets.level1Map.isMoving = false;
-            assets.level2Map.isMoving = false;
-            assets.level3Map.isMoving = false;
-        }*/
         if (assets.currScreen == DEMO_MODE) AutoRegimePlayerUpdate(&gamestate,&aiShoot);
         if (!assets.isPaused && assets.currScreen != MAIN_MENU && !assets.odbrojavanje) {
             gamestate.globalLevelTimer+=dt;
-            printf("%f\n", gamestate.globalLevelTimer);
+            //printf("%f\n", gamestate.globalLevelTimer);
         }
 
         switch (assets.currScreen) {
@@ -281,16 +241,27 @@ int main() {
             case INFINITE_LEVEL:
                 break;
             case DEMO_MODE:
-                StartLevel(&level3, &gamestate, &gamestate.globalLevelTimer);
+                StartLevel(&level1, &gamestate, &gamestate.globalLevelTimer);
                 break;
             default:
                 break;
         }
 
-        if (fire_timer > (1/gamestate.player.fireRate) && (IsKeyDown(gamestate.keys[ACTION_SHOOT]) || aiShoot) && gamestate.player.ammo > 0) {//Ovo x je samo zbog testiranja
+        /*if (fire_timer > (1/gamestate.player.fireRate) && (IsKeyDown(gamestate.keys[ACTION_SHOOT]) || aiShoot) && gamestate.player.ammo > 0) {//Ovo x je samo zbog testiranja
             PlaySound(assets.laser);
             PlayerShootBullet(&gamestate,&gamestate.player);
             //Shoot(PLAYER, gamestate.projectiles, gamestate.player.playerPos, 5, 750, (Vector2){0, 0}, &gamestate.player);
+            fire_timer = 0;
+        }*/
+
+        if (assets.currLevel != DEMO_MODE && IsKeyDown(gamestate.keys[ACTION_SHOOT]) && fire_timer > (1/gamestate.player.fireRate) && gamestate.player.ammo > 0) {
+            PlaySound(assets.laser);
+            PlayerShootBullet(&gamestate,&gamestate.player);
+            fire_timer = 0;
+        }
+        else if (assets.currLevel == DEMO_MODE && aiShoot && fire_timer > (1/gamestate.player.fireRate)) {
+            PlaySound(assets.laser);
+            PlayerShootBullet(&gamestate,&gamestate.player);
             fire_timer = 0;
         }
 
@@ -338,6 +309,9 @@ int main() {
                     case 3:
                         MoveMap(&assets.level3Map, &gamestate);
                         break;
+                    case 6:
+                        MoveMap(&assets.level1Map, &gamestate);
+                        break;
                     default:
                         break;
                 }
@@ -376,8 +350,16 @@ int main() {
                 break;
         }
         if (assets.odbrojavanje) {
+            assets.level1Map.isMoving = false;
+            assets.level2Map.isMoving = false;
+            assets.level3Map.isMoving = false;
             DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
             DrawTextEx(assets.fontOrbitron, TextFormat("%d", (int)ceil(assets.timer)), (Vector2){windowWidth/2.0f - 60,windowHeight/2.0f - 60},120,2,WHITE);
+        }
+        else {
+            assets.level1Map.isMoving = true;
+            assets.level2Map.isMoving = true;
+            assets.level3Map.isMoving = true;
         }
 
         if (!assets.isPaused) {
@@ -388,7 +370,7 @@ int main() {
                 }
             }
             else {
-                UpdatePlayerPosition(&gamestate.player);
+                if (assets.currLevel != DEMO_MODE) UpdatePlayerPosition(&gamestate.player);
                 if (assets.currScreen == DEMO_MODE) {
                     AutoRegimePlayerUpdate(&gamestate,&aiShoot);
                     gamestate.player.playerPos.x += gamestate.player.mvmntVect.x * gamestate.player.playerSpeed *dt;

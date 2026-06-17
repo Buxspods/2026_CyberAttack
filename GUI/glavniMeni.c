@@ -132,7 +132,7 @@ void StartNewGame(GraphicAssets *assets, int score) {
         }
     }
 
-    Vector2 dimInfLevel = MeasureTextEx(assets->fontOrbitron, "INFINITE LEVEL", 40, 2);
+    /*Vector2 dimInfLevel = MeasureTextEx(assets->fontOrbitron, "INFINITE LEVEL", 40, 2);
     Rectangle recInfLevel = {windowWidth/2.0f - dimInfLevel.x/2.0f, 0.55f*windowHeight, dimInfLevel.x, dimInfLevel.y};
     DrawTextEx(assets->fontOrbitron, "INFINITE LEVEL", (Vector2){windowWidth/2.0f - dimInfLevel.x/2.0f, 0.55f*windowHeight}, 40, 2, WHITE);
     bool isHovered4 = CheckCollisionPointRec(assets->mis, recInfLevel);
@@ -155,14 +155,14 @@ void StartNewGame(GraphicAssets *assets, int score) {
             assets->currLevel = INFINITE_LEVEL;
             assets->currScreen = INFINITE_LEVEL;
         }
-    }
+    }*/
 
     Vector2 dimDemo = MeasureTextEx(assets->fontOrbitron, "DEMO MODE", 40, 2);
-    Rectangle recDemo = {windowWidth/2.0f - dimDemo.x/2.0f, 0.6f*windowHeight, dimDemo.x, dimDemo.y};
-    DrawTextEx(assets->fontOrbitron, "DEMO MODE", (Vector2){windowWidth/2.0f - dimDemo.x/2.0f, 0.6f*windowHeight}, 40, 2, WHITE);
+    Rectangle recDemo = {windowWidth/2.0f - dimDemo.x/2.0f, 0.55f*windowHeight, dimDemo.x, dimDemo.y};
+    DrawTextEx(assets->fontOrbitron, "DEMO MODE", (Vector2){windowWidth/2.0f - dimDemo.x/2.0f, 0.55f*windowHeight}, 40, 2, WHITE);
     bool isHovered5 = CheckCollisionPointRec(assets->mis, recDemo);
     if (isHovered5) {
-        DrawTextEx(assets->fontOrbitron, "DEMO MODE", (Vector2){windowWidth/2.0f - dimDemo.x/2.0f, 0.6f*windowHeight}, 40, 2, BLUE);
+        DrawTextEx(assets->fontOrbitron, "DEMO MODE", (Vector2){windowWidth/2.0f - dimDemo.x/2.0f, 0.55f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             PlaySound(assets->click);
             StopMusicStream(assets->level3);

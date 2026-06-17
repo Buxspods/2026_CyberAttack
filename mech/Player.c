@@ -21,7 +21,7 @@ Player InitPlayer(float score, Vector2 playerPos, float playerSize, float player
     player.dashTimer = 0;
     player.dashCooldown = 3.0f;
     player.playerSize = 20;
-    player.lives = 5;
+    player.lives = 10;
     player.fireRate = 10;
     player.ammo = 50;
     player.score = 0;

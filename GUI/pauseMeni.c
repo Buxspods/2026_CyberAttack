@@ -16,27 +16,29 @@ void ResumeGame(GraphicAssets *assets, int score) {
 }
 void ExitAndSave(GraphicAssets *assets, int score) {
     gamestate.exitingToMenu = true;
-    char generisanoIme[32] = "";
-    bool nadjenSlot = false;
+    if (assets->currLevel != DEMO_MODE) {
+        char generisanoIme[32] = "";
+        bool nadjenSlot = false;
 
-    for (int i = 0; i <= 9; i++) {
-        const char* proveraPutanje = TextFormat("savedGames/slot%d.dat", i);
+        for (int i = 0; i <= 9; i++) {
+            const char* proveraPutanje = TextFormat("savedGames/slot%d.dat", i);
 
-        if (!FileExists(proveraPutanje)) {
-            sprintf(generisanoIme, "slot%d.dat", i);
-            nadjenSlot = true;
-            break;
+            if (!FileExists(proveraPutanje)) {
+                sprintf(generisanoIme, "slot%d.dat", i);
+                nadjenSlot = true;
+                break;
+            }
         }
-    }
 
-    if (!nadjenSlot) {
-        printf("Svi slotovi su puni!\n");
-    }
-    else {
-        if (SaveGame(generisanoIme)) {
-            printf("Igra uspesno sacuvana pod imenom: %s\n", generisanoIme);
-        } else {
-            printf("Greska prilikom automatskog cuvanja igre!\n");
+        if (!nadjenSlot) {
+            printf("Svi slotovi su puni!\n");
+        }
+        else {
+            if (SaveGame(generisanoIme)) {
+                printf("Igra uspesno sacuvana pod imenom: %s\n", generisanoIme);
+            } else {
+                printf("Greska prilikom automatskog cuvanja igre!\n");
+            }
         }
     }
 

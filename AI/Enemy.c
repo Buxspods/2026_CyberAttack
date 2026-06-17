@@ -162,16 +162,24 @@ void UpdateEnemies(GameState * state) {
     }
 }
 void DrawEnemies(Enemy enemies[]) {
+    static bool laserActive = false;
     for (int i=0;i<ENEMY_CAP;i++) {
         if (enemies[i].active) {
             if (enemies[i].laserActive) {
                 DrawRectangle(enemies[i].position.x - enemies[i].size/2, enemies[i].position.y, enemies[i].size, WINDOW_HEIGHT, (Color){0,0,0,0});
+                if (!laserActive) {
+                    PlaySound((&assets)->bossLaser);
+                    laserActive = true;
+                }
                 if (assets.currLevel == LEVEL1 || assets.currLevel == LEVEL3) {
                     DrawLaser(enemies[i].position, assets.laserBoss1);
                 }
                 else {
                     DrawLaser(enemies[i].position, assets.laserBoss2);
                 }
+            }
+            else {
+                laserActive = false;
             }
             Texture2D tekstura = {0};
             switch (enemies[i].type) {

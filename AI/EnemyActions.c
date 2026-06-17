@@ -158,7 +158,7 @@ void FireBigLaser(Enemy *e,GameState *state, float dt) {
 }
 void BossRetreat(Enemy *e,GameState *state, float dt) {
     MoveLinear(&e->position,e->speed,e->movementData.linear.direction,dt);
-    if (e->position.y < e->size+10) {
+    if (e->position.y < e->size+50) {
         e->actions[MOVEMENT_ACTION].update = &FireBigLaser;
         e->actions[SHOOTING_ACTION].actionTimer = 2;
         e->actions[SHOOTING_ACTION].currentTime = 0;
