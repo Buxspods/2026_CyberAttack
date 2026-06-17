@@ -162,7 +162,7 @@ int main() {
             assets.level2Map.isMoving = false;
             assets.level3Map.isMoving = false;
         }*/
-
+        if (assets.currScreen == DEMO_MODE) AutoRegimePlayerUpdate(&gamestate,&aiShoot);
         if (!assets.isPaused && assets.currScreen != MAIN_MENU && !assets.odbrojavanje) {
             gamestate.globalLevelTimer+=dt;
             printf("%f\n", gamestate.globalLevelTimer);

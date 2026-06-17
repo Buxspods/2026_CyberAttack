@@ -59,24 +59,53 @@ Vector2 AutoMove(GameState *state) {
     if (evading) return Vector2Normalize(movementDirection);
 
     Enemy *closest_enemy = NULL;
-    float closest_distance = 100000.0f;
+    float closest_enemy_distance = 100000.0f;
 
     for (int i = 0; i < ENEMY_CAP; i++) {
         if (state->enemies[i].active) {
             float d = Vector2Distance(state->player.playerPos, state->enemies[i].position);
-            if (!closest_enemy || d < closest_distance) {
-                closest_distance = d;
+            if (!closest_enemy || d < closest_enemy_distance) {
+                closest_enemy_distance = d;
                 closest_enemy = &state->enemies[i];
             }
         }
     }
-
-    if (!closest_enemy) return (Vector2){0, 0};
-
-    // Keep position 150 pixels below the target enemy
-    Vector2 desiredPos = { closest_enemy->position.x, closest_enemy->position.y + 200.0f };
-    Vector2 toDesired = Vector2Subtract(desiredPos, state->player.playerPos);
-
+    PowerUp *closest_powerup = NULL;
+    float closest_powerup_distance = 100000.0f;
+    for (int i = 0; i < POWERUP_CAP; i++) {
+        if (state->powerups[i].active) {
+            float d = Vector2Distance(state->player.playerPos, state->powerups[i].position);
+            if (!closest_powerup || d < closest_powerup_distance) {
+                closest_powerup_distance = d;
+                closest_powerup = &state->powerups[i];
+            }
+        }
+    }
+    if (closest_enemy_distance<100) {//Izbegava najblizeg protivnika
+        Vector2 difference = Vector2Subtract(closest_enemy->position, state->player.playerPos);
+        Vector2 normal1 = {-difference.y, difference.x};
+        Vector2 normal2 = {difference.y, -difference.x};
+        if (Vector2DotProduct(state->player.mvmntVect, normal1)>0) {
+            movementDirection = Vector2Normalize(normal1);
+        }
+        else
+            movementDirection = Vector2Normalize(normal2);
+        return movementDirection;
+    }
+    Vector2 desiredPos,toDesired;
+    if (!closest_powerup) {
+        if (closest_enemy) {
+            desiredPos =(Vector2){ closest_enemy->position.x, closest_enemy->position.y + 200.0f };
+            toDesired = Vector2Subtract(desiredPos, state->player.playerPos);
+        }
+        else {
+            return (Vector2){0,0};
+        }
+    }
+    else {
+        desiredPos =(Vector2){ closest_powerup->position.x, closest_powerup->position.y};
+        toDesired = Vector2Subtract(desiredPos, state->player.playerPos);
+    }
     if (Vector2Length(toDesired) > 5.0f) {
         movementDirection = Vector2Normalize(toDesired);
     }
