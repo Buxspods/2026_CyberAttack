@@ -1,5 +1,6 @@
 #include "Level.h"
 #include <stdlib.h>
+#include<stdio.h>
 
 void StartLevel(Level *level, GameState *gamestate, float *globalTimer) {
     if (gamestate->gameLoaded) {
@@ -84,6 +85,10 @@ void UpdateLevelEnd(GraphicAssets *assets, GameState *gamestate, Level *level){
 
         if (gamestate->player.lives > 0) {
             PlaySound(assets->youWon);
+            if (assets->currScreen == LEVEL1 && assets->najvisiLevel == LEVEL1) {
+                assets->najvisiLevel = LEVEL2;
+            }
+            else if (assets->currScreen == LEVEL2 && assets->najvisiLevel == LEVEL2) assets->najvisiLevel = LEVEL3;
             assets->fja = DrawYouWonScreen;
         }
         else {

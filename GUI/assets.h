@@ -52,8 +52,10 @@ typedef struct GraphicAssets {
     Texture2D meele, ranged, turret, finalBoss;
     Texture2D background1, background2, background3;
     Texture2D metakBoss, laserBoss1, laserBoss2;
+    Texture2D planeGameOver, planeYouWon;
     Sound gameOver, explosion, powerUp, laser, bossLaser, hit1, hit2, click, hover, youWon;
     Music mainMenu, level1, level2, level3;
+    SCREEN najvisiLevel;
     float music, sfx;
     MeniOpcija opcije[6], opcijePause[5];
     KeyboardKey keys[7];

@@ -5,7 +5,6 @@
 #include<stdlib.h>
 #include<string.h>
 #include"loadGame.h"
-#include "endScreen.h"
 
 void Set_Keys(GraphicAssets *assets) {
     for (int i = 0; i < 7; i++) {
@@ -86,50 +85,62 @@ void StartNewGame(GraphicAssets *assets, int score) {
     Rectangle recLevel2 = {windowWidth/2.0f - dimLevel2.x/2.0f, 0.45f*windowHeight, dimLevel2.x, dimLevel2.y};
     DrawTextEx(assets->fontOrbitron, "LEVEL 2", (Vector2){windowWidth/2.0f - dimLevel2.x/2.0f, 0.45f*windowHeight}, 40, 2, WHITE);
     bool isHovered2 = CheckCollisionPointRec(assets->mis, recLevel2);
-    if (isHovered2) {
-        DrawTextEx(assets->fontOrbitron, "LEVEL 2", (Vector2){windowWidth/2.0f - dimLevel2.x/2.0f, 0.45f*windowHeight}, 40, 2, BLUE);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            PlaySound(assets->click);
-            StopMusicStream(assets->level1);
-            StopMusicStream(assets->level3);
-            StopMusicStream(assets->mainMenu);
-            PlayMusicStream(assets->level2);
-            assets->level1Map.offset = 0;
-            assets->level2Map.offset = 0;
-            assets->level3Map.offset = 0;
-            assets->level1Map.isMoving = true;
-            assets->level2Map.isMoving = true;
-            assets->level3Map.isMoving = true;
-            gamestate = InitGameState();
-            Set_Keys(assets);
-            assets->currLevel = LEVEL2;
-            assets->currScreen = LEVEL2;
+    if (assets->najvisiLevel > LEVEL1) {
+        if (isHovered2) {
+            DrawTextEx(assets->fontOrbitron, "LEVEL 2", (Vector2){windowWidth/2.0f - dimLevel2.x/2.0f, 0.45f*windowHeight}, 40, 2, BLUE);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                PlaySound(assets->click);
+                StopMusicStream(assets->level1);
+                StopMusicStream(assets->level3);
+                StopMusicStream(assets->mainMenu);
+                PlayMusicStream(assets->level2);
+                assets->level1Map.offset = 0;
+                assets->level2Map.offset = 0;
+                assets->level3Map.offset = 0;
+                assets->level1Map.isMoving = true;
+                assets->level2Map.isMoving = true;
+                assets->level3Map.isMoving = true;
+                gamestate = InitGameState();
+                Set_Keys(assets);
+                assets->currLevel = LEVEL2;
+                assets->currScreen = LEVEL2;
+            }
         }
+    }
+    else {
+        DrawTextEx(assets->fontOrbitron, "LEVEL 2", (Vector2){windowWidth/2.0f - dimLevel2.x/2.0f, 0.45f*windowHeight}, 40, 2, GRAY);
+
     }
 
     Vector2 dimLevel3 = MeasureTextEx(assets->fontOrbitron, "LEVEL 3", 40, 2);
     Rectangle recLevel3 = {windowWidth/2.0f - dimLevel3.x/2.0f, 0.5f*windowHeight, dimLevel3.x, dimLevel3.y};
     DrawTextEx(assets->fontOrbitron, "LEVEL 3", (Vector2){windowWidth/2.0f - dimLevel3.x/2.0f, 0.5f*windowHeight}, 40, 2, WHITE);
     bool isHovered3 = CheckCollisionPointRec(assets->mis, recLevel3);
-    if (isHovered3) {
-        DrawTextEx(assets->fontOrbitron, "LEVEL 3", (Vector2){windowWidth/2.0f - dimLevel3.x/2.0f, 0.5f*windowHeight}, 40, 2, BLUE);
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            PlaySound(assets->click);
-            StopMusicStream(assets->level1);
-            StopMusicStream(assets->level2);
-            StopMusicStream(assets->mainMenu);
-            PlayMusicStream(assets->level3);
-            assets->level1Map.offset = 0;
-            assets->level2Map.offset = 0;
-            assets->level3Map.offset = 0;
-            assets->level1Map.isMoving = true;
-            assets->level2Map.isMoving = true;
-            assets->level3Map.isMoving = true;
-            gamestate = InitGameState();
-            Set_Keys(assets);
-            assets->currLevel = LEVEL3;
-            assets->currScreen = LEVEL3;
+    if (assets->najvisiLevel > LEVEL2) {
+        if (isHovered3) {
+            DrawTextEx(assets->fontOrbitron, "LEVEL 3", (Vector2){windowWidth/2.0f - dimLevel3.x/2.0f, 0.5f*windowHeight}, 40, 2, BLUE);
+            if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+                PlaySound(assets->click);
+                StopMusicStream(assets->level1);
+                StopMusicStream(assets->level2);
+                StopMusicStream(assets->mainMenu);
+                PlayMusicStream(assets->level3);
+                assets->level1Map.offset = 0;
+                assets->level2Map.offset = 0;
+                assets->level3Map.offset = 0;
+                assets->level1Map.isMoving = true;
+                assets->level2Map.isMoving = true;
+                assets->level3Map.isMoving = true;
+                gamestate = InitGameState();
+                Set_Keys(assets);
+                assets->currLevel = LEVEL3;
+                assets->currScreen = LEVEL3;
+            }
         }
+    }
+    else {
+        DrawTextEx(assets->fontOrbitron, "LEVEL 3", (Vector2){windowWidth/2.0f - dimLevel3.x/2.0f, 0.5f*windowHeight}, 40, 2, GRAY);
+
     }
 
     /*Vector2 dimInfLevel = MeasureTextEx(assets->fontOrbitron, "INFINITE LEVEL", 40, 2);
@@ -307,7 +318,7 @@ void Guide(GraphicAssets *assets, int score) {
     sprintf(dash, "%s - Dash", keyString(assets->keys[ACTION_DASH]));
     sprintf(pauza, "%s - Pause Menu", keyString(assets->keys[ACTION_PAUSE]));
 
-    char *text[] = {kretanje, pucanje, dash, pauza,"- Power Up Health", " - Power Up Ammo", " - Power Up Speed", " - Turret", " - Ranged Plane", "\t - Melee Plane", "\t - Final Boss"};
+    char *text[] = {kretanje, pucanje, dash, pauza,"- Power Up Health", " - Power Up Ammo", " - Power Up Speed", " - Turret - HP: 5, SCORE: 100, DAMAGE: 1", " - Ranged Plane - HP: 5, SCORE: 250, DAMAGE: 1", "\t - Melee Plane - HP: 10, SCORE: 50, DAMAGE: 10", "\t - Final Boss - HP: 80, SCORE: 1000,\n \t DAMAGE: 1, LASER: 2 seconds"};
     Texture teksture[] = {assets->powerUpHealth, assets->powerUpAmmo, assets->powerUpSpeed, assets->turret, assets->ranged, assets->meele, assets->finalBoss};
 
 
@@ -498,6 +509,14 @@ void Settings(GraphicAssets *assets, int score) {
     }
 }
 void ExitGame(GraphicAssets *assets, int score) {
+    FILE *f = fopen("documents/najvisiLevel.bit", "wb");
+
+    if (f != NULL) {
+        int level = (int)assets->najvisiLevel;
+        fwrite(&level, sizeof(level), 1, f);
+        fclose(f);
+    }
+
     CloseWindow();
     exit(0);
 }
@@ -572,6 +591,24 @@ void InitGlavni(GraphicAssets *assets) {
     assets->level1 = LoadMusicStream("resources/audio/level1.mp3");
     assets->level2 = LoadMusicStream("resources/audio/level2.mp3");
     assets->level3 = LoadMusicStream("resources/audio/level3.mp3");
+    assets->planeGameOver = LoadTexture("resources/images/planeGameOver.png");
+    assets->planeYouWon = LoadTexture("resources/images/planeYouWon.png");
+
+    FILE *f = fopen("documents/najvisiLevel.bit", "rb");
+
+    if (f == NULL) {
+        assets->najvisiLevel = LEVEL1;
+    } else {
+        int level = LEVEL1;
+        if (fread(&level, sizeof(level), 1, f) == 1) {
+            assets->najvisiLevel = (SCREEN)level;
+        }
+        else {
+            assets->najvisiLevel = LEVEL1;
+        }
+        fclose(f);
+    }
+
 
     FILE *fajl = fopen("documents/audio.txt", "r");
     if (fajl != NULL) {
@@ -685,6 +722,8 @@ void UnloadAssets(GraphicAssets *assets) {
     UnloadTexture(assets->laserBoss1);
     UnloadTexture(assets->laserBoss2);
     UnloadTexture(assets->metakBoss);
+    UnloadTexture(assets->planeGameOver);
+    UnloadTexture(assets->planeYouWon);
 
     UnloadSound(assets->bossLaser);
     UnloadSound(assets->laser);

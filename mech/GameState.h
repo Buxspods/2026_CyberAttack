@@ -8,6 +8,7 @@
 #include "Projectile.h"
 #include "PowerUp.h"
 #include "../AI/Enemy.h"
+#include "Screens.h"
 typedef struct GameState{
     Projectile projectiles[PROJECTILE_CAP];
     Player player;
@@ -18,6 +19,8 @@ typedef struct GameState{
     bool gameOver;
     bool gameLoaded;
     bool exitingToMenu;
+    SCREEN najvisiLevel;
+
 }GameState;
 
 GameState InitGameState();

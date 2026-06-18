@@ -25,7 +25,7 @@ void DrawYouWonScreen(GraphicAssets *assets, int score) {
         }
         scores = true;
     }
-    DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
+    DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.3f));
 
     Vector2 dimNaslov = MeasureTextEx(assets->fontOrbitron, "YOU WON", 70, 2);
     DrawTextEx(assets->fontOrbitron, "YOU WON", (Vector2){windowWidth/2.0f - dimNaslov.x/2.0f, 0.15f*windowHeight}, 70, 2, WHITE);
@@ -35,13 +35,16 @@ void DrawYouWonScreen(GraphicAssets *assets, int score) {
     Vector2 dimScore = MeasureTextEx(assets->fontOrbitron, scoreText, 40, 2);
     DrawTextEx(assets->fontOrbitron, scoreText, (Vector2){windowWidth/2.0f - dimScore.x/2.0f, 0.25f*windowHeight}, 40, 2, WHITE);
 
+    DrawRectangle(windowWidth/2 - assets->planeYouWon.width/2, 0.3f * windowHeight, assets->planeYouWon.width, assets->planeYouWon.height, Fade(BLACK, 0.5f));
+    DrawTexture(assets->planeYouWon, windowWidth/2 - assets->planeYouWon.width/2, 0.3f * windowHeight, WHITE);
+    DrawRectangleLines(windowWidth/2 - assets->planeYouWon.width/2, 0.3f * windowHeight, assets->planeYouWon.width, assets->planeYouWon.height, PINK);
 
     Vector2 dimPlayAgain = MeasureTextEx(assets->fontOrbitron, "PLAY AGAIN", 40, 2);
-    Rectangle recPlayAgain = {windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight, dimPlayAgain.x, dimPlayAgain.y};
-    DrawTextEx(assets->fontOrbitron, "PLAY AGAIN", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight}, 40, 2, WHITE);
+    Rectangle recPlayAgain = {windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.8f*windowHeight, dimPlayAgain.x, dimPlayAgain.y};
+    DrawTextEx(assets->fontOrbitron, "PLAY AGAIN", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.8f*windowHeight}, 40, 2, WHITE);
     bool isHovered = CheckCollisionPointRec(assets->mis, recPlayAgain);
     if (isHovered) {
-        DrawTextEx(assets->fontOrbitron, "PLAY AGAIN", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight}, 40, 2, BLUE);
+        DrawTextEx(assets->fontOrbitron, "PLAY AGAIN", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.8f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             PlaySound(assets->click);
             Music muzika = {0};
@@ -77,11 +80,11 @@ void DrawYouWonScreen(GraphicAssets *assets, int score) {
     }
 
     Vector2 dimMainMenu = MeasureTextEx(assets->fontOrbitron, "BACK TO MAIN MENU", 40, 2);
-    Rectangle recMainMenu = {windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight, dimMainMenu.x, dimMainMenu.y};
-    DrawTextEx(assets->fontOrbitron, "BACK TO MAIN MENU", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight}, 40, 2, WHITE);
+    Rectangle recMainMenu = {windowWidth/2.0f - dimMainMenu.x/2.0f, 0.85f*windowHeight, dimMainMenu.x, dimMainMenu.y};
+    DrawTextEx(assets->fontOrbitron, "BACK TO MAIN MENU", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.85f*windowHeight}, 40, 2, WHITE);
     bool isHovered3 = CheckCollisionPointRec(assets->mis, recMainMenu);
     if (isHovered3) {
-        DrawTextEx(assets->fontOrbitron, "BACK TO MAIN MENU", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight}, 40, 2, BLUE);
+        DrawTextEx(assets->fontOrbitron, "BACK TO MAIN MENU", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.85f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             PlaySound(assets->click);
             PlayMusicStream(assets->mainMenu);
@@ -104,7 +107,7 @@ void DrawGameOverScreen(GraphicAssets *assets, int score) {
         }
         scores = true;
     }
-    DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.5f));
+    DrawRectangle(0, 0, windowWidth, windowHeight, Fade(BLACK, 0.3f));
 
     Vector2 dimNaslov = MeasureTextEx(assets->fontOrbitron, "GAME OVER, YOU LOST", 70, 2);
     DrawTextEx(assets->fontOrbitron, "GAME OVER, YOU LOST", (Vector2){windowWidth/2.0f - dimNaslov.x/2.0f, 0.15f*windowHeight}, 70, 2, WHITE);
@@ -114,13 +117,16 @@ void DrawGameOverScreen(GraphicAssets *assets, int score) {
     Vector2 dimScore = MeasureTextEx(assets->fontOrbitron, scoreText, 40, 2);
     DrawTextEx(assets->fontOrbitron, scoreText, (Vector2){windowWidth/2.0f - dimScore.x/2.0f, 0.25f*windowHeight}, 40, 2, WHITE);
 
+    DrawRectangle(windowWidth/2 - assets->planeGameOver.width/2, 0.3f * windowHeight, assets->planeGameOver.width, assets->planeGameOver.height, Fade(BLACK, 0.5f));
+    DrawTexture(assets->planeGameOver, windowWidth/2 - assets->planeGameOver.width/2, 0.3f * windowHeight, WHITE);
+    DrawRectangleLines(windowWidth/2 - assets->planeGameOver.width/2, 0.3f * windowHeight, assets->planeGameOver.width, assets->planeGameOver.height, PINK);
 
     Vector2 dimPlayAgain = MeasureTextEx(assets->fontOrbitron, "PLAY AGAIN", 40, 2);
-    Rectangle recPlayAgain = {windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight, dimPlayAgain.x, dimPlayAgain.y};
-    DrawTextEx(assets->fontOrbitron, "PLAY AGAIN", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight}, 40, 2, WHITE);
+    Rectangle recPlayAgain = {windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.8f*windowHeight, dimPlayAgain.x, dimPlayAgain.y};
+    DrawTextEx(assets->fontOrbitron, "PLAY AGAIN", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.8f*windowHeight}, 40, 2, WHITE);
     bool isHovered = CheckCollisionPointRec(assets->mis, recPlayAgain);
     if (isHovered) {
-        DrawTextEx(assets->fontOrbitron, "PLAY AGAIN", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.4f*windowHeight}, 40, 2, BLUE);
+        DrawTextEx(assets->fontOrbitron, "PLAY AGAIN", (Vector2){windowWidth/2.0f - dimPlayAgain.x/2.0f, 0.8f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             PlaySound(assets->click);
             Music muzika = {0};
@@ -156,11 +162,11 @@ void DrawGameOverScreen(GraphicAssets *assets, int score) {
     }
 
     Vector2 dimMainMenu = MeasureTextEx(assets->fontOrbitron, "BACK TO MAIN MENU", 40, 2);
-    Rectangle recMainMenu = {windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight, dimMainMenu.x, dimMainMenu.y};
-    DrawTextEx(assets->fontOrbitron, "BACK TO MAIN MENU", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight}, 40, 2, WHITE);
+    Rectangle recMainMenu = {windowWidth/2.0f - dimMainMenu.x/2.0f, 0.85f*windowHeight, dimMainMenu.x, dimMainMenu.y};
+    DrawTextEx(assets->fontOrbitron, "BACK TO MAIN MENU", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.85f*windowHeight}, 40, 2, WHITE);
     bool isHovered3 = CheckCollisionPointRec(assets->mis, recMainMenu);
     if (isHovered3) {
-        DrawTextEx(assets->fontOrbitron, "BACK TO MAIN MENU", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.5f*windowHeight}, 40, 2, BLUE);
+        DrawTextEx(assets->fontOrbitron, "BACK TO MAIN MENU", (Vector2){windowWidth/2.0f - dimMainMenu.x/2.0f, 0.85f*windowHeight}, 40, 2, BLUE);
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             PlaySound(assets->click);
             assets->prethodnaFja = assets->fja;
